@@ -47,7 +47,8 @@ Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomp
 `CafeTableOutput` を描画し、`CafeInfoHeader` で選択テーブルの要約とclose操作を
 扱える。子routeの `CafeTableOverview` で利用率とステータス別時間も表示でき、
 `angular-split` で一覧と詳細の左右領域を分けている。URLの `tableNumber` を
-選択状態と右ペイン表示の正本にし、一致する一覧行を強調表示できる段階である。
+選択状態と右ペイン表示の正本にし、一致する一覧行の強調表示と、
+行選択からoverviewへの遷移を行える段階である。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択はoverviewのURL遷移に変換できるが、対応するrouteと右ペインの表示、編集処理は
@@ -155,7 +156,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] `angular-split` で左右の分割レイアウトを作成
 - [x] URLから選択中のテーブル番号を取得
 - [x] 選択中の行を強調表示
-- [ ] 行選択でoverviewへ遷移
+- [x] 行選択でoverviewへ遷移
 - [ ] closeで `/cafe-status` へ遷移
 - [ ] 戻る・進むで選択状態を同期
 - [ ] 存在しないテーブルのnot-found表示を追加
@@ -233,5 +234,5 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示は完了。
-次は一覧の行選択から対応するoverview URLへの遷移を確定する。
+Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示と
+overviewへの遷移は完了。次はclose操作で `/cafe-status` へ戻す。

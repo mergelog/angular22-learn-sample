@@ -14,7 +14,7 @@ import {
 import { CafeTables } from './cafe-tables';
 
 describe('CafeTables', () => {
-  it('初期表示でテーブル状況の一覧を描画する', () => {
+  it('初期表示で一覧を描画し、行選択でoverviewへ遷移する', () => {
     const dashboard: CafeDashboard = {
       generatedAt: '2026-09-20T01:00:00.000Z',
       staff: { hall: 3, kitchen: 2 },
