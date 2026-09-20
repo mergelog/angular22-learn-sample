@@ -12,6 +12,7 @@ import { CafeTable, TableStatus } from '../../../../core/model/cafe-status.model
 })
 export class CafeTablesGrid {
   readonly tables = input.required<readonly CafeTable[]>();
+  readonly selectedTableNumber = input<string | null>(null);
 
   protected statusClass(status: TableStatus): string {
     switch (status) {

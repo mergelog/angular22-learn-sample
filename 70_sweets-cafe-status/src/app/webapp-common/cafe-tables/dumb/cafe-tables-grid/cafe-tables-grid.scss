@@ -42,6 +42,10 @@ tbody tr:hover {
   background: #faf9ff;
 }
 
+tbody tr.selected {
+  background: #f0edff;
+}
+
 .numeric {
   text-align: right;
 }

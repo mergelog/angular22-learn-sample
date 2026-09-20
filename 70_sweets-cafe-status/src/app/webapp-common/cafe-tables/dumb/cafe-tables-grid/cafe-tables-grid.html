@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       @for (table of tables(); track table.tableNumber) {
-        <tr>
+        <tr [class.selected]="table.tableNumber === selectedTableNumber()">
           <td>
             <strong>{{ table.tableNumber }}</strong>
           </td>
