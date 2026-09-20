@@ -23,6 +23,13 @@ export const routes: Routes = [
     path: 'cafe-status',
     loadComponent: () =>
       import('./webapp-common/cafe-tables/cafe-tables').then((m) => m.CafeTables),
+    children: [
+      {
+        path: ':tableNumber',
+        pathMatch: 'full',
+        redirectTo: ':tableNumber/overview',
+      },
+    ],
     providers: [
       provideState(CAFE_STATUS_FEATURE_KEY, cafeStatusReducer),
       provideEffects(CafeStatusEffects),
