@@ -1,0 +1,31 @@
+<h2>c08-ng-template-dynamic</h2>
+
+<p>検索結果の種別ごとに TemplateRef を選び、同じ一覧の中で異なる表示を行う。</p>
+
+<div class="filters" role="group" aria-label="検索結果の種別">
+  @for (type of resultTypes; track type) {
+    <button type="button" [class.active]="activeType() === type" (click)="setActiveType(type)">
+      {{ type }}
+    </button>
+  }
+</div>
+
+<ng-template #projectTemplate let-result>
+  <article class="result project"><strong>Project</strong><span>{{ result.title }}</span><small>{{ result.detail }}</small></article>
+</ng-template>
+
+<ng-template #experimentTemplate let-result>
+  <article class="result experiment"><strong>Experiment</strong><span>{{ result.title }}</span><small>{{ result.detail }}</small></article>
+</ng-template>
+
+<ng-template #modelTemplate let-result>
+  <article class="result model"><strong>Model</strong><span>{{ result.title }}</span><small>{{ result.detail }}</small></article>
+</ng-template>
+
+<app-c08-search-results
+  [items]="results()"
+  [projectTemplate]="projectTemplate"
+  [experimentTemplate]="experimentTemplate"
+  [modelTemplate]="modelTemplate" />
+
+<app-p03-compo-navi />

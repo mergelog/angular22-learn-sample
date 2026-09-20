@@ -1,0 +1,21 @@
+<main class="main-board">
+  <h1>Main board</h1>
+
+  [ <a routerLink="/dashboard/sub-board">Go to Sub board</a> ]
+
+  [ <a routerLink="/samples/a-sample">Go to ASample</a> ]
+
+  @if (viewModel$ | async; as viewModel) {
+    @if (viewModel.error) {
+      <p role="alert">{{ viewModel.error }}</p>
+    }
+
+    @if (viewModel.loading && viewModel.items.length === 0) {
+      <p>Loading...</p>
+    } @else {
+      <app-lot-list [items]="viewModel.items" />
+    }
+  } @else {
+    <p>Loading...</p>
+  }
+</main>

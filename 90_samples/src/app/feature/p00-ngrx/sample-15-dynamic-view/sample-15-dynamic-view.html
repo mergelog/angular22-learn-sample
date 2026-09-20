@@ -1,0 +1,51 @@
+<main>
+  <h2>Portal / NgComponentOutlet / createComponent</h2>
+
+  <section class="explanation">
+    <p>
+      3つとも実行時に表示内容を決める仕組みですが、用途が異なります。 宣言的な切替は
+      <code>NgComponentOutlet</code>、表示場所の持ち運びは Portal、
+      <code>ComponentRef</code> を直接扱う必要があるときは <code>createComponent</code> を使います。
+    </p>
+  </section>
+
+  <section class="examples">
+    <article>
+      <h3>NgComponentOutlet</h3>
+      <label>
+        Component:
+        <select #widgetSelect (change)="selectWidget(widgetSelect)">
+          @for (option of widgetOptions; track option.label; let index = $index) {
+            <option [value]="index">{{ option.label }}</option>
+          }
+        </select>
+      </label>
+
+      <!-- [■観点:NgComponentOutlet] Signal が持つ Component 型を宣言的に描画し、inputs も渡す。 -->
+      <ng-container
+        *ngComponentOutlet="
+          selectedWidget().component;
+          inputs: { message: selectedWidget().message }
+        "
+      />
+    </article>
+
+    <article>
+      <h3>CDK Portal</h3>
+      <!-- [■観点:Portal] ComponentPortal の内容を PortalOutlet という表示先へ接続する。 -->
+      <ng-template [cdkPortalOutlet]="portal" />
+    </article>
+
+    <article>
+      <h3>createComponent</h3>
+      <div class="actions">
+        @for (option of widgetOptions; track option.label) {
+          <button type="button" (click)="createManually(option)">{{ option.label }}を生成</button>
+        }
+      </div>
+      <ng-container #manualHost />
+    </article>
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

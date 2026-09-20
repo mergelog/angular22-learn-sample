@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.panel {
+  overflow: hidden;
+  border: 1px solid #90a4ae;
+  border-radius: 8px;
+}
+
+header,
+main {
+  padding: 16px;
+}
+
+header {
+  background: #eceff1;
+  font-weight: 700;
+}

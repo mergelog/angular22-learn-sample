@@ -1,0 +1,30 @@
+<main>
+  <header>
+    <div>
+      <p class="eyebrow">Live simulation</p>
+      <h1>Sweets Cafe Status</h1>
+      <p class="description">取得時点のスナップショット</p>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/cafe-status">Cafe Tables</a>
+      <button type="button" [disabled]="loading()" (click)="refreshView()">
+        {{ loading() ? '更新中...' : '更新' }}
+      </button>
+    </div>
+  </header>
+
+  @if (errorMessage(); as message) {
+    <p class="error" role="alert">{{ message }}</p>
+  }
+
+  @if (dashboard(); as data) {
+    <!-- [■観点:JsonPipe] オブジェクトを読みやすく整形し、加工せずそのまま表示します。 -->
+    <pre>{{ data | json }}</pre>
+    <h2>注文情報</h2>
+    <pre>{{ orders() | json }}</pre>
+  } @else if (loading()) {
+    <p class="loading" aria-live="polite">読み込み中...</p>
+  }
+</main>

@@ -1,0 +1,12 @@
+<h2>withComponentInputBinding() + input()</h2>
+<p>
+  lessonId: <strong>{{ lessonId() }}</strong>
+</p>
+<p>
+  filter: <strong>{{ filter() }}</strong>
+</p>
+<a
+  [routerLink]="['/p01-signals/sample-12-router-input', 'signals']"
+  [queryParams]="{ filter: 'advanced' }"
+  >paramsを付けて開く</a
+><app-p01-signals-navi />

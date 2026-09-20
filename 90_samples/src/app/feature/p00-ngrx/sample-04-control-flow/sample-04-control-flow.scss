@@ -1,0 +1,58 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 760px;
+}
+
+section {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+}
+
+.explanation {
+  border-left: 4px solid #5c6bc0;
+  background: #f5f6ff;
+}
+
+h3,
+p {
+  margin-top: 0;
+}
+
+.controls,
+.child-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.child-list {
+  margin-top: 12px;
+}
+
+.empty {
+  margin-bottom: 0;
+  color: #546e7a;
+}
+
+.defer-status {
+  margin: 12px 0 0;
+}
+
+.log {
+  background: #fafafa;
+}
+
+ol {
+  margin: 0;
+  padding-left: 24px;
+}
+
+li + li {
+  margin-top: 4px;
+}

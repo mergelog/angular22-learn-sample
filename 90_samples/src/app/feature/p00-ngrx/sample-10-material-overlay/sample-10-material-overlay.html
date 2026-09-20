@@ -1,0 +1,36 @@
+<main>
+  <h2>Material Menu / Dialog</h2>
+
+  <section class="explanation">
+    <p>
+      Menu と Dialog は、呼び出し元の子要素として表示されるのではなく、Angular Material が用意する
+      overlay 上に表示されます。テンプレート参照変数と <code>MatDialog</code> がその入口です。
+    </p>
+    <pre>
+button → MatMenuTrigger → overlay menu → MatDialog.open() → overlay dialog → afterClosed()</pre>
+  </section>
+
+  <!--
+    [■観点:exportAs] #trigger="matMenuTrigger" は button に付いた Directive の API を参照する。
+    #actionMenu="matMenu" は mat-menu Component を参照し、[matMenuTriggerFor] に渡す。
+  -->
+  <button
+    mat-stroked-button
+    type="button"
+    #trigger="matMenuTrigger"
+    [matMenuTriggerFor]="actionMenu"
+    aria-label="操作メニューを開く"
+  >
+    操作を選ぶ <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #actionMenu="matMenu">
+    @for (action of actions; track action) {
+      <button mat-menu-item type="button" (click)="openConfirmation(action)">{{ action }}</button>
+    }
+  </mat-menu>
+
+  <p class="result" aria-live="polite">{{ result() }}</p>
+
+  <app-p00-ngrx-navi />
+</main>

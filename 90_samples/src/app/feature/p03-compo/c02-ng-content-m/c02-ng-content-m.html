@@ -1,0 +1,24 @@
+<h2>c02-ng-content-m</h2>
+
+<p>名前付き slot と本文 slot を持つカード</p>
+
+<div class="controls">
+  <button type="button" (click)="toggleFooter()">
+    footer を {{ showFooter() ? '非表示' : '表示' }}にする
+  </button>
+  <span>親で受け取った操作回数: {{ actionCount() }}</span>
+</div>
+
+<app-c02-content-card><!-- 子に丸ごと渡している -->
+  <h3 card-title>Experiment #42</h3>
+
+  <button card-actions type="button" (click)="runExperiment()">実行</button>
+
+  <p>この本文には selector を付けないため、カードの本文 slot に投影される。</p>
+
+  @if (showFooter()) {
+    <div card-footer>最終更新: 2026-09-17</div>
+  }
+</app-c02-content-card>
+
+<app-p03-compo-navi />

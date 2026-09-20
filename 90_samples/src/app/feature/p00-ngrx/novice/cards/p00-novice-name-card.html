@@ -1,0 +1,12 @@
+<app-p00-novice-card>
+  <span card-title>{{ card().name || '名称未設定のカード' }}</span>
+
+  <label card-body>
+    カード名
+    <input
+      [value]="card().name"
+      (input)="changeName($event)"
+      placeholder="カード名を入力"
+    />
+  </label>
+</app-p00-novice-card>

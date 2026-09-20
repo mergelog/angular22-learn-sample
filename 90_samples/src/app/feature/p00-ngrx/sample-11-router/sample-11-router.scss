@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 820px;
+}
+
+.explanation {
+  margin: 20px 0;
+  padding: 16px;
+  border-left: 4px solid #5c6bc0;
+  background: #f5f6ff;
+}
+
+.explanation p,
+.explanation pre {
+  margin: 0;
+}
+
+.explanation pre {
+  margin-top: 12px;
+  white-space: pre-wrap;
+}
+
+.child-navigation {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.child-navigation a {
+  padding: 8px 12px;
+  border: 1px solid #9fa8da;
+  border-radius: 6px;
+  color: #303f9f;
+  text-decoration: none;
+}
+
+.child-navigation .active {
+  color: white;
+  background: #3f51b5;
+}

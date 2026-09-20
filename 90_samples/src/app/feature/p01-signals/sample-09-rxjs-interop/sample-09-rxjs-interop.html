@@ -1,0 +1,7 @@
+<h2>toSignal() / toObservable()</h2>
+<label>検索語 <input #queryInput [value]="query()" (input)="setQuery(queryInput.value)" /></label>
+<p>
+  Signal → Observable → Signal: <strong>{{ upperCaseQuery() }}</strong>
+</p>
+<p>文字数: {{ characterCount() }}</p>
+<app-p01-signals-navi />

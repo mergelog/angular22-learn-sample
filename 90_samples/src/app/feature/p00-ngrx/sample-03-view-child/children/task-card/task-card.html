@@ -1,0 +1,4 @@
+<article [class.archived]="isArchived()">
+  <h4>{{ title() }}</h4>
+  <p>状態: {{ isArchived() ? 'アーカイブ済み' : '作業中' }}</p>
+</article>

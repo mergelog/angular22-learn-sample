@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+.animal-grid {
+  display: block;
+  height: 520px;
+}

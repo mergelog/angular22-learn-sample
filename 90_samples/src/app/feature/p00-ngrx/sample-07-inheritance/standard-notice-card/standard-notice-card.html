@@ -1,0 +1,9 @@
+<article [style.border-color]="accentColor">
+  <h3>{{ cardType }}</h3>
+  <p>実体: <code>StandardNoticeCard</code></p>
+  <button type="button" (click)="toggle()">共通メソッド toggle()</button>
+
+  @if (isOpen()) {
+    <p class="detail">{{ details() }}</p>
+  }
+</article>

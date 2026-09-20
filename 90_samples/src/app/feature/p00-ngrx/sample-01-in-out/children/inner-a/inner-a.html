@@ -1,0 +1,9 @@
+<section class="child">
+  <h3>子コンポーネント</h3>
+
+  <p>input() で受け取った値: {{ message() }}</p>
+  <button type="button" (click)="sendMessage()">output() で親に通知</button>
+
+  <p>model() で共有するカウント: {{ count() }}</p>
+  <button type="button" (click)="increment()">model() の値を +1</button>
+</section>

@@ -1,0 +1,20 @@
+<table>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">親が渡した行テンプレート</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of rows(); track row.id; let index = $index) {
+      <!--
+        [■観点:ngTemplateOutlet] TemplateRef を、行ごとに指定した context で描画する。
+        $implicit は let-row、row は let-currentRow、index は let-index に対応する。
+      -->
+      <ng-container
+        [ngTemplateOutlet]="rowTemplate()"
+        [ngTemplateOutletContext]="{ $implicit: row, row, index }"
+      />
+    }
+  </tbody>
+</table>

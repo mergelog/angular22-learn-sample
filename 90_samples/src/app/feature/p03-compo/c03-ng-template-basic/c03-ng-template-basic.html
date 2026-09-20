@@ -1,0 +1,32 @@
+<h2>c03-ng-template-basic</h2>
+
+<hr><!-- [ngTemplateOutlet] -->
+
+<ng-template #basicMessage>
+  <p>[ngTemplateOutlet] の内容</p>
+</ng-template>
+
+<ng-container [ngTemplateOutlet]="basicMessage"></ng-container>
+
+<hr><!-- *ngTemplateOutlet -->
+
+<ng-container *ngTemplateOutlet="basicMessage"></ng-container>
+
+<hr><!-- context: { $implicit: -->
+
+<ng-template #contextMessage let-name>
+  <p>{{ name }}</p>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="contextMessage; context: { $implicit: '短縮構文の context' }"></ng-container>
+
+<hr><!--  -->
+
+<ng-container
+  [ngTemplateOutlet]="contextMessage"
+  [ngTemplateOutletContext]="{ $implicit: 'プロパティ構文の context' }">
+</ng-container>
+
+<hr><!--  -->
+
+<app-p03-compo-navi />

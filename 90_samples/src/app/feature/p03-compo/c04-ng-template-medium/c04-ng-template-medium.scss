@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  max-width: 680px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+button.active {
+  font-weight: 700;
+}
+
+.experiment {
+  border: 1px solid #b0bec5;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.compact {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.detail p {
+  margin: 4px 0 0;
+}
+
+.running {
+  color: #1565c0;
+}
+
+.completed {
+  color: #2e7d32;
+}
+
+.failed {
+  color: #c62828;
+}

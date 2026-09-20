@@ -1,0 +1,15 @@
+<!-- A / B / C はアクション定義の書き方の比較。詳細は processing.actions.ts の冒頭コメント -->
+<h2>A: createActionGroup（スペース区切り）</h2>
+<p>ProcessingActions.userClickedToggleButton</p>
+<p>1: {{ statusLabel() }}</p>
+<button type="button" (click)="toggleProcessing()">2: {{ toggleLabel() }}</button>
+
+<h2>B: createAction</h2>
+<p>userClickedSecondToggleButton</p>
+<p>3: {{ secondStatusLabel() }}</p>
+<button type="button" (click)="toggleSecondProcessing()">4: {{ secondToggleLabel() }}</button>
+
+<h2>C: createActionGroup（1語）</h2>
+<p>ProcessingActions.toggle</p>
+<p>5: {{ thirdStatusLabel() }}</p>
+<button type="button" (click)="toggleThirdProcessing()">6: {{ thirdToggleLabel() }}</button>

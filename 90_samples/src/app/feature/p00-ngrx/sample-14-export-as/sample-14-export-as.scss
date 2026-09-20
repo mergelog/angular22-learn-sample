@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 900px;
+}
+
+.explanation {
+  margin: 20px 0;
+  padding: 16px;
+  border-left: 4px solid #7e57c2;
+  background: #f8f5ff;
+}
+
+.explanation p,
+.explanation pre {
+  margin: 0;
+}
+
+.explanation pre {
+  margin-top: 12px;
+  white-space: pre-wrap;
+}
+
+.examples {
+  display: grid;
+  gap: 12px;
+}
+
+article {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #d1c4e9;
+  border-radius: 8px;
+}
+
+h3 {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+article > button:not([mat-stroked-button]) {
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f3e5f5;
+}

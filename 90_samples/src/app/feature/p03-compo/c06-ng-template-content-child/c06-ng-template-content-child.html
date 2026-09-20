@@ -1,0 +1,15 @@
+<h2>c06-ng-template-content-child</h2>
+
+<p>親が投影した無名 template を、子が contentChild(TemplateRef) で取得して繰り返し展開する。</p>
+
+<app-c06-task-list [items]="tasks">
+  <ng-template let-task let-rowIndex="rowIndex">
+    <article class="task">
+      <span>{{ rowIndex + 1 }}</span>
+      <strong>{{ task.title }}</strong>
+      <span>{{ task.assignee }}</span>
+    </article>
+  </ng-template>
+</app-c06-task-list>
+
+<app-p03-compo-navi />

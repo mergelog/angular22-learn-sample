@@ -1,0 +1,9 @@
+<h2>outputFromObservable() / outputToObservable()</h2>
+<button type="button" (click)="emitFromObservable()">Observableから通知</button>
+<button type="button" (click)="emitManual()">outputをObservableとして通知</button>
+<p>{{ received() }}</p>
+<p>
+  <code>outputFromObservable</code> は親コンポーネントから
+  <code>(notice)</code> としても購読できる。
+</p>
+<app-p01-signals-navi />

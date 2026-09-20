@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label {
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.filter-input {
+  width: 280px;
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  font-size: 0.85rem;
+}
+
+.filter-input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+.reload-button {
+  padding: 6px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.reload-button:hover:not(:disabled) {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.reload-button:disabled {
+  color: #94a3b8;
+  cursor: not-allowed;
+}

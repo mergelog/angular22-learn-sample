@@ -1,0 +1,28 @@
+<main>
+  <h2>standalone imports とテンプレート上の親子構築</h2>
+
+  <section class="explanation" aria-labelledby="import-rule-heading">
+    <h3 id="import-rule-heading">このサンプルの構造</h3>
+    <pre>Sample02Standalone → LessonCard → LessonStatus</pre>
+
+    <ul>
+      <li>
+        Angular 22では standalone が既定なので、<code>standalone: true</code> は省略できます。
+      </li>
+      <li>親は、直接使う <code>LessonCard</code> だけを imports に追加します。</li>
+      <li>
+        孫の <code>LessonStatus</code> は、実際に使う <code>LessonCard</code> が imports
+        に追加します。
+      </li>
+      <li>パイプもテンプレートの依存なので、使うコンポーネント自身が imports に追加します。</li>
+      <li>
+        TypeScriptの <code>import</code> はクラスや型をTS内で使うため、<code>@Component</code> の
+        <code>imports</code> はテンプレートで使うための宣言です。
+      </li>
+    </ul>
+  </section>
+
+  <app-lesson-card [lesson]="lesson" />
+
+  <app-p00-ngrx-navi />
+</main>

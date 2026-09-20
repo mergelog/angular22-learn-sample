@@ -1,0 +1,40 @@
+.card {
+  padding: 28px;
+  border: 1px solid #d8dee9;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgb(30 41 59 / 8%);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #1d4ed8;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.page-title {
+  margin: 0 0 20px;
+  font-size: 1.4rem;
+}
+
+.detail-list {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px 20px;
+  margin: 0;
+}
+
+dt {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+dd {
+  margin: 0;
+}

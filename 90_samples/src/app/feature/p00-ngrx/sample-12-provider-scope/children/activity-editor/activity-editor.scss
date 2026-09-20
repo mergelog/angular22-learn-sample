@@ -1,0 +1,14 @@
+.editor {
+  display: flex;
+  gap: 8px;
+}
+
+input {
+  min-width: 0;
+  flex: 1;
+  padding: 7px;
+}
+
+button {
+  cursor: pointer;
+}

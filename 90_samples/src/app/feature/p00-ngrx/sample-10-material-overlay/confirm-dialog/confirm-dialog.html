@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ data.action }}しますか？</h2>
+
+<mat-dialog-content>
+  この画面の外側に dialog 用の overlay が作られます。閉じると結果だけが呼び出し元へ返ります。
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">キャンセル</button>
+  <button mat-flat-button type="button" (click)="confirm()">実行</button>
+</mat-dialog-actions>

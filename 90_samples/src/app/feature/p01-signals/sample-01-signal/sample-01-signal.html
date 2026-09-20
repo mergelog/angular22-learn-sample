@@ -1,0 +1,22 @@
+<h2>signal()</h2>
+
+<p>
+  <code>signal()</code>
+  は変更をAngularへ通知できる状態を作る。テンプレートでは関数のように呼び出して値を読む。
+</p>
+
+<section class="counter" aria-labelledby="counter-title">
+  <h3 id="counter-title">カウンター</h3>
+
+  <p class="count" aria-live="polite">{{ count() }}</p>
+
+  <div class="actions">
+    <button type="button" (click)="decrement()">-1: update()</button>
+    <button type="button" (click)="increment()">+1: update()</button>
+    <button type="button" (click)="reset()">0に戻す: set()</button>
+  </div>
+</section>
+
+<p><code>update()</code> は現在値を基に更新し、<code>set()</code> は指定した値へ置き換える。</p>
+
+<app-p01-signals-navi />

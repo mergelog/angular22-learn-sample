@@ -1,0 +1,155 @@
+<main class="page-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/dashboard" aria-label="Sweets Cafe dashboard">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span>Sweets Cafe</span>
+    </a>
+
+    <nav aria-label="画面ナビゲーション">
+      <a routerLink="/dashboard">Dashboard</a>
+      <a class="active" routerLink="/cafe-status" aria-current="page">Cafe Tables</a>
+      <a routerLink="/view-json">View JSON</a>
+    </nav>
+
+    <span class="learning-badge">LEARNING</span>
+  </header>
+
+  <section class="workspace">
+    <aside class="sidebar" aria-label="カフェメニュー">
+      <div class="sidebar-heading">OPERATIONS</div>
+      <a class="sidebar-item active" routerLink="/cafe-status">
+        <span class="sidebar-icon" aria-hidden="true">▦</span>
+        Tables
+      </a>
+      <span class="sidebar-item disabled" aria-disabled="true">
+        <span class="sidebar-icon" aria-hidden="true">⌁</span>
+        Orders
+        <span class="soon">Soon</span>
+      </span>
+      <span class="sidebar-item disabled" aria-disabled="true">
+        <span class="sidebar-icon" aria-hidden="true">◷</span>
+        Reservations
+        <span class="soon">Soon</span>
+      </span>
+    </aside>
+
+    <section class="content" aria-labelledby="page-title">
+      <header class="page-header">
+        <div>
+          <p class="breadcrumb">SWEETS CAFE / OPERATIONS</p>
+          <h1 id="page-title">Cafe Tables</h1>
+          <p class="subtitle">店内テーブルの現在の利用状況</p>
+        </div>
+
+        <button
+          type="button"
+          class="refresh-button"
+          [disabled]="loading()"
+          (click)="loadDashboard()"
+        >
+          <span aria-hidden="true">↻</span>
+          {{ loading() ? '更新中' : '再読み込み' }}
+        </button>
+      </header>
+
+      <section class="summary-strip" aria-label="現在の集計">
+        <div class="summary-item">
+          <span>TABLES</span>
+          <strong>{{ dashboard()?.tables?.length ?? '—' }}</strong>
+        </div>
+        <div class="summary-item">
+          <span>SEATS</span>
+          <strong
+            >{{ dashboard()?.seats?.usedToday ?? '—' }} /
+            {{ dashboard()?.seats?.total ?? '—' }}</strong
+          >
+        </div>
+        <div class="summary-item">
+          <span>STAFF</span>
+          <strong>{{
+            (dashboard()?.staff?.hall ?? 0) + (dashboard()?.staff?.kitchen ?? 0)
+          }}</strong>
+        </div>
+        <div class="snapshot-time">
+          <span class="live-dot" aria-hidden="true"></span>
+          @if (dashboard(); as data) {
+            取得時刻 {{ data.generatedAt | date: 'yyyy/MM/dd HH:mm:ss' }}
+          } @else {
+            取得時刻 —
+          }
+        </div>
+      </section>
+
+      <section class="table-panel">
+        <div class="table-toolbar">
+          <div>
+            <h2>All tables</h2>
+            <span>{{ dashboard()?.tables?.length ?? 0 }} tables</span>
+          </div>
+          <div class="future-tools" aria-label="今後追加する操作">
+            <span>⌕&nbsp; Filter</span>
+            <span>☷&nbsp; Columns</span>
+          </div>
+        </div>
+
+        @if (errorMessage(); as message) {
+          <div class="state-message error" role="alert">
+            <strong>読み込みに失敗しました</strong>
+            <span>{{ message }}</span>
+            <button type="button" (click)="loadDashboard()">もう一度試す</button>
+          </div>
+        } @else if (!dashboard() && loading()) {
+          <div class="state-message" aria-live="polite">
+            <span class="spinner" aria-hidden="true"></span>
+            <strong>テーブル状況を読み込んでいます</strong>
+          </div>
+        } @else if (dashboard(); as data) {
+          @if (data.tables.length > 0) {
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">テーブル番号</th>
+                    <th scope="col">分類</th>
+                    <th scope="col">状態</th>
+                    <th scope="col" class="numeric">人数</th>
+                    <th scope="col" class="numeric">会計金額</th>
+                    <th scope="col">現状態の経過時間</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (table of data.tables; track table.tableNumber) {
+                    <tr>
+                      <td>
+                        <strong>{{ table.tableNumber }}</strong>
+                      </td>
+                      <td>{{ table.classification }}</td>
+                      <td>
+                        <span class="status" [class]="'status ' + statusClass(table.status)">
+                          <span aria-hidden="true"></span>{{ table.status }}
+                        </span>
+                      </td>
+                      <td class="numeric">{{ table.people }}名</td>
+                      <td class="numeric">¥{{ table.billingAmount | number }}</td>
+                      <td>{{ formatDuration(table.stateElapsedSeconds) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <div class="state-message">
+              <strong>表示できるテーブルがありません</strong>
+              <span>データが追加されると、ここに一覧が表示されます。</span>
+            </div>
+          }
+        }
+
+        <footer class="table-footer">
+          <span>取得時点のスナップショットを表示しています</span>
+          <span>詳細ペインは次の学習ステップで追加</span>
+        </footer>
+      </section>
+    </section>
+  </section>
+</main>

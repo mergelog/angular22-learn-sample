@@ -1,0 +1,100 @@
+:host {
+  display: block;
+}
+
+.page {
+  display: grid;
+  gap: 24px;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 56px 24px;
+}
+
+.card {
+  padding: 32px;
+  border: 1px solid #d8dee9;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgb(30 41 59 / 8%);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+h1 {
+  font-size: 1.8rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+.state-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 28px 0 16px;
+}
+
+.state-label,
+.sync-status {
+  color: #475569;
+}
+
+.sync-status.is-syncing {
+  color: #0f766e;
+  font-style: italic;
+}
+
+.state-value {
+  color: #64748b;
+  font-size: 1.35rem;
+}
+
+.state-value.is-on {
+  color: #15803d;
+}
+
+.toggle-button {
+  width: 100%;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #334155;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle-button.is-on {
+  background: #15803d;
+}
+
+.color-box {
+  display: grid;
+  min-height: 128px;
+  place-items: center;
+  margin-top: 20px;
+  border-radius: 12px;
+  color: #ffffff;
+  font-weight: 700;
+  transition: background-color 180ms ease;
+}
+
+.sync-status {
+  min-height: 1.5em;
+  margin: 14px 0 0;
+}

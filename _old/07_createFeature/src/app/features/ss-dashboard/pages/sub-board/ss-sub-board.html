@@ -1,0 +1,15 @@
+<main class="sub-board">
+  <h1>Signal Store Sub board</h1>
+
+  <a routerLink="/ss-dashboard">Go to Signal Store Main board</a>
+
+  @if (dashboardStore.error()) {
+    <p role="alert">{{ dashboardStore.error() }}</p>
+  }
+
+  @if (dashboardStore.loading() && dashboardStore.items().length === 0) {
+    <p>Loading...</p>
+  } @else {
+    <app-ss-lot-list [items]="dashboardStore.items()" />
+  }
+</main>

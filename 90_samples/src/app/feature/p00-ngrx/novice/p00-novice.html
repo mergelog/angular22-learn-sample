@@ -1,0 +1,19 @@
+<h2>p00-ngrx / novice</h2>
+
+<p>
+  名前付きスロットを持つ共通カードで合成した UI と、昔ながらの reducer
+  関数による状態管理の例です。
+</p>
+
+<section class="card-list" aria-label="カード一覧">
+  <app-p00-novice-add-card (addCard)="addCard()" />
+
+  @for (card of cards(); track card.id) {
+    <app-p00-novice-name-card
+      [card]="card"
+      (nameChange)="changeCardName($event)"
+    />
+  }
+</section>
+
+<app-p00-ngrx-navi />

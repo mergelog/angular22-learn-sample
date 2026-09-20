@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+article {
+  padding: 12px;
+  border: 1px solid #90a4ae;
+  border-radius: 6px;
+  background: #fff;
+}
+
+article.archived {
+  color: #546e7a;
+  background: #eceff1;
+}
+
+h4,
+p {
+  margin: 0;
+}
+
+p {
+  margin-top: 8px;
+}

@@ -1,0 +1,6 @@
+<h2>withMethods() + withComputed()</h2>
+<p>count: {{ store.count() }} / doubled: {{ store.doubled() }}</p>
+<button type="button" (click)="store.increment()">+1</button>
+<button type="button" (click)="store.reset()">reset</button>
+<p>状態更新と派生値をStoreに閉じ込められる。</p>
+<app-p01-signals-navi />

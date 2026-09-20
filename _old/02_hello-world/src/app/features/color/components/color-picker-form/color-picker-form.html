@@ -1,0 +1,19 @@
+<div class="picker">
+  <label class="picker-label" for="color-input">色を直接選ぶ</label>
+
+  <input
+    id="color-input"
+    class="picker-input"
+    type="color"
+    [value]="pickedColor()"
+    (input)="onColorInput($event)"
+  />
+
+  <dl class="picker-values">
+    <dt>入力中の値（signal）</dt>
+    <dd>{{ pickedColor() }}</dd>
+
+    <dt>store の値（async パイプ）</dt>
+    <dd>{{ backgroundColor$ | async }}</dd>
+  </dl>
+</div>

@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.selected {
+  color: #fff;
+  background: #3949ab;
+}

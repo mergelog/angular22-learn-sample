@@ -1,0 +1,9 @@
+<h2>asReadonly()</h2>
+<p>
+  公開する温度: <strong>{{ temperature() }} ℃</strong>
+</p>
+<button type="button" (click)="warmUp()">内部から+1 ℃</button>
+<p>
+  テンプレートや外部の利用者は値を読めるが、<code>set()</code> と <code>update()</code> は呼べない。
+</p>
+<app-p01-signals-navi />

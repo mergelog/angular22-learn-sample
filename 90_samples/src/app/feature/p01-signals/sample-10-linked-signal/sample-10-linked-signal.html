@@ -1,0 +1,10 @@
+<h2>linkedSignal()</h2>
+<p>
+  選択中: <strong>{{ selected() }}</strong>
+</p>
+@for (option of options(); track option) {
+  <button type="button" (click)="select(option)">{{ option }}</button>
+}
+<button type="button" (click)="replaceOptions()">選択肢を差し替える</button>
+<p>選択肢を差し替えると、選択値は新しい先頭値になる。</p>
+<app-p01-signals-navi />

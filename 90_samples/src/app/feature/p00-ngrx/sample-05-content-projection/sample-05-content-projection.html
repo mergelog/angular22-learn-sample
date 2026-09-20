@@ -1,0 +1,32 @@
+<main>
+  <h2>&lt;ng-content&gt; / select</h2>
+
+  <section class="explanation">
+    <p>
+      <code>ng-content</code>
+      は、親が子コンポーネントのタグの中に書いた要素を、子のテンプレートへ差し込む仕組みです。
+      <code>select</code> を付けると、属性や CSS セレクターごとに差し込み先を分けられます。
+    </p>
+    <pre>親が内容を渡す → ProjectedPanel が select ごとの場所へ配置する</pre>
+  </section>
+
+  <!--
+    [■観点:コンテンツ投影] ProjectedPanel の開始・終了タグの間に書いた要素は、
+    ProjectedPanel の ng-content に渡される。ここで見えている見出し・本文・ボタン自体は親のもの。
+  -->
+  <app-sample-05-projected-panel>
+    <!-- [■観点:select] [panel-title] に一致するため、子の title 用 ng-content に入る。 -->
+    <h3 panel-title>デプロイ結果</h3>
+
+    <!-- [■観点:select] [panel-body] に一致するため、子の body 用 ng-content に入る。 -->
+    <p panel-body>3 件のサービスが正常に更新されました。</p>
+
+    <!-- [■観点:select] [panel-actions] に一致するため、子の footer 用 ng-content に入る。 -->
+    <button panel-actions type="button">詳細を開く(押しても何も起こりません)</button>
+
+    <!-- どの select にも一致しない要素は、select のない ng-content に入る。 -->
+    <small>更新日時: 2026-09-14 10:30</small>
+  </app-sample-05-projected-panel>
+
+  <app-p00-ngrx-navi />
+</main>

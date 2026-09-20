@@ -1,0 +1,19 @@
+<article>
+  <header>
+    <h3>{{ lesson().title | uppercase }}</h3>
+    <app-lesson-status [label]="lesson().status" />
+  </header>
+
+  <p>{{ lesson().description }}</p>
+
+  <dl>
+    <div>
+      <dt>このテンプレートの依存</dt>
+      <dd><code>LessonStatus</code>、<code>UpperCasePipe</code></dd>
+    </div>
+    <div>
+      <dt>宣言場所</dt>
+      <dd><code>LessonCard</code> の <code>imports</code></dd>
+    </div>
+  </dl>
+</article>

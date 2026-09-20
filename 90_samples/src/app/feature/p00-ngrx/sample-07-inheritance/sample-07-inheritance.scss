@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 760px;
+}
+
+.explanation {
+  margin-top: 20px;
+  padding: 16px;
+  border-left: 4px solid #5c6bc0;
+  background: #f5f6ff;
+}
+
+p {
+  margin-top: 0;
+}
+
+pre {
+  margin: 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}

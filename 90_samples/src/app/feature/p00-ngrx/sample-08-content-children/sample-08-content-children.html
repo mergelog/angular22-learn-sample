@@ -1,0 +1,25 @@
+<main>
+  <h2>contentChild() / contentChildren() / pTemplate</h2>
+
+  <section class="explanation">
+    <p>
+      親が複数の <code>ng-template</code> を子へ投影し、子は名前付き template
+      を取り出して描画します。 <code>pTemplate</code> は PrimeNG でよく見る「template
+      に役割名を付ける」仕組みです。
+    </p>
+    <pre>
+親の ng-template pTemplate="item" → 子の contentChildren(PTemplate) → ngTemplateOutlet</pre>
+  </section>
+
+  <app-sample-08-template-slot>
+    <!-- [■観点:pTemplate] Directive が "header" という役割名と TemplateRef を結び付ける。 -->
+    <ng-template pTemplate="header"><h3>親が渡した通知テンプレート</h3></ng-template>
+
+    <!-- [■観点:contentChildren] 同じ子に複数の template を渡し、子は name で選択する。 -->
+    <ng-template pTemplate="item" let-notice>
+      <li><strong>通知:</strong> {{ notice }}</li>
+    </ng-template>
+  </app-sample-08-template-slot>
+
+  <app-p00-ngrx-navi />
+</main>

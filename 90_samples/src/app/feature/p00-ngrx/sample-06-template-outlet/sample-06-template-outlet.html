@@ -1,0 +1,48 @@
+<main>
+  <h2>&lt;ng-template&gt; / TemplateRef / ngTemplateOutlet</h2>
+
+  <section class="explanation">
+    <p>
+      テーブルは「行を繰り返す」責務だけを持ち、各行をどう見せるかは親から <code>ng-template</code>
+      として渡します。同じデータでも、渡すテンプレートだけで表示を差し替えられます。
+    </p>
+    <pre>親の ng-template → TemplateRef input → 子の ngTemplateOutlet</pre>
+  </section>
+
+  <button type="button" (click)="toggleDetails()">
+    {{ showDetails() ? '簡易表示に切り替える' : '詳細表示に切り替える' }}
+  </button>
+
+  @if (showDetails()) {
+    <!-- [■観点:TemplateRef] #detailedRow が TemplateRef として ReportTable に渡される。 -->
+    <app-sample-06-report-table [rows]="reports" [rowTemplate]="detailedRow" />
+  } @else {
+    <app-sample-06-report-table [rows]="reports" [rowTemplate]="compactRow" />
+  }
+
+  <!--
+    [■観点:ng-template] 通常の DOM には直ちに描画されない。TemplateRef として保持され、
+    ReportTable の ngTemplateOutlet が描画を要求したときにだけ行になる。
+  -->
+  <ng-template #compactRow let-row let-index="index">
+    <tr>
+      <td>{{ index + 1 }}</td>
+      <td>{{ row.service }} — {{ row.status }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template #detailedRow let-currentRow="row" let-index="index">
+    <tr>
+      <td>{{ index + 1 }}</td>
+      <td>
+        <strong>{{ currentRow.service }}</strong>
+        <span
+          >状態: {{ currentRow.status }} / 更新: {{ currentRow.updatedAt }} / 担当:
+          {{ currentRow.owner }}</span
+        >
+      </td>
+    </tr>
+  </ng-template>
+
+  <app-p00-ngrx-navi />
+</main>

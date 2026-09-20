@@ -1,0 +1,12 @@
+<section>
+  <h3>子: WorkspacePanel</h3>
+  <p>viewChildren(TaskCard) が見つけた子: {{ taskCount() }} 件</p>
+
+  <div class="task-list">
+    <app-sample-03-task-card #primaryTask title="最初のタスク" />
+
+    @if (showExtraTask()) {
+      <app-sample-03-task-card title="条件付きの追加タスク" />
+    }
+  </div>
+</section>

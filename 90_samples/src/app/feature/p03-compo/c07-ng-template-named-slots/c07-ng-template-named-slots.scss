@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  max-width: 680px;
+}
+
+button {
+  margin: 12px 0;
+}
+
+.header-row,
+.body-row {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #b0bec5;
+}
+
+.header-row {
+  background: #eceff1;
+}
+
+.empty {
+  padding: 12px;
+  border: 1px solid #b0bec5;
+}

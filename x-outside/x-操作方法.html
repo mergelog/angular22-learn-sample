@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Battery Manufacturing 操作ガイド</title>
+<style>
+:root {
+  --ground: #eceff0;
+  --surface: #ffffff;
+  --sunk: #f4f7f7;
+  --ink: #101a1c;
+  --muted: #5b6e70;
+  --line: #cdd8d8;
+  --line-soft: #e0e8e8;
+  --accent: #0d6d6d;
+  --accent-ink: #0a5757;
+  --accent-soft: #e2efee;
+  --pass: #1c7a4f;
+  --pass-bg: #e2f1e8;
+  --hold: #8f6304;
+  --hold-bg: #f6ecd6;
+  --fail: #a6342a;
+  --fail-bg: #f7e4e1;
+  --active: #1d5da8;
+  --active-bg: #e2ebf7;
+  /* 縁取り用の半透明色。旧 Safari でも同じ見た目になるよう静的に持つ */
+  --accent-edge: rgba(13, 109, 109, .45);
+  --pass-edge: rgba(28, 122, 79, .3);
+  --hold-edge: rgba(143, 99, 4, .3);
+  --fail-edge: rgba(166, 52, 42, .3);
+  --active-edge: rgba(29, 93, 168, .3);
+  --shadow: 0 1px 2px rgba(16, 26, 28, .06), 0 8px 24px -18px rgba(16, 26, 28, .45);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0d1414;
+    --surface: #151e1e;
+    --sunk: #1b2626;
+    --ink: #e2ecea;
+    --muted: #94a7a6;
+    --line: #2b3838;
+    --line-soft: #223030;
+    --accent: #54c3b6;
+    --accent-ink: #7ad6ca;
+    --accent-soft: #16302e;
+    --pass: #5cc48b;
+    --pass-bg: #16301f;
+    --hold: #d8a63c;
+    --hold-bg: #332714;
+    --fail: #e58074;
+    --fail-bg: #341f1c;
+    --active: #79aeea;
+    --active-bg: #16263a;
+    /* 縁取り用の半透明色。旧 Safari でも同じ見た目になるよう静的に持つ */
+    --accent-edge: rgba(84, 195, 182, .45);
+    --pass-edge: rgba(92, 196, 139, .3);
+    --hold-edge: rgba(216, 166, 60, .3);
+    --fail-edge: rgba(229, 128, 116, .3);
+    --active-edge: rgba(121, 174, 234, .3);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -18px rgba(0, 0, 0, .9);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #0d1414;
+  --surface: #151e1e;
+  --sunk: #1b2626;
+  --ink: #e2ecea;
+  --muted: #94a7a6;
+  --line: #2b3838;
+  --line-soft: #223030;
+  --accent: #54c3b6;
+  --accent-ink: #7ad6ca;
+  --accent-soft: #16302e;
+  --pass: #5cc48b;
+  --pass-bg: #16301f;
+  --hold: #d8a63c;
+  --hold-bg: #332714;
+  --fail: #e58074;
+  --fail-bg: #341f1c;
+  --active: #79aeea;
+  --active-bg: #16263a;
+  /* 縁取り用の半透明色。旧 Safari でも同じ見た目になるよう静的に持つ */
+  --accent-edge: rgba(84, 195, 182, .45);
+  --pass-edge: rgba(92, 196, 139, .3);
+  --hold-edge: rgba(216, 166, 60, .3);
+  --fail-edge: rgba(229, 128, 116, .3);
+  --active-edge: rgba(121, 174, 234, .3);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -18px rgba(0, 0, 0, .9);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  font-size: 15px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, .mono, kbd {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, "Noto Sans Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+a { color: var(--accent-ink); text-decoration-color: var(--accent-edge); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/* ---------- masthead ---------- */
+.masthead {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.masthead-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.masthead h1 {
+  margin: 6px 0 4px;
+  font-size: 28px;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: .01em;
+  text-wrap: balance;
+}
+.masthead p { margin: 0; color: var(--muted); font-size: 14px; }
+.eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 0;
+}
+.stamp {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: var(--muted);
+  border-left: 2px solid var(--accent);
+  padding-left: 14px;
+}
+.stamp b { color: var(--ink); font-weight: 500; }
+
+/* ---------- shell ---------- */
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px 96px;
+  display: grid;
+  grid-template-columns: 216px minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.rail {
+  position: sticky;
+  top: 24px;
+  padding: 28px 0 0;
+  font-size: 13px;
+}
+.rail-title {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.rail li { border-top: 1px solid var(--line-soft); }
+.rail li:last-child { border-bottom: 1px solid var(--line-soft); }
+.rail a {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 8px;
+  padding: 7px 4px;
+  text-decoration: none;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.rail a:hover { color: var(--accent-ink); background: var(--accent-soft); }
+.rail .n { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); padding-top: 2px; }
+
+main { padding-top: 28px; min-width: 0; }
+
+/* ---------- sections ---------- */
+section { margin: 0 0 56px; scroll-margin-top: 24px; }
+section > h2 {
+  margin: 0 0 6px;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  text-wrap: balance;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+section > h2 .n {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+}
+.route {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 0 0 18px 44px;
+}
+.route b { color: var(--ink); font-weight: 500; }
+
+h3 {
+  margin: 30px 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+h4 { margin: 22px 0 6px; font-size: 14px; font-weight: 700; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 14px; padding-left: 1.4em; max-width: 68ch; }
+li { margin-bottom: 5px; }
+li::marker { color: var(--muted); }
+
+code {
+  font-size: .88em;
+  background: var(--sunk);
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+kbd {
+  font-size: .82em;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 1px 6px;
+  background: var(--surface);
+}
+
+pre {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12.5px;
+  line-height: 1.75;
+}
+pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+pre .c { color: var(--muted); }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.65; }
+thead th {
+  background: var(--sunk);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--line);
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.mono, th.mono { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; white-space: nowrap; }
+
+/* ---------- chips ---------- */
+.chip {
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: .07em;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.chip.pass { color: var(--pass); background: var(--pass-bg); border-color: var(--pass-edge); }
+.chip.hold { color: var(--hold); background: var(--hold-bg); border-color: var(--hold-edge); }
+.chip.fail { color: var(--fail); background: var(--fail-bg); border-color: var(--fail-edge); }
+.chip.act  { color: var(--active); background: var(--active-bg); border-color: var(--active-edge); }
+.chip.neu  { color: var(--muted); background: var(--sunk); border-color: var(--line); }
+
+.state { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .06em; white-space: nowrap; }
+.state.on  { color: var(--pass); }
+.state.ro  { color: var(--muted); }
+.state.off { color: var(--fail); }
+
+/* ---------- callouts ---------- */
+.note {
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+}
+.note.warn { border-left-color: var(--hold); }
+.note.stop { border-left-color: var(--fail); }
+.note > :last-child { margin-bottom: 0; }
+.note-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  display: block;
+  margin-bottom: 4px;
+}
+.note.warn .note-label { color: var(--hold); }
+.note.stop .note-label { color: var(--fail); }
+
+/* ---------- wireframe ---------- */
+.wire {
+  margin: 0 0 20px;
+  padding: 16px;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12.5px;
+}
+.wire-cap {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  line-height: 1.5;
+}
+.box.dash { border-style: dashed; color: var(--muted); background: none; }
+.box .lbl { font-weight: 700; }
+.box small { color: var(--muted); font-size: 11.5px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.row > .box { flex: 1 1 160px; }
+.pin {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  flex: none;
+}
+:root[data-theme="dark"] .pin, :root:not([data-theme="light"]) .pin { color: #0d1414; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .pin { color: #ffffff; } }
+.navbar { display: flex; flex-wrap: wrap; gap: 6px; }
+.navbar span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+}
+.navbar span.cur { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); }
+
+/* ---------- steps ---------- */
+ol.steps { list-style: none; padding: 0; counter-reset: step; max-width: 68ch; }
+ol.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 34px;
+  margin-bottom: 10px;
+}
+ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--accent);
+  color: var(--accent-ink);
+  border-radius: 50%;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.lede { font-size: 15.5px; color: var(--muted); max-width: 66ch; }
+.lede strong { color: var(--ink); font-weight: 500; }
+
+footer {
+  border-top: 1px solid var(--line);
+  margin-top: 20px;
+  padding-top: 18px;
+  font-size: 12.5px;
+  color: var(--muted);
+  max-width: 68ch;
+}
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 20px 64px; }
+  .rail { position: static; padding-top: 24px; }
+  .rail ol { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+  .masthead-inner { padding: 24px 20px 20px; }
+  section > h2 { grid-template-columns: 28px 1fr; }
+  .route { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div>
+      <p class="eyebrow">Battery Manufacturing Data Hub</p>
+      <h1>画面操作ガイド</h1>
+      <p>ローカル開発環境で起動した6画面の、見方・操作手順・実際に動くボタンの一覧。</p>
+    </div>
+    <div class="stamp">
+      対象 &nbsp;<b>/manufacturing</b> 配下 7ルート<br />
+      確認日 &nbsp;<b>2026-09-02</b>（ローカル実機・シードデータ）<br />
+      前提 &nbsp;<b>FastAPI :8010</b> + <b>Angular :4200</b> 起動済み
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="目次">
+    <p class="rail-title">目次</p>
+    <ol>
+      <li><a href="#s0"><span class="n">00</span><span>最初に開くURL</span></a></li>
+      <li><a href="#s1"><span class="n">01</span><span>画面全体の地図</span></a></li>
+      <li><a href="#s2"><span class="n">02</span><span>Overview</span></a></li>
+      <li><a href="#s3"><span class="n">03</span><span>Work Orders</span></a></li>
+      <li><a href="#s4"><span class="n">04</span><span>Work Order 詳細</span></a></li>
+      <li><a href="#s5"><span class="n">05</span><span>Traceability</span></a></li>
+      <li><a href="#s6"><span class="n">06</span><span>Quality</span></a></li>
+      <li><a href="#s7"><span class="n">07</span><span>Data Products</span></a></li>
+      <li><a href="#s8"><span class="n">08</span><span>Operations</span></a></li>
+      <li><a href="#s9"><span class="n">09</span><span>画面にない操作</span></a></li>
+      <li><a href="#s10"><span class="n">10</span><span>困ったとき</span></a></li>
+      <li><a href="#s11"><span class="n">11</span><span>ステータス語彙</span></a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <section id="s0">
+    <h2><span class="n">00</span><span>最初に開くURL</span></h2>
+    <p class="lede">起動しても何も出ないのは正常です。トップページ <code>/</code> は ClearML の
+    ダッシュボードにリダイレクトしますが、<strong>ClearML Server は起動していない</strong>ため
+    ログインできず、左サイドナビの「BM」アイコンも表示されません。製造画面には URL で直接入ります。</p>
+
+    <div class="note">
+      <span class="note-label">ここを開く</span>
+      <p style="margin:0"><code>http://localhost:4200/manufacturing</code><br />
+      Mac など別端末からは <code>http://&lt;WindowsのLAN IPv4&gt;:4200/manufacturing</code></p>
+    </div>
+
+    <p>製造画面は ClearML のログイン状態とは無関係に動きます。ヘッダーもサイドナビも使わず、
+    <code>/manufacturing</code> 配下だけで完結する独立したシェルを持っているためです。</p>
+
+    <h3>開く前の起動確認</h3>
+<pre><code>curl http://127.0.0.1:8010/health/ready   <span class="c"># {"status":"ok","database":"ready"}</span>
+curl -I http://127.0.0.1:4200/           <span class="c"># HTTP/1.1 200 OK</span></code></pre>
+    <p>ブラウザからの API は Angular 開発サーバーが中継します
+    （<code>/bm-api/v1/...</code> → <code>127.0.0.1:8010/v1/...</code>）。
+    8010 番をブラウザに公開する必要はありません。</p>
+  </section>
+
+  <section id="s1">
+    <h2><span class="n">01</span><span>画面全体の地図</span></h2>
+    <p>上部の製品バーが唯一のナビゲーションです。6つのタブと、左端のロゴ（Overview へ戻る）で構成されます。</p>
+
+    <div class="wire">
+      <p class="wire-cap">共通ヘッダー</p>
+      <div class="box">
+        <span class="lbl">■ Battery Manufacturing</span>
+        <small>Data Hub · P01 / P02</small>
+        <span class="navbar" style="margin-left:auto">
+          <span class="cur">OV Overview</span><span>WO Work Orders</span><span>TR Traceability</span>
+          <span>QG Quality</span><span>DP Data Products</span><span>OP Operations</span>
+        </span>
+      </div>
+      <div class="box dash">● LOCAL CONNECTED &nbsp;— 固定表示のラベルです。API の疎通状態は反映しません。</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>画面</th><th class="mono">URL</th><th>役割</th><th>更新操作</th></tr></thead>
+        <tbody>
+          <tr><td>Overview</td><td class="mono">/manufacturing/overview</td><td>工場全体のスナップショット</td><td class="state ro">なし（閲覧）</td></tr>
+          <tr><td>Work Orders</td><td class="mono">/manufacturing/work-orders</td><td>製造指図の一覧・絞り込み</td><td class="state ro">なし（閲覧）</td></tr>
+          <tr><td>Work Order 詳細</td><td class="mono">/manufacturing/work-orders/wo-004</td><td>ロット・工程履歴・リリース</td><td class="state on">Release あり</td></tr>
+          <tr><td>Traceability</td><td class="mono">/manufacturing/traceability</td><td>系譜（ジェネアロジー）検索</td><td class="state ro">なし（検索）</td></tr>
+          <tr><td>Quality</td><td class="mono">/manufacturing/quality</td><td>品質ゲート判定の一覧</td><td class="state ro">なし（閲覧）</td></tr>
+          <tr><td>Data Products</td><td class="mono">/manufacturing/data-products</td><td>データ製品カタログ</td><td class="state ro">なし（閲覧）</td></tr>
+          <tr><td>Operations</td><td class="mono">/manufacturing/operations</td><td>未接続アダプタの一覧</td><td class="state off">STUB のみ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <span class="note-label">先に知っておくと迷わないこと</span>
+      <p style="margin:0">この画面群で<strong>データを実際に変更できるのは、Work Order 詳細の「Release work order」ボタン1つだけ</strong>です。
+      それ以外の目立つボタン（+ New work order / Export review queue / Create release candidate など）は
+      レイアウト確認用に置かれており、押しても何も起きません。各画面の「操作一覧」で
+      <span class="state on">動作</span> / <span class="state ro">表示のみ</span> / <span class="state off">未実装</span> を区別しています。</p>
+    </div>
+  </section>
+
+  <section id="s2">
+    <h2><span class="n">02</span><span>Overview — 工場の現在地</span></h2>
+    <p class="route"><b>/manufacturing/overview</b> &nbsp;·&nbsp; API: GET /v1/overview</p>
+
+    <p>最初に開く画面です。上段の指標カード4枚、中段の工程分布と健全性、下段の直近の工程実行テーブルという構成になっています。</p>
+
+    <div class="wire">
+      <p class="wire-cap">画面の見取り図</p>
+      <div class="row">
+        <div class="box"><span class="pin">1</span><span class="lbl">2</span><small>Active work orders →&nbsp;Work Orders へ</small></div>
+        <div class="box"><span class="pin">1</span><span class="lbl">1</span><small>Lots on hold →&nbsp;Quality へ</small></div>
+        <div class="box"><span class="lbl">1</span><small>Cells in process（リンクなし）</small></div>
+        <div class="box"><span class="pin">1</span><span class="lbl">1</span><small>Published products →&nbsp;Data Products へ</small></div>
+      </div>
+      <div class="row">
+        <div class="box" style="flex:2 1 320px"><span class="pin">2</span><span class="lbl">Route position</span><small>工程ごとの滞留ロット数（横棒）</small></div>
+        <div class="box"><span class="lbl">Platform integrity</span><small>同期失敗数ほか</small></div>
+      </div>
+      <div class="box"><span class="pin">3</span><span class="lbl">Recent process runs</span><small>Run / Process step / Equipment / Run status / Quality / Data / ClearML</small></div>
+    </div>
+
+    <h3>操作手順</h3>
+    <ol class="steps">
+      <li><b>指標カードをクリックして掘り下げる。</b>「Active work orders」「Lots on hold」「Published products」の3枚はリンクです。
+      Cells in process だけはリンクではありません。</li>
+      <li><b>Route position で滞留を見る。</b>工程コード（LOT-RELEASE / SLURRY-MIX-C / FORMATION-AGE / EOL-GRADE）ごとに
+      現在いるロット数が並びます。横棒の長さは件数 × 28% で描かれる相対表示です。</li>
+      <li><b>Recent process runs で異常を拾う。</b>Run status と Quality の色付きチップが赤／橙なら、
+      Quality 画面か Work Order 詳細で追跡します。初期データでは <span class="chip hold">ON_HOLD</span>
+      の <code>RUN-EOL-260902-002</code> が該当します。</li>
+    </ol>
+
+    <h3>操作一覧</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>操作</th><th>結果</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>指標カード（3枚）をクリック</td><td>対応する画面へ遷移</td><td class="state on">動作</td></tr>
+          <tr><td>「View all lots →」</td><td>Work Orders へ遷移</td><td class="state on">動作</td></tr>
+          <tr><td>Platform integrity の各値</td><td>API contract / Genealogy index / Last reconciliation は画面に直書きの固定値</td><td class="state ro">表示のみ</td></tr>
+          <tr><td>「Operational snapshot · 02 Sep 2026」</td><td>固定文字列。現在時刻ではありません</td><td class="state ro">表示のみ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s3">
+    <h2><span class="n">03</span><span>Work Orders — 指図の一覧と絞り込み</span></h2>
+    <p class="route"><b>/manufacturing/work-orders</b> &nbsp;·&nbsp; API: GET /v1/work-orders?status=&amp;q=</p>
+
+    <div class="wire">
+      <p class="wire-cap">ツールバー</p>
+      <div class="box">
+        <span class="pin">1</span><span class="lbl">［ Search ID or product ］</span>
+        <span class="pin">2</span><span class="lbl">［ All states ▾ ］</span>
+        <span class="pin">3</span><span class="lbl">［ Apply filters ］</span>
+        <small style="margin-left:auto">＋ New work order（未実装）</small>
+      </div>
+    </div>
+
+    <h3>操作手順</h3>
+    <ol class="steps">
+      <li><b>検索する。</b>入力欄に指図番号か製品コードの一部を入れて <kbd>Enter</kbd> を押します。
+      <span style="color:var(--fail)">入力しただけでは絞り込まれません</span>。<kbd>Enter</kbd> か「Apply filters」が必要です。
+      例: <code>P01</code> / <code>NMC</code> / <code>WO-P01-20260902</code>。
+      対象は指図番号（public_id）と製品コード（product_code）の部分一致です。</li>
+      <li><b>状態で絞る。</b>ドロップダウンは選んだ瞬間に再検索します。
+      All states / DRAFT / RELEASED / IN_PROGRESS / COMPLETED の5択です。</li>
+      <li><b>詳細へ入る。</b>左端の指図番号リンクをクリックします。</li>
+    </ol>
+
+    <h3>列の読み方</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>列</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>Work order</td><td>指図番号（リンク）と、その下に工順リビジョン（例 <code>ROUTE-PCH-R12</code>）</td></tr>
+          <tr><td>Product</td><td>製品コードと製品リビジョン</td></tr>
+          <tr><td>Site</td><td>工場コード。P01 / P02</td></tr>
+          <tr><td>Status</td><td>状態チップ。保留ロットがあると <span class="chip hold">1 HOLD</span> が並記されます</td></tr>
+          <tr><td>Lots</td><td>紐づく製造ロット数。DRAFT はまだ 0 件です</td></tr>
+          <tr><td>Progress</td><td>完了数 / 目標数と百分率。バーは四捨五入した整数％</td></tr>
+          <tr><td>Due date</td><td>納期。一覧は納期の昇順で並びます</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>初期データの5件</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="mono">URL の id</th><th>指図番号</th><th>状態</th><th>特徴</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">wo-003</td><td class="mono">WO-P02-20260901-0008</td><td><span class="chip pass">COMPLETED</span></td><td>リリース済みロットの見本</td></tr>
+          <tr><td class="mono">wo-005</td><td class="mono">WO-P02-20260902-0009</td><td><span class="chip pass">COMPLETED</span></td><td>100セルの小ロット</td></tr>
+          <tr><td class="mono">wo-001</td><td class="mono">WO-P01-20260902-0001</td><td><span class="chip act">IN_PROGRESS</span></td><td><b>ロットと工程履歴が一番充実</b>。保留1件あり</td></tr>
+          <tr><td class="mono">wo-002</td><td class="mono">WO-P01-20260902-0002</td><td><span class="chip neu">RELEASED</span></td><td>着手前</td></tr>
+          <tr><td class="mono">wo-004</td><td class="mono">WO-P01-20260903-0001</td><td><span class="chip neu">DRAFT</span></td><td><b>Release ボタンを押せる唯一の指図</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>詳細画面の URL には指図番号ではなく内部 ID を使います。直接開くなら
+    <code>/manufacturing/work-orders/wo-001</code> のように指定します。</p>
+
+    <h3>操作一覧</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>操作</th><th>結果</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>検索欄で <kbd>Enter</kbd></td><td>絞り込み実行</td><td class="state on">動作</td></tr>
+          <tr><td>状態ドロップダウン</td><td>選択と同時に絞り込み実行</td><td class="state on">動作</td></tr>
+          <tr><td>「Apply filters」</td><td>現在の入力で再検索</td><td class="state on">動作</td></tr>
+          <tr><td>指図番号リンク</td><td>詳細画面へ遷移</td><td class="state on">動作</td></tr>
+          <tr><td>「＋ New work order」</td><td>クリックハンドラなし。何も起きません</td><td class="state off">未実装</td></tr>
+          <tr><td>列ヘッダー</td><td>並べ替え不可。並び順は納期昇順で固定</td><td class="state ro">表示のみ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s4">
+    <h2><span class="n">04</span><span>Work Order 詳細 — 唯一の更新操作</span></h2>
+    <p class="route"><b>/manufacturing/work-orders/:id</b> &nbsp;·&nbsp; API: GET /v1/work-orders/:id, POST …/release</p>
+
+    <div class="wire">
+      <p class="wire-cap">画面の見取り図</p>
+      <div class="box dash">Work orders / WO-P01-20260903-0001 &nbsp;— パンくず（左の「Work orders」で一覧へ戻る）</div>
+      <div class="box">
+        <span class="lbl">WO-P01-20260903-0001</span>
+        <small>P01 · ROUTE-PCH-R13 / 製品リビジョン R01 / Aggregate version 1</small>
+        <span style="margin-left:auto;display:flex;gap:8px;align-items:center">
+          <span class="chip neu">DRAFT</span><span class="pin">1</span><span class="lbl">［ Release work order ］</span>
+        </span>
+      </div>
+      <div class="row">
+        <div class="box"><small>Target quantity</small></div>
+        <div class="box"><small>Completed</small></div>
+        <div class="box"><small>Due date</small></div>
+        <div class="box"><small>Released by</small></div>
+      </div>
+      <div class="box"><span class="pin">2</span><span class="lbl">Production lots</span><small>ロット / 状態 / 現在工程 / 数量 / 例外理由</small></div>
+      <div class="box"><span class="pin">3</span><span class="lbl">Process traveler</span><small>工程実行カードの並び。設備・レシピ・判定・ClearML 連携状態</small></div>
+    </div>
+
+    <h3>リリース操作（実際にデータが変わります）</h3>
+    <ol class="steps">
+      <li><code>/manufacturing/work-orders/wo-004</code> を開きます。状態が <span class="chip neu">DRAFT</span> のときだけ
+      「Release work order」ボタンが押せます。DRAFT 以外では常に無効です。</li>
+      <li>ボタンを押すと <code>POST /v1/work-orders/wo-004/release</code> が飛びます。ヘッダーには
+      <code>If-Match: 1</code>（楽観ロック用の版数）、<code>Idempotency-Key</code>（毎回新しい UUID）、
+      <code>X-BM-Roles: PRODUCTION_MANAGER</code> が付きます。</li>
+      <li>成功すると画面上の状態チップが <span class="chip neu">RELEASED</span> に変わり、
+      Aggregate version が 1 → 2 に上がります。ページ全体の再読み込みは行われません。</li>
+      <li>以後ボタンは無効になります。<b>この操作は画面からは戻せません。</b>再度試すにはデータの初期化が必要です（<a href="#s10">§10</a>）。</li>
+    </ol>
+
+    <div class="note warn">
+      <span class="note-label">エラーが出たとき</span>
+      <p style="margin:0">「Release was rejected. Refresh the aggregate version and retry.」は、
+      版数の不一致（409 VERSION_CONFLICT）か、DRAFT 以外への遷移（409 INVALID_TRANSITION）、
+      またはロール不足（403）です。ブラウザを再読み込みして最新の版数を取り直してから、もう一度試します。</p>
+    </div>
+
+    <h3>見どころのある指図</h3>
+    <ul>
+      <li><code>wo-004</code> … Release を試せる唯一の指図。ただしロットが0件なので、下の2つのテーブルは空です。</li>
+      <li><code>wo-001</code> … ロット2件（うち1件が <span class="chip hold">ON_HOLD</span>、理由「QG-80: DCIR upper limit」）と
+      工程履歴が入っています。Process traveler の見本にはこちらが向いています。</li>
+    </ul>
+
+    <h3>Process traveler カードの読み方</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>項目</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>Equipment</td><td>実行設備 ID（例 <code>FORM-P01-B03</code>）</td></tr>
+          <tr><td>Recipe</td><td>適用したレシピリビジョン。製品リビジョンと対で監査に使います</td></tr>
+          <tr><td>チップ2つ</td><td>左が実行状態（RUNNING / COMPLETED / DATA_PENDING / ON_HOLD）、右が品質判定（PASS / HOLD / PENDING）</td></tr>
+          <tr><td>ClearML</td><td>ClearML Task ID があれば Linked、なければ Pending。現状は ID を保持しているだけで実接続はしていません</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s5">
+    <h2><span class="n">05</span><span>Traceability — 系譜をたどる</span></h2>
+    <p class="route"><b>/manufacturing/traceability</b> &nbsp;·&nbsp; API: GET /v1/trace/:id</p>
+
+    <p>原材料ロット → スラリーバッチ → 電極ロール → セル → 出荷ロットの上流／下流を、
+    再帰クエリで一括取得して表示します。画面を開いた時点で
+    <code>CELL-P01-260902-000001</code> が自動で検索されています。</p>
+
+    <h3>操作手順</h3>
+    <ol class="steps">
+      <li>入力欄に ID を入れて <kbd>Enter</kbd>、または「Trace entity」を押します。
+      空欄のままでは何も起きません。</li>
+      <li>左パネルにヒットした全エンティティがカードで並びます。<b>検索した本人のカードだけが強調表示</b>されます。
+      その下に「親 → 関係 → 子」の関係行が並びます（例:
+      <code>RM-NMC811-… → CONSUMED INTO → SB-C-P01-260902-001</code>）。</li>
+      <li>右パネルで、検索したエンティティの種別・所属ロット・数量・グレード・
+      固有属性（粘度、目付、DCIR など）を確認します。</li>
+    </ol>
+
+    <div class="note">
+      <span class="note-label">試せる ID</span>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table>
+          <thead><tr><th>ID</th><th>種別</th><th>見えるもの</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">CELL-P01-260902-000001</td><td>CELL</td><td>初期表示。原材料2件まで遡る5ノード</td></tr>
+            <tr><td class="mono">CELL-P01-260902-004421</td><td>CELL</td><td>保留中セル。DCIR 2.41 mΩ、グレード C</td></tr>
+            <tr><td class="mono">SB-C-P01-260902-001</td><td>SLURRY_BATCH</td><td>粘度・固形分を持つ中間バッチ</td></tr>
+            <tr><td class="mono">ER-C-P01-260902-001</td><td>ELECTRODE_ROLL</td><td>目付 21.2 mg/cm² の電極ロール</td></tr>
+            <tr><td class="mono">RM-NMC811-P01-260825-014</td><td>MATERIAL_LOT</td><td>上流の起点。供給者と COA 番号</td></tr>
+            <tr><td class="mono">REL-LOT-P02-260901-08-R01</td><td>CELL_LOT</td><td>リリース済みの出荷ロット</td></tr>
+            <tr><td class="mono">CELLLOT-P02-260902-09</td><td>CELL_LOT</td><td>リリース候補になれる在庫ロット</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>操作一覧</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>操作</th><th>結果</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>ID を入れて <kbd>Enter</kbd> / 「Trace entity」</td><td>系譜を再取得して描画</td><td class="state on">動作</td></tr>
+          <tr><td>存在しない ID</td><td>「No traceable entity found for …」を表示し、直前の結果は消えます</td><td class="state on">動作</td></tr>
+          <tr><td>ノードカードをクリック</td><td>クリックできません。別ノードを見るには ID を入力し直します</td><td class="state ro">表示のみ</td></tr>
+          <tr><td>グラフ描画</td><td>線でつないだ図ではなく、カード一覧と「親→関係→子」の行で表現しています</td><td class="state ro">表示のみ</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>内部 ID（<code>ent-cell-02</code> など）でも検索できます。公開 ID と内部 ID のどちらでも同じ結果を返します。</p>
+  </section>
+
+  <section id="s6">
+    <h2><span class="n">06</span><span>Quality — 品質ゲートの判定一覧</span></h2>
+    <p class="route"><b>/manufacturing/quality</b> &nbsp;·&nbsp; API: GET /v1/quality/evaluations?result=</p>
+
+    <h3>操作手順</h3>
+    <ol class="steps">
+      <li>上部の3タブで絞り込みます。<b>All results</b>（既定）／<b>Needs review</b>（result=HOLD）／<b>Passed</b>（result=PASS）。
+      押すたびに API を呼び直します。FAIL だけを見るタブはありません。</li>
+      <li>All results では <b>HOLD → FAIL → その他</b>の順、同順位内は評価時刻の新しい順に並びます。
+      つまり<b>先頭行がいちばん対応が必要な判定</b>です。</li>
+      <li>行を左から右へ読みます。ゲート ＞ 判定 ＞ 実測値 ＞ 規格範囲 ＞ 評価者 ＞ 処置。
+      実測値が規格範囲のどちら側に外れたかを見て、Traceability で対象を特定します。</li>
+    </ol>
+
+    <h3>列の読み方</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>列</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>Gate / subject</td><td>ゲートコード（QG-20C 粘度、QG-30C 目付、QG-80 EOL）と、判定対象の種別・ID</td></tr>
+          <tr><td>Result</td><td>判定チップと重大度（BLOCKING / ADVISORY）</td></tr>
+          <tr><td>Measurement evidence</td><td>実測値と単位、その下に要約文</td></tr>
+          <tr><td>Specification</td><td>下限 — 上限と、束ねている規格リビジョン（例 <code>QSP-QG80-R09</code>）</td></tr>
+          <tr><td>Evaluated</td><td>評価日時と評価者（人名またはルールエンジン名）</td></tr>
+          <tr><td>Disposition</td><td>処置状態。ボタンの形をしていますが押しても何も起きません</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>初期データは5件で、内訳は <span class="chip hold">HOLD</span> 2件・<span class="chip pass">PASS</span> 3件です。
+    先頭の <code>QG-80 / PRODUCTION_LOT lot-002</code>（実測 127.0 cells、処置 UNDER REVIEW）が、
+    Overview の「Lots on hold = 1」および <code>wo-001</code> の保留ロットと同じ事象です。</p>
+
+    <h3>操作一覧</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>操作</th><th>結果</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>3つのタブ</td><td>結果種別で絞り込み</td><td class="state on">動作</td></tr>
+          <tr><td>Disposition のボタン</td><td>現在の処置状態を表示しているだけ。クリックハンドラなし</td><td class="state off">未実装</td></tr>
+          <tr><td>「Export review queue」</td><td>何も起きません</td><td class="state off">未実装</td></tr>
+          <tr><td>行クリック</td><td>詳細画面はありません</td><td class="state ro">表示のみ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s7">
+    <h2><span class="n">07</span><span>Data Products — 外部提供カタログ</span></h2>
+    <p class="route"><b>/manufacturing/data-products</b> &nbsp;·&nbsp; API: GET /v1/data-products</p>
+
+    <p>外部コンシューマに渡すデータ製品を、バージョン単位のカードで並べます。
+    1枚のカードが「スキーマ契約・元ロット・レコード件数・ClearML Dataset・マニフェストの SHA-256」を束ねた1版です。</p>
+
+    <h3>カードの読み方</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>項目</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td>状態チップ</td><td><span class="chip pass">PUBLISHED</span> は公開済み、<span class="chip neu">DRAFT</span> は候補段階</td></tr>
+          <tr><td>Schema contract</td><td>提供スキーマ（例 <code>bm.release-manifest/v1</code>）</td></tr>
+          <tr><td>Source release</td><td>由来の製造ロット ID</td></tr>
+          <tr><td>ClearML Dataset</td><td>未確定なら「Finalize pending」と表示されます</td></tr>
+          <tr><td>SHA-256 manifest</td><td>マニフェストのハッシュ。受け取り側の検証キーになります</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>初期データは2件です。<code>P02 LFP release genealogy 2026.09.01-r1</code> が PUBLISHED、
+    <code>P01 NMC formation telemetry 2026.09.02-rc1</code> が DRAFT。
+    DRAFT のカードでは「Consumer guide」ボタンが無効化されます（PUBLISHED のときだけ有効になる作りです）。</p>
+
+    <h3>操作一覧</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>操作</th><th>結果</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr><td>「Consumer guide」の有効／無効</td><td>PUBLISHED のカードだけ有効。押しても遷移はしません</td><td class="state off">未実装</td></tr>
+          <tr><td>「View manifest」</td><td>何も起きません</td><td class="state off">未実装</td></tr>
+          <tr><td>「Create release candidate」</td><td>何も起きません。候補作成は API 経由です（<a href="#s9">§9</a>）</td><td class="state off">未実装</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s8">
+    <h2><span class="n">08</span><span>Operations — 未接続であることを見せる画面</span></h2>
+    <p class="route"><b>/manufacturing/operations</b> ／ <b>/manufacturing/operations/:area</b></p>
+
+    <p>設備接続・SPC・保全・異常検知・バッテリーパスポート・ERP/LIMS 連携の6領域を、
+    <b>STUB（未接続）と明示したまま</b>並べた画面です。数字を出さずに置き換え境界だけを示すのが目的で、
+    「stub の結果を品質ゲートやリリース判断に使わない」と画面上に宣言しています。</p>
+
+    <ol class="steps">
+      <li>6枚のカードのどれかをクリックすると、その領域の STUB 詳細ページへ遷移します
+      （例 <code>/manufacturing/operations/spc</code>）。</li>
+      <li>詳細ページでは「現在の挙動」「置き換えポイント」「稼働前に必要なもの
+      （契約テスト・認可スコープ・監査イベント・突合ルール）」が読めます。</li>
+      <li>左上の「← Operations」で一覧に戻ります。「Download adapter contract」は未実装です。</li>
+    </ol>
+
+    <p>URL の <code>:area</code> は何を入れても同じ体裁のページが出ます。見出しはハイフン区切りを
+    単語頭大文字に変換しているだけなので、<code>/operations/anything-here</code> でも 404 にはなりません。</p>
+  </section>
+
+  <section id="s9">
+    <h2><span class="n">09</span><span>画面にない操作（API のみ）</span></h2>
+    <p>製造の本流ワークフローはバックエンドに実装済みですが、UI はまだありません。
+    動かして確かめるには curl を使います。すべて <code>Idempotency-Key</code> が必須で、
+    更新系は <code>If-Match</code> に現在の版数が必要です。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>操作</th><th class="mono">エンドポイント</th><th>必要ロール</th></tr></thead>
+        <tbody>
+          <tr><td>工程実行の開始</td><td class="mono">POST /v1/runs/:id/start</td><td>PRODUCTION_OPERATOR</td></tr>
+          <tr><td>実測ファイルの取り込み</td><td class="mono">POST /v1/runs/:id/ingestions</td><td>PRODUCTION_OPERATOR</td></tr>
+          <tr><td>実行の完了と品質評価</td><td class="mono">POST /v1/runs/:id/complete</td><td>PRODUCTION_OPERATOR</td></tr>
+          <tr><td>リリース候補の作成</td><td class="mono">POST /v1/lots/:id/release-candidates</td><td>PRODUCTION_MANAGER</td></tr>
+          <tr><td>二者承認</td><td class="mono">POST /v1/release-candidates/:id/approvals</td><td>PRODUCTION_MANAGER ＋ QUALITY_ENGINEER（別人）</td></tr>
+          <tr><td>データ製品の公開</td><td class="mono">POST /v1/release-candidates/:id/data-products</td><td>DATA_STEWARD</td></tr>
+          <tr><td>外部カタログ参照</td><td class="mono">GET /external/v1/data-products</td><td>X-BM-Service-Account</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+<pre><code><span class="c"># 画面の Release ボタンと同じ操作を curl で行う場合</span>
+curl -X POST http://127.0.0.1:8010/v1/work-orders/wo-004/release \
+  -H "If-Match: 1" \
+  -H "Idempotency-Key: $(uuidgen)" \
+  -H "X-BM-Actor: local.production.manager" \
+  -H "X-BM-Roles: PRODUCTION_MANAGER"
+
+<span class="c"># 対話的な API ドキュメント（全エンドポイントをブラウザから試せる）</span>
+open http://127.0.0.1:8010/docs</code></pre>
+
+    <div class="note">
+      <span class="note-label">同じキーで2回叩いたら</span>
+      <p style="margin:0">同じ <code>Idempotency-Key</code> で再送すると、処理は繰り返されず
+      前回の応答が <code>"replayed": true</code> 付きで返ります。二重実行の確認はこれで行えます。</p>
+    </div>
+  </section>
+
+  <section id="s10">
+    <h2><span class="n">10</span><span>困ったとき</span></h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>症状</th><th>原因と対処</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>ログイン画面が出る／サイドナビに BM アイコンがない</td>
+            <td>ClearML Server が未起動のため正常です。<code>/manufacturing</code> を直接開いてください。BM アイコンは ClearML にログインしている間だけ表示されます。</td>
+          </tr>
+          <tr>
+            <td>「Manufacturing API is unavailable. Start the service on port 8010 and retry.」</td>
+            <td>FastAPI が落ちています。<code>bm-services</code> で uvicorn を起動し直し、<code>curl http://127.0.0.1:8010/health/ready</code> で確認します。</td>
+          </tr>
+          <tr>
+            <td>「Could not load work orders.」「Quality review queue is unavailable.」</td>
+            <td>同じくバックエンド側の問題です。ブラウザの DevTools → Network で <code>/bm-api/v1/...</code> の応答コードを確認します。</td>
+          </tr>
+          <tr>
+            <td>Release ボタンが押せない</td>
+            <td>その指図が DRAFT ではありません。初期データで DRAFT なのは <code>wo-004</code> だけです。</td>
+          </tr>
+          <tr>
+            <td>データを初期状態に戻したい</td>
+            <td>バックエンドを止めて <code>bm-services/.local/bm-data-hub.db</code> を削除し、再起動します。work_orders が空のときだけシードが流れる作りなので、これで5件の初期データが戻ります。</td>
+          </tr>
+          <tr>
+            <td>「Invalid PrimeUI License」バナー</td>
+            <td>設定不備として扱う仕様です。<code>.env</code> の <code>PRIMEUI_LICENSE_KEY</code> を設定して <code>pnpm start</code> をやり直します。</td>
+          </tr>
+          <tr>
+            <td>Mac から 4200 につながらない</td>
+            <td>WSL の <code>172.x</code> ではなく Windows の LAN IPv4 を使います。スリープ復帰後は Angular を止め、ポートフォワードのスクリプトを実行してから再起動します（<code>x-起動方法.md</code> §3）。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s11">
+    <h2><span class="n">11</span><span>ステータス語彙と色</span></h2>
+    <p>チップの色は文字列から機械的に決まります。同じ色なら同じ意味だと読んで構いません。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>色</th><th>該当する値</th><th>読み方</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="chip pass">緑</span></td>
+            <td class="mono">PASS / COMPLETED / PUBLISHED / RELEASED_PRODUCT / SYNCED</td>
+            <td>完了・合格。追加の対応は不要</td>
+          </tr>
+          <tr>
+            <td><span class="chip hold">橙</span></td>
+            <td class="mono">HOLD / ON_HOLD / DATA_ERROR / BLOCKING</td>
+            <td>止まっている。人の判断待ち</td>
+          </tr>
+          <tr>
+            <td><span class="chip fail">赤</span></td>
+            <td class="mono">FAIL / FAILED / REJECTED / SCRAPPED</td>
+            <td>不合格・破棄。後戻りしない結末</td>
+          </tr>
+          <tr>
+            <td><span class="chip act">青</span></td>
+            <td class="mono">RUNNING / IN_PROGRESS / PROCESSING / PENDING</td>
+            <td>進行中。時間が経てば変わる</td>
+          </tr>
+          <tr>
+            <td><span class="chip neu">灰</span></td>
+            <td class="mono">DRAFT / RELEASED / AVAILABLE / CONSUMED ほか</td>
+            <td>上のどれでもない中立状態</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>紛らわしい2つの RELEASED</h4>
+    <ul>
+      <li><b>Work order の RELEASED</b> … 指図が現場に出た（着手可能になった）状態。灰色チップ。</li>
+      <li><b>Entity の RELEASED</b> … セルロットが出荷可能として確定した状態。Traceability 画面で見えます。</li>
+    </ul>
+    <p>また、Run status（工程実行の進み）と Quality（品質判定）は別物です。
+    実行が COMPLETED でも品質が HOLD なら、そのロットは先へ進みません。</p>
+  </section>
+
+  <footer>
+    このガイドは 2026-09-02 時点のローカル実機（シードデータ5指図）で確認した内容です。
+    起動手順は <code>x-起動方法.md</code>、実装範囲と未完了項目は
+    <code>docs/architecture/reports/003-first-manufacturing-slice.md</code> および
+    <code>004-core-workflow-and-external-api.md</code> を参照してください。
+  </footer>
+
+  </main>
+</div>
+
+</body>
+</html>

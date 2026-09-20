@@ -1,0 +1,10 @@
+<p>a-sample works!</p>
+
+[ <a routerLink="/dashboard">dashboard</a> ]
+[ <a routerLink="/samples/b-sample">b-sample</a> ]
+
+<hr>
+
+<p>changeName → {{ aSample$ | async }}</p>
+<input type="text" #s (input)="changeName(s.value)">
+<button type="button" (click)="s.value = ''; changeName()">clear name</button>

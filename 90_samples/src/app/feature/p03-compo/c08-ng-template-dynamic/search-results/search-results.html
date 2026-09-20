@@ -1,0 +1,9 @@
+<section class="results" aria-label="検索結果">
+  @for (item of items(); track item.id) {
+    <ng-container
+      [ngTemplateOutlet]="templateFor(item)"
+      [ngTemplateOutletContext]="{ $implicit: item }" />
+  } @empty {
+    <p>一致する検索結果はありません。</p>
+  }
+</section>

@@ -1,0 +1,5 @@
+<h2>effect() の onCleanup()</h2>
+<p>タイマー: {{ enabled() ? '実行中' : '停止中' }} / tick: {{ ticks() }}</p>
+<button type="button" (click)="toggle()">開始・停止</button>
+<p>停止時とコンポーネント破棄時に、effectへ登録したcleanupがタイマーを解除する。</p>
+<app-p01-signals-navi />

@@ -1,0 +1,20 @@
+<h2>c05-ng-template-input</h2>
+
+<p>親の template を子の input に渡し、子が context を渡して描画する。</p>
+
+<div class="controls">
+  <button type="button" (click)="toggleScreenSize()">
+    {{ smallScreen() ? 'wide 表示にする' : 'small 表示にする' }}
+  </button>
+  <span>親で作成した実験数: {{ createdCount() }}</span>
+</div>
+
+<ng-template #createAction let-smallScreen="smallScreen">
+  <button type="button" (click)="createExperiment()">
+    {{ smallScreen ? '+' : '+ Create experiment' }}
+  </button>
+</ng-template>
+
+<app-c05-experiment-header [actionTemplate]="createAction" [smallScreen]="smallScreen()" />
+
+<app-p03-compo-navi />

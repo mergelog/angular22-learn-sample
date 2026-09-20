@@ -1,0 +1,16 @@
+<div class="filter-bar">
+  <label class="filter-label" for="keyword">キーワード</label>
+  <input
+    id="keyword"
+    class="filter-input"
+    type="search"
+    placeholder="名前・種別・アカウント ID を横断検索"
+    autocomplete="off"
+    [disabled]="disabled()"
+    (input)="onKeywordInput($event)"
+  />
+
+  <button type="button" class="reload-button" [disabled]="disabled()" (click)="reload.emit()">
+    再読み込み
+  </button>
+</div>

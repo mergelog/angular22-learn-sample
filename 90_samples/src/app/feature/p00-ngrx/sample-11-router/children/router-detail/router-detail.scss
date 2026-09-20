@@ -1,0 +1,27 @@
+section {
+  padding: 20px;
+  border: 1px solid #b2dfdb;
+  border-radius: 8px;
+  background: #f4fffd;
+}
+
+.label {
+  color: #00796b;
+  font-size: 0.85rem;
+}
+
+h3,
+p {
+  margin: 0 0 8px;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 6px 12px;
+  margin-bottom: 0;
+}
+
+dd {
+  margin: 0;
+}

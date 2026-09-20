@@ -1,0 +1,22 @@
+<!--
+  [■観点:content projection] 下の ng-template は親から投影された content。
+  contentChild() / contentChildren() は、この投影 content を検索する。
+-->
+@if (headerTemplate(); as header) {
+  <ng-container [ngTemplateOutlet]="header.templateRef" />
+}
+
+<ul aria-label="通知一覧">
+  @if (itemTemplate(); as item) {
+    @for (notice of ['ビルド完了', 'レビュー待ち', 'デプロイ予約']; track notice) {
+      <ng-container
+        [ngTemplateOutlet]="item.templateRef"
+        [ngTemplateOutletContext]="{ $implicit: notice }"
+      />
+    }
+  }
+</ul>
+
+<p class="query-result">
+  最初の template: {{ firstTemplate()?.name() ?? 'なし' }} / 取得数: {{ templates().length }}
+</p>

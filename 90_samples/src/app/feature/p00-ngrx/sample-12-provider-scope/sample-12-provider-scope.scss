@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 920px;
+}
+
+.explanation {
+  margin: 20px 0;
+  padding: 16px;
+  border-left: 4px solid #00897b;
+  background: #f1f8f7;
+}
+
+.explanation p,
+.explanation pre {
+  margin: 0;
+}
+
+.explanation pre {
+  margin-top: 12px;
+  white-space: pre-wrap;
+}
+
+.scopes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}

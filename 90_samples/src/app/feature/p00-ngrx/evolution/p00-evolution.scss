@@ -1,0 +1,59 @@
+.temperature-controller {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 22rem);
+  padding: 1.5rem;
+  border: 1px solid #d7e2ea;
+  border-radius: 1rem;
+  background: #f7fbff;
+}
+
+.temperature-controller h2,
+.temperature-controller p {
+  margin: 0;
+}
+
+.current-temperature {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.target-temperature {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.target-temperature p:last-child {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.temperature-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.temperature-actions button,
+.temperature-controller > button {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #99b9d0;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #17384d;
+  font: inherit;
+  cursor: pointer;
+}
+
+.temperature-actions button {
+  flex: 1;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.temperature-controller > button {
+  background: #dff2ff;
+}

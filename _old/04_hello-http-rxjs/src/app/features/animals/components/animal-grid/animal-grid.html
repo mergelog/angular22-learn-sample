@@ -1,0 +1,12 @@
+<ag-grid-angular
+  class="animal-grid"
+  [theme]="theme"
+  [localeText]="localeText"
+  [rowData]="animals()"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+  [quickFilterText]="quickFilterText()"
+  [rowHeight]="40"
+  [animateRows]="true"
+  (modelUpdated)="onModelUpdated($event)"
+/>

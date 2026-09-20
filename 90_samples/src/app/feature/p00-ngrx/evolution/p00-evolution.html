@@ -1,0 +1,47 @@
+<h2>p00-ngrx / evolution</h2>
+
+<section class="temperature-controller">
+  <h2>室内温度コントローラー</h2>
+
+  <p class="current-temperature">
+    室温: {{ currentTemperature() }}℃
+  </p>
+
+  <div class="target-temperature">
+    <p>設定温度</p>
+    <p>{{ targetTemperature() }}℃</p>
+  </div>
+
+  <div class="temperature-actions">
+    <button
+      type="button"
+      aria-label="設定温度を下げる"
+      (click)="decreaseTargetTemperature()"
+    >
+      -
+    </button>
+
+    <button
+      type="button"
+      aria-label="設定温度を上げる"
+      (click)="increaseTargetTemperature()"
+    >
+      +
+    </button>
+  </div>
+
+  <!--
+  [attr.xxx] は HTML 属性 xxx を Angular の値で設定する書き方
+  aria-pressed は true / false を取るアクセシビリティ属性
+  isAirConditionerOn() は Store から取得した signal の現在値
+  -->
+  <button
+    type="button"
+    [attr.aria-pressed]="isAirConditionerOn()"
+    (click)="toggleAirConditioner()"
+  >
+    エアコン: {{ isAirConditionerOn() ? 'ON' : 'OFF' }}
+  </button>
+</section>
+
+<app-p00-ngrx-navi />

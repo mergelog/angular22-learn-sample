@@ -1,0 +1,35 @@
+{
+  "name": "06-users-sample",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed --workers=1",
+    "e2e:debug": "playwright test --debug --workers=1",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report",
+    "e2e:typecheck": "tsc --project tsconfig.playwright.json"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "dependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
+    "@ngrx/effects": "^22.0.0",
+    "@ngrx/store": "^22.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.0.6",
+    "@angular/cli": "^22.0.6",
+    "@angular/compiler-cli": "^22.0.0",
+    "@playwright/test": "1.56.1",
+    "@types/node": "^26.5.0",
+    "typescript": "~6.0.2"
+  }
+}

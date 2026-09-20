@@ -1,0 +1,38 @@
+<main>
+  <h2>iframe / postMessage / document events</h2>
+
+  <section class="explanation">
+    <p>
+      iframe は別の <code>window</code> を持つため、親子 Component の input/output は使えません。
+      <code>postMessage</code> で通信し、受信時は origin・送信元・データ形式を検証します。
+    </p>
+    <pre>親 window → postMessage → iframe window → postMessage → 親の window:message listener</pre>
+  </section>
+
+  <section class="frame-demo">
+    <div class="controls">
+      <input
+        #messageInput
+        type="text"
+        value="Angular から ping"
+        aria-label="iframeへ送るメッセージ"
+      />
+      <button type="button" [disabled]="!frameReady()" (click)="sendPing(messageInput)">
+        iframe へ送信
+      </button>
+    </div>
+
+    <!-- [■観点:iframe] iframe内は別document・別window。静的な子ページを読み込む。 -->
+    <iframe #demoFrame src="/sample-16-frame.html" title="postMessageを受信する子ページ"></iframe>
+
+    <p class="result" aria-live="polite">{{ lastFrameMessage() }}</p>
+  </section>
+
+  <section class="document-demo">
+    <h3>document event</h3>
+    <p>入力欄の中でも外でも Escape キーを押せます。</p>
+    <p class="result" aria-live="polite">{{ lastDocumentEvent() }}</p>
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

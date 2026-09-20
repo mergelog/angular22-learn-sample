@@ -1,0 +1,7 @@
+[
+  { "product_id": "p-001", "product_name": "エスプレッソマシン", "unit_price": 48000, "category_code": "kitchen" },
+  { "product_id": "p-002", "product_name": "ノイズキャンセリングヘッドホン", "unit_price": 39800, "category_code": "audio" },
+  { "product_id": "p-003", "product_name": "アロマディフューザー", "unit_price": 6800, "category_code": "kitchen" },
+  { "product_id": "p-004", "product_name": "ワイヤレスイヤホン", "unit_price": 21500, "category_code": "audio" },
+  { "product_id": "p-005", "product_name": "電動昇降デスク", "unit_price": 89000, "category_code": "furniture" }
+]

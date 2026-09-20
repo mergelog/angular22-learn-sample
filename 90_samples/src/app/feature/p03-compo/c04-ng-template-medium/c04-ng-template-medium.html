@@ -1,0 +1,40 @@
+<h2>c04-ng-template-medium</h2>
+
+<p>親が表示テンプレートを渡し、子が各行のデータと行番号を context として供給する。</p>
+
+<div class="controls" role="group" aria-label="表示形式">
+  <button type="button" [class.active]="viewMode() === 'compact'" (click)="setViewMode('compact')">
+    compact
+  </button>
+  <button type="button" [class.active]="viewMode() === 'detail'" (click)="setViewMode('detail')">
+    detail
+  </button>
+</div>
+
+<ng-template #compactTemplate let-experiment let-rowIndex="rowIndex">
+  <article class="experiment compact">
+    <span>{{ rowIndex + 1 }}</span>
+    <strong>{{ experiment.name }}</strong>
+    <span [class]="experiment.status.toLowerCase()">{{ experiment.status }}</span>
+  </article>
+</ng-template>
+
+<ng-template #detailTemplate let-experiment let-rowIndex="rowIndex">
+  <article class="experiment detail">
+    <header>
+      <span>Experiment {{ rowIndex + 1 }}</span>
+      <span [class]="experiment.status.toLowerCase()">{{ experiment.status }}</span>
+    </header>
+    <strong>{{ experiment.name }}</strong>
+    <p>ID: {{ experiment.id }}</p>
+    <p>Owner: {{ experiment.owner }}</p>
+  </article>
+</ng-template>
+
+@if (viewMode() === 'compact') {
+  <app-p04-template-list [items]="experiments" [itemTemplate]="compactTemplate" />
+} @else {
+  <app-p04-template-list [items]="experiments" [itemTemplate]="detailTemplate" />
+}
+
+<app-p03-compo-navi />

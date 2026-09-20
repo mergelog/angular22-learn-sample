@@ -1,0 +1,25 @@
+<main>
+  <h2>&lt;ng-template&gt; / TemplateRef / ngTemplateOutlet（実務例）</h2>
+
+  <section>
+    <h3>親でそのまま表示する</h3>
+
+    <ng-template #chartTemplate>
+      <app-chart />
+    </ng-template>
+
+    <ng-container *ngTemplateOutlet="chartTemplate" />
+  </section>
+
+  <section>
+    <h3>親から子へ渡して表示する</h3>
+
+    <app-panel>
+      <ng-template #bodyTemplate>
+        <app-chart />
+      </ng-template>
+    </app-panel>
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

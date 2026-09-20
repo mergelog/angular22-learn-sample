@@ -1,0 +1,9 @@
+<article [style.border-color]="accentColor">
+  <h3>{{ cardType }}</h3>
+  <p>実体: <code>ExtendedNoticeCard</code></p>
+  <button type="button" (click)="toggle()">継承した toggle()</button>
+
+  @if (isOpen()) {
+    <p class="detail">{{ details() }}</p>
+  }
+</article>

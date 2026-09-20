@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  max-width: 680px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+button.active {
+  font-weight: 700;
+}
+
+.result {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 12px;
+  padding: 12px;
+  border-left: 4px solid;
+  background: #f8fafb;
+}
+
+.project {
+  border-color: #1565c0;
+}
+
+.experiment {
+  border-color: #2e7d32;
+}
+
+.model {
+  border-color: #6a1b9a;
+}

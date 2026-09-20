@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  font-size: 14px;
+}
+
+.active {
+  font-weight: 700;
+}

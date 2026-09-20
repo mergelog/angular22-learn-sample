@@ -1,0 +1,25 @@
+<h2>p00-ngrx / canvas</h2>
+
+<!-- <p>changeName → {{ p00Canvas$ | async }}</p> -->
+<p>changeStatus → {{ p00CanvasStatus$ | ngrxPush }}</p>
+<p>changeNum → {{ p00CanvasNum$ | ngrxPush }}</p>
+<p>changeName → {{ p00CanvasName$ | ngrxPush }}</p>
+<mat-form-field appearance="outline" class="name-field">
+  <mat-label>名前</mat-label>
+  <input matInput
+    #s
+    type="text"
+    (input)="changeName(s.value)"
+  >
+  <button matIconButton
+    matSuffix
+    type="button"
+    aria-label="名前をクリア"
+    (click)="s.value = ''; clearName()"
+    [disabled]="p00CanvasName() === ''"
+  >
+    <mat-icon>cancel</mat-icon>
+  </button>
+</mat-form-field>
+
+<app-p00-ngrx-navi />

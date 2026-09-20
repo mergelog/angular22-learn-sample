@@ -1,0 +1,26 @@
+<h2>c07-ng-template-named-slots</h2>
+
+<p>役割名を付けた template を子が contentChildren() で集め、header / body / empty に振り分ける。</p>
+
+<button type="button" (click)="toggleItems()">
+  {{ showItems() ? 'empty 表示にする' : 'データを表示する' }}
+</button>
+
+<app-c07-experiment-table [items]="items()">
+  <ng-template c07Template="header">
+    <div class="header-row"><strong>Experiment</strong><strong>Owner</strong></div>
+  </ng-template>
+
+  <ng-template c07Template="body" let-experiment let-rowIndex="rowIndex">
+    <div class="body-row">
+      <span>{{ rowIndex + 1 }}. {{ experiment.name }}</span>
+      <span>{{ experiment.owner }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template c07Template="empty">
+    <p class="empty">表示できる実験はありません。</p>
+  </ng-template>
+</app-c07-experiment-table>
+
+<app-p03-compo-navi />

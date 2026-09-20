@@ -1,0 +1,31 @@
+<h2>input() / output() / model()</h2>
+
+<section class="parent">
+  <h3>親コンポーネント</h3>
+
+  <p>子に渡す値: {{ messageForChild() }}</p>
+  <button type="button" (click)="changeMessage()">親の値を変更</button>
+
+  <p>親と子で共有するカウント: {{ count() }}</p>
+  <p>子から受け取った通知: {{ messageFromChild() }}</p>
+
+  <app-inner-a
+    [message]="messageForChild()"
+    [(count)]="count"
+    (messageSent)="receiveMessage($event)"
+  />
+
+  <!--
+    <app-inner-a
+      [message]="messageForChild()"          // [message]は子が宣言しているinput.required、messageForChild()は親が宣言したSignal
+      [(count)]="count"                      // [(count)]は子のcount、"count"は親のcount
+      (messageSent)="receiveMessage($event)" // (messageSent)は子が宣言しているoutput、親が持つメソッドreceiveMessage($event)
+    />
+
+    [子input]="親signal"
+    (子output)="親method"
+  -->
+
+</section>
+
+<app-p00-ngrx-navi />

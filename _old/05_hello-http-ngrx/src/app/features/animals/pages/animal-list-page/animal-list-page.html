@@ -1,0 +1,26 @@
+<section class="card">
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">動物一覧</h1>
+      <p class="page-summary">{{ summary() }}</p>
+    </div>
+
+    <app-animal-filter-bar
+      [disabled]="isLoading()"
+      (keywordChange)="onKeywordChange($event)"
+      (reload)="onReload()"
+    />
+  </div>
+
+  @if (isLoading()) {
+    <app-spinner label="動物データを読み込み中…" />
+  } @else if (error(); as message) {
+    <app-error-banner [message]="message" [retryable]="true" (retry)="onReload()" />
+  } @else {
+    <app-animal-grid
+      [animals]="animals()"
+      [quickFilterText]="keyword()"
+      (visibleCountChange)="onVisibleCountChange($event)"
+    />
+  }
+</section>

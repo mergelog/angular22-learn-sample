@@ -1,0 +1,36 @@
+article {
+  padding: 20px;
+  border: 1px solid #c5cae9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+h3 {
+  margin: 0;
+}
+
+dl {
+  margin-bottom: 0;
+}
+
+dl div {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  padding-block: 6px;
+}
+
+dt {
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+}

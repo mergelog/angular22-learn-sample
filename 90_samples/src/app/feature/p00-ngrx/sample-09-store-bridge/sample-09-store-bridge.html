@@ -1,0 +1,19 @@
+<main>
+  <h2>NgRx Store との接続</h2>
+
+  <section class="explanation">
+    <p>
+      子 A と子 B は input / output でつながっていません。子 A が action を dispatch すると reducer
+      が状態を更新し、 子 B の <code>selectSignal()</code> が新しい状態を受け取ります。
+    </p>
+    <pre>子 A → dispatch(action) → Store / reducer → selectSignal() → 子 B</pre>
+  </section>
+
+  <!-- [■観点:Store] 親は子を並べるだけ。状態の橋渡しは Store が担う。 -->
+  <section class="children">
+    <app-sample-09-work-item-picker />
+    <app-sample-09-work-item-summary />
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

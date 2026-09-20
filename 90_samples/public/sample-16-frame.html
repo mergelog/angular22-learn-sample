@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>postMessage child</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        color: #16444a;
+        font-family: sans-serif;
+        background: #e0f7fa;
+      }
+      output {
+        display: block;
+        margin-top: 12px;
+        padding: 10px;
+        border-radius: 4px;
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <strong>iframe 内の別 document</strong>
+    <output id="received">親画面からのメッセージ待ち</output>
+    <script>
+      const output = document.querySelector('#received');
+
+      window.addEventListener('message', (event) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.source !== window.parent) return;
+        if (event.data?.source !== 'sample-16-parent' || event.data?.type !== 'ping') return;
+
+        const payload = typeof event.data.payload === 'string' ? event.data.payload : '';
+        output.textContent = `受信: ${payload}`;
+        window.parent.postMessage(
+          { source: 'sample-16-frame', type: 'pong', payload: `「${payload}」を受け取りました` },
+          window.location.origin,
+        );
+      });
+
+      window.parent.postMessage(
+        { source: 'sample-16-frame', type: 'ready' },
+        window.location.origin,
+      );
+    </script>
+  </body>
+</html>

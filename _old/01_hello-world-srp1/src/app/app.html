@@ -1,0 +1,24 @@
+<main class="page">
+  <section class="card" aria-labelledby="page-title">
+    <p class="eyebrow">Angular 22 + NgRx</p>
+    <h1 id="page-title">ON / OFF と Effect</h1>
+
+    <div class="state-row">
+      <span class="state-label">ボタンの状態</span>
+      <strong class="state-value" [class.is-on]="isOn()">{{ stateLabel() }}</strong>
+    </div>
+
+    <button type="button" class="toggle-button" [class.is-on]="isOn()" (click)="toggle()">
+      {{ buttonLabel() }}
+    </button>
+  </section>
+
+  <section class="card" aria-labelledby="color-title">
+    <p class="eyebrow">別の状態: color</p>
+    <h2 id="color-title">Effect が変える別 div</h2>
+    <div class="color-box" [style.background-color]="color()">
+      <span>{{ color() }}</span>
+    </div>
+    <p class="sync-status" [class.is-syncing]="isSyncing()">{{ syncStatusLabel() }}</p>
+  </section>
+</main>

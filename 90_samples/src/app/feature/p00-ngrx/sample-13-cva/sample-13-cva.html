@@ -1,0 +1,31 @@
+<main>
+  <h2>ControlValueAccessor / Forms</h2>
+
+  <section class="explanation">
+    <p>
+      <code>ControlValueAccessor</code> は Angular Forms と独自 UI の翻訳役です。
+      親から見ると、この3ボタン部品も通常の input と同じ <code>FormControl</code> です。
+    </p>
+    <pre>FormControl ⇄ ControlValueAccessor ⇄ 独自の優先度 UI</pre>
+  </section>
+
+  <section class="form-card">
+    <label>優先度</label>
+    <!-- [■観点:FormControl] CVA を実装した独自 Component に formControl をそのまま接続できる。 -->
+    <app-sample-13-priority-control [formControl]="priority" />
+
+    <p>
+      FormControl の現在値: <strong>{{ priorityValue() }}</strong>
+    </p>
+    <p>状態: {{ priority.disabled ? 'disabled' : 'enabled' }}</p>
+
+    <div class="actions">
+      <button type="button" (click)="reset()">中に戻す</button>
+      <button type="button" (click)="toggleDisabled()">
+        {{ priority.disabled ? '有効にする' : '無効にする' }}
+      </button>
+    </div>
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 760px;
+}
+
+.explanation {
+  margin: 20px 0;
+  padding: 16px;
+  border-left: 4px solid #3949ab;
+  background: #f5f6ff;
+}
+
+.explanation p,
+.explanation pre {
+  margin: 0;
+}
+
+.explanation pre {
+  margin-top: 12px;
+}
+
+.form-card {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #c5cae9;
+  border-radius: 8px;
+}
+
+.form-card p {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actions button {
+  padding: 7px 12px;
+  cursor: pointer;
+}

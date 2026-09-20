@@ -1,0 +1,54 @@
+<main>
+  <h2>exportAs / Material の template reference</h2>
+
+  <section class="explanation">
+    <p>
+      <code>#ref</code> は通常は DOM 要素や Component を指します。
+      <code>#ref="名前"</code> とすると、同じ要素上でその名前を <code>exportAs</code> した Directive
+      を指します。
+    </p>
+    <pre>
+#native → button要素 / #counter="clickCounter" → 独自Directive / #trigger="matMenuTrigger" → Material Directive</pre>
+  </section>
+
+  <section class="examples">
+    <article>
+      <h3>1. 通常の参照</h3>
+      <button #nativeButton type="button">フォーカス先</button>
+      <button type="button" (click)="nativeButton.focus()">#nativeButton.focus()</button>
+    </article>
+
+    <article>
+      <h3>2. 独自 Directive の exportAs</h3>
+      <!-- [■観点:独自exportAs] counter は button ではなく ClickCounter Directive の instance。 -->
+      <button type="button" appSample14ClickCounter #counter="clickCounter">
+        クリックを数える
+      </button>
+      <span>Directive が記録: {{ counter.clicks() }} 回</span>
+    </article>
+
+    <article>
+      <h3>3. Angular Material</h3>
+      <!-- [■観点:Material exportAs] trigger は MatMenuTrigger Directive の public API を参照する。 -->
+      <button
+        mat-stroked-button
+        type="button"
+        [matMenuTriggerFor]="actionMenu"
+        #trigger="matMenuTrigger"
+      >
+        メニュー本体
+      </button>
+      <button type="button" (click)="trigger.openMenu()">別ボタンから openMenu()</button>
+      <span>menuOpen: {{ trigger.menuOpen }}</span>
+
+      <mat-menu #actionMenu="matMenu">
+        <button mat-menu-item type="button" (click)="selectedAction.set('共有')">共有</button>
+        <button mat-menu-item type="button" (click)="selectedAction.set('複製')">複製</button>
+      </mat-menu>
+    </article>
+  </section>
+
+  <p class="result">選択した操作: {{ selectedAction() }}</p>
+
+  <app-p00-ngrx-navi />
+</main>

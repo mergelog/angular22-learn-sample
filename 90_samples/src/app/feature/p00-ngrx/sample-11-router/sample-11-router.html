@@ -1,0 +1,21 @@
+<main>
+  <h2>Router / router-outlet / loadComponent</h2>
+
+  <section class="explanation">
+    <p>
+      URL に一致した子ルートだけが <code>router-outlet</code> の位置に生成されます。
+      子画面のコードは <code>loadComponent</code> が必要になった時点で遅延読み込みします。
+    </p>
+    <pre>URL → Routes の照合 → loadComponent() → router-outlet に画面を生成</pre>
+  </section>
+
+  <nav class="child-navigation" aria-label="sample 11 child navigation">
+    <a routerLink="overview" routerLinkActive="active">概要</a>
+    <a routerLink="detail" routerLinkActive="active">詳細</a>
+  </nav>
+
+  <!-- [■観点:router-outlet] URL に合った子 Route の Component が、この場所へ差し込まれる。 -->
+  <router-outlet />
+
+  <app-p00-ngrx-navi />
+</main>

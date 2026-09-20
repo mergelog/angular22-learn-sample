@@ -1,0 +1,7 @@
+<section class="list" aria-label="実験一覧">
+  @for (item of items(); track item.id; let rowIndex = $index) {
+    <ng-container
+      [ngTemplateOutlet]="itemTemplate()"
+      [ngTemplateOutletContext]="{ $implicit: item, rowIndex }" />
+  }
+</section>

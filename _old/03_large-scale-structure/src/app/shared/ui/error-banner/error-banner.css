@@ -1,0 +1,26 @@
+.error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+}
+
+.error-message {
+  margin: 0;
+  color: #b91c1c;
+}
+
+.error-retry {
+  padding: 8px 14px;
+  border: 1px solid #b91c1c;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #b91c1c;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}

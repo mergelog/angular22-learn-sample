@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+article {
+  display: grid;
+  gap: 4px;
+  min-width: 156px;
+  padding: 12px;
+  border: 1px solid #81c784;
+  border-radius: 6px;
+  background: #f1f8e9;
+}
+
+strong {
+  font-size: 0.85rem;
+}

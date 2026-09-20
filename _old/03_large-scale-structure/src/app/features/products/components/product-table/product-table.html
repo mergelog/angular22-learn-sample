@@ -1,0 +1,29 @@
+<table class="product-table">
+  <caption class="product-caption">
+    {{ products().length }} 件
+  </caption>
+
+  <thead>
+    <tr>
+      <th scope="col">商品名</th>
+      <th scope="col">カテゴリ</th>
+      <th scope="col" class="numeric">価格</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (product of products(); track product.id) {
+    <tr>
+      <td>
+        <a class="product-link" [routerLink]="['/products', product.id]">{{ product.name }}</a>
+      </td>
+      <td>{{ categoryLabels[product.category] }}</td>
+      <td class="numeric">{{ product.price | currency: 'JPY' }}</td>
+    </tr>
+    } @empty {
+    <tr>
+      <td class="empty" colspan="3">該当する商品がありません。</td>
+    </tr>
+    }
+  </tbody>
+</table>

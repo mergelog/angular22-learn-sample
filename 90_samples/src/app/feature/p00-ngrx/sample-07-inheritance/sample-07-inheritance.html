@@ -1,0 +1,25 @@
+<main>
+  <h2>継承 / override / Extended</h2>
+
+  <section class="explanation">
+    <p>
+      タグの selector だけでは、共通処理がどこで定義されているか分からないことがあります。
+      <code>extends</code> を上へたどると、実際に使われる基底クラスと、<code>override</code>
+      で差し替えた部分を追えます。
+    </p>
+    <pre>
+BaseNoticeCard
+  └─ StandardNoticeCard
+       └─ ExtendedNoticeCard</pre>
+  </section>
+
+  <section class="cards">
+    <!-- [■観点:実体] このタグの実体は StandardNoticeCard。extends をたどると BaseNoticeCard に至る。 -->
+    <app-sample-07-standard-notice-card />
+
+    <!-- [■観点:extended] このタグの実体は ExtendedNoticeCard。StandardNoticeCard も継承している。 -->
+    <app-sample-07-extended-notice-card />
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

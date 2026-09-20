@@ -1,0 +1,25 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 720px;
+}
+
+.explanation {
+  margin-block: 20px;
+  padding: 16px;
+  border-left: 4px solid #5c6bc0;
+  background: #f5f6ff;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 12px;
+  background: #fff;
+}
+
+li + li {
+  margin-top: 8px;
+}

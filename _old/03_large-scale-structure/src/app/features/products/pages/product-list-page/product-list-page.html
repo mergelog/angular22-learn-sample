@@ -1,0 +1,30 @@
+<section class="card">
+  <div class="page-head">
+    <h1 class="page-title">商品一覧</h1>
+
+    <div class="page-controls">
+      <label class="filter-label" for="category-filter">カテゴリ</label>
+      <select
+        id="category-filter"
+        class="filter-select"
+        [value]="categoryFilter() ?? ''"
+        (change)="onCategoryChange($event)"
+      >
+        <option value="">すべて</option>
+        @for (category of categories(); track category) {
+        <option [value]="category">{{ categoryLabels[category] }}</option>
+        }
+      </select>
+
+      <button type="button" class="refresh-button" (click)="onRefresh()">再読み込み</button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+  <app-spinner label="商品を読み込み中…" />
+  } @else if (error(); as message) {
+  <app-error-banner [message]="message" [retryable]="true" (retry)="onRefresh()" />
+  } @else {
+  <app-product-table [products]="products()" />
+  }
+</section>

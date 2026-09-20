@@ -1,0 +1,7 @@
+<section>
+  <h3>子コンポーネント</h3>
+  <p>この子は、親から受け取ったテンプレートをここで描画します。</p>
+
+  <!-- [■観点:ngTemplateOutlet] TemplateRef を実際の DOM として描画する。 -->
+  <ng-container [ngTemplateOutlet]="content()" />
+</section>

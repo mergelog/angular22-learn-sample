@@ -1,0 +1,37 @@
+<main class="page">
+  <section class="card">
+    <p class="eyebrow">Angular 22 + NgRx</p>
+    <h1>ユーザー一覧</h1>
+    <p class="flow">ボタン → loadUsers → Effect → API → loadUsersSuccess → Reducer → Store</p>
+
+    <div class="actions">
+      <button type="button" (click)="loadUsers()" [disabled]="isLoading()">
+        {{ isLoading() ? "読み込み中..." : "ユーザーを取得" }}
+      </button>
+
+      <button
+        class="button-secondary"
+        type="button"
+        (click)="clearUsers()"
+        [disabled]="isLoading() || users().length === 0"
+      >
+        リストを削除
+      </button>
+    </div>
+
+    @if (users().length === 0 && !isLoading()) {
+      <p class="empty">ボタンを押すと、Action から Store 保存までの流れが動きます。</p>
+    }
+
+    @if (users().length > 0) {
+      <ul class="user-list">
+        @for (user of users(); track user.id) {
+          <li>
+            <strong>{{ user.name }}</strong>
+            <span>{{ user.email }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</main>

@@ -1,0 +1,24 @@
+<main>
+  <h2>&lt;ng-template&gt; / TemplateRef / ngTemplateOutlet（基本）</h2>
+
+  <section class="explanation">
+    <p>
+      <code>ng-template</code> の中身は、宣言しただけでは画面に出ません。親はそれを子へ渡し、子が
+      <code>ngTemplateOutlet</code> で「ここに表示して」と指定しています。
+    </p>
+    <pre>親の ng-template → 子の TemplateRef input → 子の ngTemplateOutlet</pre>
+  </section>
+
+  <!-- [■観点:TemplateRef] #greeting は親が作った、未描画のテンプレートを指す。 -->
+  <app-sample-06-template-host [content]="greeting" />
+
+  <!--
+    [■観点:ng-template] この内容は親に書かれているが、親の位置では描画されない。
+    TemplateHost が受け取り、子コンポーネントの中で描画する。
+  -->
+  <ng-template #greeting>
+    <p class="greeting">親が渡したメッセージです。</p>
+  </ng-template>
+
+  <app-p00-ngrx-navi />
+</main>

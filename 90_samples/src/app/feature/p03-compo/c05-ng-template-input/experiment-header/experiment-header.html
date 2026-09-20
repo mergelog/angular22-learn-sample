@@ -1,0 +1,10 @@
+<header class="header">
+  <div>
+    <h3>Experiments</h3>
+    <p>実験の一覧</p>
+  </div>
+
+  <ng-container
+    [ngTemplateOutlet]="actionTemplate()"
+    [ngTemplateOutletContext]="{ smallScreen: smallScreen() }" />
+</header>

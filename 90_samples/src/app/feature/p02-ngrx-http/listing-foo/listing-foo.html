@@ -1,0 +1,42 @@
+<h2>p02-ngrx-http / listing-foo</h2>
+
+<p>3 秒ごとに /api/foo をポーリングする。レスポンスは mod-httpInterceptorFn のスタブ。</p>
+
+[ <a routerLink="/dashboard">dashboard</a> ]
+
+<button type="button" (click)="refresh()">今すぐ再取得</button>
+
+@if (viewModel$ | async; as viewModel) {
+  @if (viewModel.error) {
+    <p role="alert">{{ viewModel.error }}</p>
+  }
+
+  @if (viewModel.loading && viewModel.items.length === 0) {
+    <p>Loading...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Foo Id</th>
+          <th scope="col">Foo Name</th>
+          <th scope="col">Count</th>
+          <th scope="col">Status</th>
+          <th scope="col">Updated At</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (foo of viewModel.items; track foo.fooId) {
+          <tr>
+            <td>{{ foo.fooId }}</td>
+            <td>{{ foo.fooName }}</td>
+            <td>{{ foo.count }}</td>
+            <td>{{ foo.status }}</td>
+            <td>{{ foo.updatedAt }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+} @else {
+  <p>Loading...</p>
+}

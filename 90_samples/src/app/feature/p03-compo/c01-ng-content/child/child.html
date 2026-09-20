@@ -1,0 +1,13 @@
+<section style="background-color: #ccc">
+  <h3>child</h3>
+
+  <div class="header">
+    
+    <ng-content select="[header]" />
+    <pre>⇨ &lt;ng-content select="[header]"&gt;</pre>
+  </div>
+
+  <app-c01-grand>
+    <ng-content /> <!-- こやつ headerは消化済みなので本文だけ -->
+  </app-c01-grand>
+</section>

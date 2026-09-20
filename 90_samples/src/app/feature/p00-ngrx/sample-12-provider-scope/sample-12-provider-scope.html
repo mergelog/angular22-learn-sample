@@ -1,0 +1,19 @@
+<main>
+  <h2>component providers / DI</h2>
+
+  <section class="explanation">
+    <p>
+      Component の <code>providers</code> で作った Service は、その Component
+      と子孫だけで共有されます。 下の2つは同じ Service
+      型を注入しますが、スコープが別なので履歴は混ざりません。
+    </p>
+    <pre>ProjectScope providers → 子 Editor と子 Feed が同じ Service instance を inject</pre>
+  </section>
+
+  <section class="scopes">
+    <app-sample-12-project-scope projectName="分析プロジェクト" />
+    <app-sample-12-project-scope projectName="学習プロジェクト" />
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

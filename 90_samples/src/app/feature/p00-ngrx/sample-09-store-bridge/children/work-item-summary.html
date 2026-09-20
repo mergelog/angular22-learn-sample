@@ -1,0 +1,11 @@
+<section aria-labelledby="summary-heading">
+  <h3 id="summary-heading">子 B: 選択結果を読む</h3>
+  @if (selectedItem(); as item) {
+    <p>
+      <strong>{{ item.title }}</strong> — 担当: {{ item.owner }}
+    </p>
+    <button type="button" (click)="clear()">選択を解除</button>
+  } @else {
+    <p>まだ作業が選ばれていません。</p>
+  }
+</section>

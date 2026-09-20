@@ -1,0 +1,21 @@
+<article>
+  <header>
+    <!-- [■観点:select] 親から渡された [panel-title] 属性の要素だけをここへ投影する。 -->
+    <ng-content select="[panel-title]" />
+  </header>
+
+  <div class="body">
+    <!-- [■観点:select] 属性セレクターは CSS と同じ書き方で指定できる。 -->
+    <ng-content select="[panel-body]" />
+  </div>
+
+  <footer>
+    <!-- [■観点:select] アクション用の要素だけを footer へ投影する。 -->
+    <ng-content select="[panel-actions]" />
+  </footer>
+
+  <div class="meta">
+    <!-- [■観点:ng-content] select のない投影口は、どの select にも一致しない要素を受け取る。 -->
+    <ng-content />
+  </div>
+</article>

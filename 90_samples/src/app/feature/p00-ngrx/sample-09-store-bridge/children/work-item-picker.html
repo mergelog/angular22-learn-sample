@@ -1,0 +1,14 @@
+<section aria-labelledby="picker-heading">
+  <h3 id="picker-heading">子 A: 作業を選ぶ</h3>
+  <div class="items">
+    @for (item of items(); track item.id) {
+      <button
+        type="button"
+        [class.selected]="selectedItemId() === item.id"
+        (click)="select(item.id)"
+      >
+        {{ item.title }}
+      </button>
+    }
+  </div>
+</section>

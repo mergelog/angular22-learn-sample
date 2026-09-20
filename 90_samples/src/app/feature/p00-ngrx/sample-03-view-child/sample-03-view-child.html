@@ -1,0 +1,44 @@
+<main>
+  <h2>#ref / viewChild() / viewChildren()</h2>
+
+  <hr>
+  <app-newc />
+
+  <hr>
+
+  <section class="explanation">
+    <p>
+      「99件＋多段連鎖」は、<code>viewChild</code>
+      の使用箇所が多数あり、親から子、さらに孫を参照するコードもある、という意味です。99段連鎖ではありません。
+    </p>
+    <pre>Sample03ViewChild → WorkspacePanel → TaskCard</pre>
+  </section>
+
+  <section class="controls" aria-label="view child controls">
+    <button type="button" class="toggle-extra" (click)="workspace().toggleExtraTask()">
+      viewChild(): 追加タスクを表示 / 非表示
+    </button>
+    <button type="button" class="archive-primary" (click)="archivePrimaryThroughChain()">
+      親 → 子 → 孫で最初のタスクをアーカイブ
+    </button>
+    <button type="button" class="archive-all" (click)="archiveAll()">
+      viewChildren(): すべてアーカイブ
+    </button>
+  </section>
+
+  <p class="last-action">{{ lastAction() }}</p>
+
+  <!--
+    [■観点:#workspaceRef] - #workspaceRef はテンプレート内で子コンポーネントを直接参照する #ref。
+
+    ts側で宣言必要
+    readonly workspace = viewChild.required(WorkspacePanel);
+  -->
+  <app-sample-03-workspace-panel #workspaceRef />
+
+  <button type="button" class="restore-all" (click)="workspaceRef.restoreAll()">
+    #ref: すべて元に戻す
+  </button>
+
+  <app-p00-ngrx-navi />
+</main>

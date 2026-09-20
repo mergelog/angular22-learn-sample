@@ -1,0 +1,82 @@
+<main>
+  <h2>&#64;if / &#64;for / &#64;defer</h2>
+
+  <section class="explanation">
+    <p>
+      制御フローは見た目だけを切り替えるものではありません。条件や配列、トリガーに応じて、子コンポーネントの
+      <strong>生成・破棄そのもの</strong>を決めます。
+    </p>
+    <p>この親が現在持つ <code>FlowChild</code>: {{ flowChildCount() }} 件</p>
+  </section>
+
+  <section aria-labelledby="if-heading">
+    <h3 id="if-heading">&#64;if — 条件が true のときだけ子を生成する</h3>
+    <button type="button" (click)="toggleDetail()">
+      {{ showDetail() ? '詳細の子を破棄する' : '詳細の子を生成する' }}
+    </button>
+
+    <!-- [■観点:@if] false では <app-sample-04-flow-child> はコンポーネントツリーに存在しない。 -->
+    @if (showDetail()) {
+      <app-sample-04-flow-child
+        label="@if で表示された詳細"
+        (created)="recordLifecycle($event)"
+        (destroyed)="recordLifecycle($event)"
+      />
+    } @else {
+      <p class="empty">詳細の子はまだ存在しません。</p>
+    }
+  </section>
+
+  <section aria-labelledby="for-heading">
+    <h3 id="for-heading">&#64;for — 配列の要素ごとに子を生成する</h3>
+    <div class="controls">
+      <button type="button" (click)="addTask()">タスクを1件追加</button>
+      <button type="button" (click)="removeLastTask()" [disabled]="tasks().length === 0">
+        最後のタスクを削除
+      </button>
+    </div>
+
+    <div class="child-list">
+      <!-- [■観点:@for] 要素を追加・削除すると、対応する子コンポーネントも生成・破棄される。 -->
+      @for (task of tasks(); track task.id) {
+        <app-sample-04-flow-child
+          [label]="task.title"
+          (created)="recordLifecycle($event)"
+          (destroyed)="recordLifecycle($event)"
+        />
+      } @empty {
+        <p class="empty">タスクの子はまだ存在しません。</p>
+      }
+    </div>
+  </section>
+
+  <section aria-labelledby="defer-heading">
+    <h3 id="defer-heading">&#64;defer — 必要になるまで子を生成しない</h3>
+
+    <!-- [■観点:@defer] 下のボタン操作まで DeferredChild は生成されない。 -->
+    @defer (on interaction(deferTrigger)) {
+      <app-sample-04-deferred-child (created)="recordLifecycle($event)" />
+    } @placeholder {
+      <button #deferTrigger type="button">操作して遅延された子を生成する</button>
+    }
+
+    <p class="defer-status">
+      DeferredChild: {{ deferredChild() ? '生成済み' : 'まだ存在しない' }}
+    </p>
+  </section>
+
+  <section class="log" aria-labelledby="log-heading">
+    <h3 id="log-heading">生成・破棄の記録</h3>
+    @if (lifecycleLog().length > 0) {
+      <ol>
+        @for (message of lifecycleLog(); track $index) {
+          <li>{{ message }}</li>
+        }
+      </ol>
+    } @else {
+      <p class="empty">まだ子コンポーネントは生成されていません。</p>
+    }
+  </section>
+
+  <app-p00-ngrx-navi />
+</main>

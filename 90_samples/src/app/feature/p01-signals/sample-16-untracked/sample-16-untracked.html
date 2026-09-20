@@ -1,0 +1,8 @@
+<h2>untracked()</h2>
+<p>
+  選択ID: {{ selectedId() }} / 監査番号: {{ auditVersion() }} / effect実行回数: {{ effectRuns() }}
+</p>
+<button type="button" (click)="nextSelection()">選択IDを変更</button>
+<button type="button" (click)="bumpAuditVersion()">監査番号だけ変更</button>
+<p>監査番号はuntrackedで読んでいるため、後者ではeffectは再実行されない。</p>
+<app-p01-signals-navi />

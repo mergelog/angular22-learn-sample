@@ -1,0 +1,28 @@
+<section class="card">
+  <a class="back-link" routerLink="/products">← 商品一覧へ戻る</a>
+
+  @if (isLoading()) {
+  <app-spinner label="商品を読み込み中…" />
+  } @else if (error(); as message) {
+  <app-error-banner [message]="message" />
+  } @else if (detail(); as product) {
+  <h1 class="page-title">{{ product.name }}</h1>
+
+  <dl class="detail-list">
+    <dt>商品 ID</dt>
+    <dd>{{ product.id }}</dd>
+
+    <dt>カテゴリ</dt>
+    <dd>{{ categoryLabels[product.category] }}</dd>
+
+    <dt>価格</dt>
+    <dd>{{ product.price | currency: 'JPY' }}</dd>
+
+    <dt>在庫</dt>
+    <dd>@if (product.stock > 0) { {{ product.stock }} 個 } @else { 在庫切れ }</dd>
+
+    <dt>説明</dt>
+    <dd>{{ product.description }}</dd>
+  </dl>
+  }
+</section>

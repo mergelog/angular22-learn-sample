@@ -1,0 +1,8 @@
+<hr />
+
+<nav aria-label="p01-signals navigation">
+  <a routerLink="/dashboard">dashboard</a>
+  @for (sample of samples; track sample.path) {
+    <a [routerLink]="'/p01-signals/' + sample.path" routerLinkActive="active">{{ sample.label }}</a>
+  }
+</nav>

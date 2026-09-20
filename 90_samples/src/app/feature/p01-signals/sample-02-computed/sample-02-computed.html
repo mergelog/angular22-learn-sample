@@ -1,0 +1,12 @@
+<h2>computed()</h2>
+<p>単価と数量から合計を派生させる。合計値は直接更新しない。</p>
+<section>
+  <p>単価: {{ price() }} 円</p>
+  <p>数量: {{ quantity() }}</p>
+  <p>
+    <strong>合計: {{ total() }} 円</strong>
+  </p>
+  <button type="button" (click)="changeQuantity(-1)">-1</button>
+  <button type="button" (click)="changeQuantity(1)">+1</button>
+</section>
+<app-p01-signals-navi />
