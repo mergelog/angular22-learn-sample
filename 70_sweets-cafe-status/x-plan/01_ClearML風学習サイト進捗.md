@@ -42,7 +42,7 @@
 
 現在は、既存APIから取得したテーブル状況をSignalで表示でき、Phase 2の
 `CafeTablesGrid` への一覧表分離とcomponent testまで完了し、Phase 3で使用する
-`@ngrx/store` と `@ngrx/effects` を追加し、一覧取得成功のeffect testまで完了した段階である。
+`@ngrx/store` と `@ngrx/effects` を追加し、一覧取得のeffect testまで完了した段階である。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択は親子間で受け渡せるが、右ペインと編集処理は追加していない。
 
@@ -124,7 +124,7 @@
 ### 完了条件
 
 - [x] effect testで取得成功を確認できる
-- [ ] effect testで取得失敗を確認できる
+- [x] effect testで取得失敗を確認できる
 - [ ] reducer testで状態遷移を確認できる
 - [ ] `ViewJson` 以外のcomponentがAPIを直接呼んでいない
 - [ ] 再読み込み開始時に以前の取得エラーが消える
@@ -227,5 +227,5 @@
 ## 9. 次に着手する項目
 
 Phase 3の一覧取得をNgRxへ移行済み。componentはStoreを `selectSignal()` で読み、
-初期表示と再読み込みで `loadDashboard` をdispatchする。effect testで取得成功を確認済み。
-次はeffect testで取得失敗を確認する。
+初期表示と再読み込みで `loadDashboard` をdispatchする。effect testで取得成功と取得失敗を
+確認済み。次はreducer testで状態遷移を確認する。

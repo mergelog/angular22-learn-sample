@@ -1,11 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
-import { firstValueFrom, of, Subject } from 'rxjs';
+import { firstValueFrom, of, Subject, throwError } from 'rxjs';
 
 import { CafeDashboardApi } from '../../../core/api/cafe-dashboard.api';
 import { CafeDashboard } from '../../../core/model/cafe-status.model';
-import { loadDashboard, loadDashboardSuccess } from './cafe-status.actions';
+import {
+  loadDashboard,
+  loadDashboardFailure,
+  loadDashboardSuccess,
+} from './cafe-status.actions';
 import { CafeStatusEffects } from './cafe-status.effects';
 
 describe('CafeStatusEffects', () => {
@@ -41,6 +45,18 @@ describe('CafeStatusEffects', () => {
     actions$.next(loadDashboard());
 
     await expect(result).resolves.toEqual(loadDashboardSuccess({ dashboard }));
+    expect(api.getDashboard).toHaveBeenCalledOnce();
+  });
+
+  it('取得失敗時に画面表示用メッセージを持つ失敗actionを返す', async () => {
+    api.getDashboard.mockReturnValue(throwError(() => new Error('network error')));
+
+    const result = firstValueFrom(effects.loadDashboard$);
+    actions$.next(loadDashboard());
+
+    await expect(result).resolves.toEqual(
+      loadDashboardFailure({ errorMessage: 'カフェの状況を取得できませんでした。' }),
+    );
     expect(api.getDashboard).toHaveBeenCalledOnce();
   });
 });
