@@ -260,7 +260,7 @@ dashboard内の該当行だけを置換する。
 - [x] 状態、人数、会計金額を更新できる
 - [x] `generatedAt` と手動再読み込みを利用できる
 - [x] URL、NgRx、Form/Signalの正本が重複していない
-- [ ] 一覧、ルート、reducer、effect、更新の自動テストが成功する
+- [x] 一覧、ルート、reducer、effect、更新の自動テストが成功する
 - [x] production buildが成功する
 
 ## 9. 次に着手する項目
@@ -292,5 +292,6 @@ invalidと送信中の保存ボタン無効化までをcomponent testで確認�
 分割比率はNgRx Store、未保存の編集値はReactive Formをそれぞれ唯一の正本にしていることを
 ソース全体から確認済み。`selectedTableNumber`と`tableNumber`はURLからの派生値、
 `selectedTable`と`generatedAt`はStoreからの派生値で、`editing`は編集欄の表示だけを担う。
-ペイン開閉用booleanや複製した選択状態はない。次は「一覧、ルート、reducer、effect、
-更新の自動テストが成功する」を最終確認する。
+ペイン開閉用booleanや複製した選択状態はない。一覧、ルート、reducer、effect、
+更新の経路を含む全15test file・98testの成功も再確認済み。次はすべての受け入れ条件が
+揃ったことを確認し、「初期完成版の受け入れ条件をすべて達成」を完了にする。
