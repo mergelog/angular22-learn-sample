@@ -1,5 +1,10 @@
 import { CafeDashboard } from '../../../core/model/cafe-status.model';
-import { loadDashboard, loadDashboardFailure, loadDashboardSuccess } from './cafe-status.actions';
+import {
+  changeSplitPercent,
+  loadDashboard,
+  loadDashboardFailure,
+  loadDashboardSuccess,
+} from './cafe-status.actions';
 import { cafeStatusReducer, initialCafeStatusState } from './cafe-status.reducer';
 
 describe('cafeStatusReducer', () => {
@@ -58,5 +63,30 @@ describe('cafeStatusReducer', () => {
       loading: false,
       loadError: '取得できませんでした。',
     });
+  });
+
+  it('分割比率の変更を保持する', () => {
+    const result = cafeStatusReducer(
+      initialCafeStatusState,
+      changeSplitPercent({ splitPercent: 42 }),
+    );
+
+    expect(result).toEqual({
+      ...initialCafeStatusState,
+      splitPercent: 42,
+    });
+  });
+
+  it('分割比率の変更で他の状態を変えない', () => {
+    const state = {
+      ...initialCafeStatusState,
+      dashboard,
+      loading: true,
+      loadError: '取得できませんでした。',
+    };
+
+    const result = cafeStatusReducer(state, changeSplitPercent({ splitPercent: 30 }));
+
+    expect(result).toEqual({ ...state, splitPercent: 30 });
   });
 });

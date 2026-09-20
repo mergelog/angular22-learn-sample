@@ -166,7 +166,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 ### 分割比率
 
 - [x] `changeSplitPercent` actionを追加
-- [ ] reducerで分割比率を保持
+- [x] reducerで分割比率を保持
 - [ ] `dragEnd` をactionのdispatchへ接続
 
 ### 完了条件
@@ -237,5 +237,5 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示、
 overviewへの遷移、closeによる一覧復帰、戻る・進む時の選択同期、
 loading表示、not-found表示、詳細ペインの取得時刻表示、分割比率の
-`changeSplitPercent` action追加は完了。
-次はreducerで分割比率を保持する。
+`changeSplitPercent` action追加とreducerでの保持は完了。
+次は `dragEnd` をactionのdispatchへ接続する。

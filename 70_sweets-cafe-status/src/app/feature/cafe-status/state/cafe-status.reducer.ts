@@ -1,7 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { CafeDashboard } from '../../../core/model/cafe-status.model';
-import { loadDashboard, loadDashboardFailure, loadDashboardSuccess } from './cafe-status.actions';
+import {
+  changeSplitPercent,
+  loadDashboard,
+  loadDashboardFailure,
+  loadDashboardSuccess,
+} from './cafe-status.actions';
 
 export const CAFE_STATUS_FEATURE_KEY = 'cafeStatus';
 
@@ -39,5 +44,9 @@ export const cafeStatusReducer = createReducer(
     ...state,
     loading: false,
     loadError: errorMessage,
+  })),
+  on(changeSplitPercent, (state, { splitPercent }) => ({
+    ...state,
+    splitPercent,
   })),
 );
