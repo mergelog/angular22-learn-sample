@@ -205,4 +205,18 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T01');
     expect(detailPane(harness).textContent).not.toContain('テーブルが見つかりません');
   });
+
+  for (const unknownTableNumber of ['T99', 't01']) {
+    it(`存在しないテーブル番号 ${unknownTableNumber} のURLでnot-foundを表示する`, async () => {
+      configureCafeStatusTestBed();
+
+      const harness = await openCafeStatus(`/cafe-status/${unknownTableNumber}/overview`);
+
+      expect(detailPaneArea(harness).visible()).toBe(true);
+      expect(detailPane(harness).textContent).toContain('テーブルが見つかりません');
+      expect(detailPane(harness).textContent).toContain(unknownTableNumber);
+      expect(detailPane(harness).querySelector('.info-header')).toBeNull();
+      expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('false');
+    });
+  }
 });
