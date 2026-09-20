@@ -73,8 +73,9 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 入力欄の下にエラーを表示する。保存ボタンはinvalidまたは `saving` inputがtrueの
 あいだ無効化し、`save()` でも同じ条件で親への通知を止めている。
 保存時は `updateTable` actionをdispatchする。更新成功時のAPI応答を受ける
-`updateTableSuccess` actionも定義済み。失敗actionやeffectなどの更新処理はまだ
-追加していないため、通信は発生しない。
+`updateTableSuccess` actionと、対象番号・メッセージを保持する
+`updateTableFailure` actionも定義済み。effectなどの更新処理はまだ追加していないため、
+通信は発生しない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -220,7 +221,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 - [x] `updateTable` actionを追加
 - [x] `updateTableSuccess` actionを追加
-- [ ] `updateTableFailure` actionを追加
+- [x] `updateTableFailure` actionを追加
 - [ ] 更新effectを `concatMap` で実装
 - [ ] 更新成功時に該当する一覧データを置換
 - [ ] 更新失敗時に入力内容を維持
@@ -262,4 +263,5 @@ invalidと送信中の保存ボタン無効化までをcomponent testで確認�
 表示値は `afterNextRender` で同期されるため、testでは `TestBed.tick()` を使う。
 `updateTable` actionを追加し、`CafeInfoHeader` の `saveRequested` を
 `CafeTableOutput` のdispatchへ接続済み。API応答の `CafeTable` をpayloadに持つ
-`updateTableSuccess` actionも追加した。次は `updateTableFailure` actionを追加する。
+`updateTableSuccess` actionと、対象番号・メッセージをpayloadに持つ
+`updateTableFailure` actionも追加した。次は更新effectを `concatMap` で実装する。

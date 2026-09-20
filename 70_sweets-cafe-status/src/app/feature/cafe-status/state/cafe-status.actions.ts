@@ -30,6 +30,11 @@ export const updateTableSuccess = createAction(
   props<{ readonly table: CafeTable }>(),
 );
 
+export const updateTableFailure = createAction(
+  `[${CAFE_STATUS_ACTION_SOURCE}] Update Table Failure`,
+  props<{ readonly tableNumber: string; readonly message: string }>(),
+);
+
 export const changeSplitPercent = createAction(
   `[${CAFE_STATUS_ACTION_SOURCE}] Change Split Percent`,
   props<{ readonly splitPercent: number }>(),
