@@ -88,6 +88,30 @@ h2 {
   border-bottom: 1px solid #e2e5ea;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.field-label {
+  color: #6d7482;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.field select,
+.field input {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #d4d7dd;
+  border-radius: 6px;
+  background: #fff;
+  color: #202634;
+  font-size: 0.82rem;
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

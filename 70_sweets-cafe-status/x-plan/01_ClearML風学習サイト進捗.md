@@ -67,7 +67,8 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 再取得では入力中の値を保持する。編集欄の開閉は `editing` Signalで管理し、
 編集ボタンで開き、キャンセルで閉じて入力内容を破棄し、保存で更新内容を
 `saveRequested` として親へ通知する。表示対象が別テーブルへ変わったときは編集を
-終了する。個別の入力欄と更新処理はまだ追加していない。
+終了する。編集欄には `TABLE_STATUSES` を選択肢とする状態の `select` を用意した。
+人数と会計金額の入力欄、検証、更新処理はまだ追加していない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -202,7 +203,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 - [x] `CafeInfoHeader` にReactive Formsを追加
 - [x] 編集中かどうかをSignalで管理
-- [ ] 状態の入力欄を追加
+- [x] 状態の入力欄を追加
 - [ ] 人数の入力欄を追加
 - [ ] 会計金額の入力欄を追加
 - [ ] 人数を0以上の整数として検証
@@ -249,7 +250,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 5の編集UIでは、Reactive Formsの追加に続き、編集欄の開閉を `editing`
-Signalで管理するところまで完了。編集ボタンでの開始、キャンセルでの破棄、
-別テーブルへの切り替えでの終了、保存時の `saveRequested` 通知をcomponent testで
-確認済み。次は状態の入力欄を追加する。
+Phase 5の編集UIでは、Reactive Formsの追加と `editing` Signalでの開閉管理に続き、
+状態の `select` を追加した。全ステータスの表示、現在値の選択、選択変更の
+フォーム反映をcomponent testで確認済み。`select` の表示値は `afterNextRender` で
+同期されるため、testでは `TestBed.tick()` を使う。次は人数の入力欄を追加する。

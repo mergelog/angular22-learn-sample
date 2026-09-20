@@ -24,6 +24,15 @@
 
 @if (editing()) {
   <form class="edit-form" aria-label="テーブルの編集" [formGroup]="form" (ngSubmit)="save()">
+    <label class="field">
+      <span class="field-label">状態</span>
+      <select formControlName="status">
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </label>
+
     <div class="form-actions">
       <button type="button" class="cancel-button" (click)="cancelEditing()">キャンセル</button>
       <button type="submit" class="save-button">保存</button>

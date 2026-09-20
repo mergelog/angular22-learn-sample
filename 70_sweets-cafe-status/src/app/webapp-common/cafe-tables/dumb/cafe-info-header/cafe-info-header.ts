@@ -13,6 +13,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import {
   CafeTable,
+  TABLE_STATUSES,
   TableStatus,
   UpdateTableRequest,
 } from '../../../../core/model/cafe-status.model';
@@ -39,6 +40,9 @@ export class CafeInfoHeader {
 
   // 編集欄を開いているかどうか。入力値そのものはFormGroupが持つ
   protected readonly editing = signal(false);
+
+  // 状態の選択肢。モデル側の定義をそのまま使う
+  protected readonly statuses = TABLE_STATUSES;
 
   // 表示対象の切り替えだけを検知する。再取得で値が変わっただけでは通知しない
   private readonly tableNumber = computed(() => this.table().tableNumber);

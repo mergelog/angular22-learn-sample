@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ComponentRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { CafeTable } from '../../../../core/model/cafe-status.model';
+import { CafeTable, TABLE_STATUSES } from '../../../../core/model/cafe-status.model';
 import { CafeInfoHeader } from './cafe-info-header';
 
 describe('CafeInfoHeader', () => {
@@ -35,7 +35,7 @@ describe('CafeInfoHeader', () => {
 
   function click(selector: string): void {
     query(selector)?.click();
-    componentRef.changeDetectorRef.detectChanges();
+    TestBed.tick();
   }
 
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe('CafeInfoHeader', () => {
     componentRef = TestBed.createComponent(CafeInfoHeader).componentRef;
     componentRef.setInput('table', table);
     componentRef.setInput('generatedAt', generatedAt);
-    componentRef.changeDetectorRef.detectChanges();
+    TestBed.tick();
   });
 
   it('選択テーブルの要約を表示する', () => {
@@ -59,7 +59,7 @@ describe('CafeInfoHeader', () => {
 
   it('取得時刻が未設定なら—を表示する', () => {
     componentRef.setInput('generatedAt', null);
-    componentRef.changeDetectorRef.detectChanges();
+    TestBed.tick();
 
     expect(componentRef.location.nativeElement.textContent).toContain('取得時刻 —');
   });
@@ -75,7 +75,7 @@ describe('CafeInfoHeader', () => {
   it('別テーブルへ切り替えるとフォームを初期化する', () => {
     componentRef.instance.form.patchValue({ people: 8 });
     componentRef.setInput('table', { ...table, tableNumber: 'T02', people: 4 });
-    componentRef.changeDetectorRef.detectChanges();
+    TestBed.tick();
 
     expect(componentRef.instance.form.getRawValue().people).toBe(4);
   });
@@ -83,7 +83,7 @@ describe('CafeInfoHeader', () => {
   it('同じテーブルの再取得では入力内容を保持する', () => {
     componentRef.instance.form.patchValue({ people: 8 });
     componentRef.setInput('table', { ...table, people: 4 });
-    componentRef.changeDetectorRef.detectChanges();
+    TestBed.tick();
 
     expect(componentRef.instance.form.getRawValue().people).toBe(8);
   });
@@ -123,9 +123,27 @@ describe('CafeInfoHeader', () => {
     click('.edit-button');
 
     componentRef.setInput('table', { ...table, tableNumber: 'T02' });
-    componentRef.changeDetectorRef.detectChanges();
+    TestBed.tick();
 
     expect(query('.edit-form')).toBeNull();
+  });
+
+  it('状態の入力欄に全ステータスと現在値を表示する', () => {
+    click('.edit-button');
+    const select = query('select[formControlName="status"]') as HTMLSelectElement;
+
+    expect([...select.options].map((option) => option.value)).toEqual([...TABLE_STATUSES]);
+    expect(select.value).toBe('提供済');
+  });
+
+  it('状態の選択をフォームへ反映する', () => {
+    click('.edit-button');
+    const select = query('select[formControlName="status"]') as HTMLSelectElement;
+
+    select.value = '片付け中';
+    select.dispatchEvent(new Event('change'));
+
+    expect(componentRef.instance.form.getRawValue().status).toBe('片付け中');
   });
 
   it('保存で入力値とテーブル番号を親へ通知する', () => {
