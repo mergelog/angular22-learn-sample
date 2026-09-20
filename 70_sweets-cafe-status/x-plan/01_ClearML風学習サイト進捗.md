@@ -34,14 +34,14 @@
 
 - [x] `/cafe-status` の画面のガワを作成
 - [x] Phase 1: Signalで一覧を描画
-- [ ] Phase 2: 表をinput/outputで分離
+- [x] Phase 2: 表をinput/outputで分離
 - [ ] Phase 3: NgRxへ移行
 - [ ] Phase 4: URL連動の右ペイン
 - [ ] Phase 5: 編集とエラー処理
 - [ ] 初期完成版の受け入れ条件をすべて達成
 
 現在は、既存APIから取得したテーブル状況をSignalで表示でき、Phase 2の
-`CafeTablesGrid` へ一覧表を分離し、inputの描画と行選択outputをテストした段階である。
+`CafeTablesGrid` への一覧表分離とcomponent testまで完了した段階である。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択は親子間で受け渡せるが、右ペイン、NgRx、編集処理は追加していない。
 
@@ -90,7 +90,7 @@
 
 - [x] inputで渡したテーブルを描画できる
 - [x] 行操作で `tableSelected` が発火する
-- [ ] `CafeTablesGrid` のcomponent testが成功する
+- [x] `CafeTablesGrid` のcomponent testが成功する
 
 ## 5. Phase 3: NgRxへ移行
 
@@ -225,6 +225,6 @@
 
 ## 9. 次に着手する項目
 
-Phase 2の実装項目、inputの描画確認、行選択outputの確認は完了。次は完了条件の
-最後の項目として、`CafeTablesGrid` のcomponent test全体が成功することを確認する。
-この段階ではNgRxや右ペインへ進まず、input/outputによる親子component間のデータ受け渡しを学習対象とする。
+Phase 2は完了。次はPhase 3の依存関係の最初の項目として、
+`@ngrx/store@^22.0.1` を追加する。
+この段階ではNgRxの実装へ進まず、依存パッケージ1件の追加と既存機能への影響確認に限定する。
