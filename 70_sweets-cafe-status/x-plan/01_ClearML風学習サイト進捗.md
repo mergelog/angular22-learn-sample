@@ -72,8 +72,9 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 `nonNegativeInteger` で0以上の整数だけを許可し、未入力や小数、負の値では
 入力欄の下にエラーを表示する。保存ボタンはinvalidまたは `saving` inputがtrueの
 あいだ無効化し、`save()` でも同じ条件で親への通知を止めている。
-保存時は `updateTable` actionをdispatchする。成功・失敗actionやeffectなどの更新処理は
-まだ追加していないため、通信は発生しない。
+保存時は `updateTable` actionをdispatchする。更新成功時のAPI応答を受ける
+`updateTableSuccess` actionも定義済み。失敗actionやeffectなどの更新処理はまだ
+追加していないため、通信は発生しない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -218,7 +219,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 ### 更新処理
 
 - [x] `updateTable` actionを追加
-- [ ] `updateTableSuccess` actionを追加
+- [x] `updateTableSuccess` actionを追加
 - [ ] `updateTableFailure` actionを追加
 - [ ] 更新effectを `concatMap` で実装
 - [ ] 更新成功時に該当する一覧データを置換
@@ -260,4 +261,5 @@ Phase 5の「編集UI」は完了。Reactive Formsの追加、`editing` Signal�
 invalidと送信中の保存ボタン無効化までをcomponent testで確認済み。`select` の
 表示値は `afterNextRender` で同期されるため、testでは `TestBed.tick()` を使う。
 `updateTable` actionを追加し、`CafeInfoHeader` の `saveRequested` を
-`CafeTableOutput` のdispatchへ接続済み。次は `updateTableSuccess` actionを追加する。
+`CafeTableOutput` のdispatchへ接続済み。API応答の `CafeTable` をpayloadに持つ
+`updateTableSuccess` actionも追加した。次は `updateTableFailure` actionを追加する。

@@ -1,6 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 
-import { CafeDashboard, UpdateTableRequest } from '../../../core/model/cafe-status.model';
+import {
+  CafeDashboard,
+  CafeTable,
+  UpdateTableRequest,
+} from '../../../core/model/cafe-status.model';
 
 export const CAFE_STATUS_ACTION_SOURCE = 'Cafe Status';
 
@@ -19,6 +23,11 @@ export const loadDashboardFailure = createAction(
 export const updateTable = createAction(
   `[${CAFE_STATUS_ACTION_SOURCE}] Update Table`,
   props<{ readonly request: UpdateTableRequest }>(),
+);
+
+export const updateTableSuccess = createAction(
+  `[${CAFE_STATUS_ACTION_SOURCE}] Update Table Success`,
+  props<{ readonly table: CafeTable }>(),
 );
 
 export const changeSplitPercent = createAction(
