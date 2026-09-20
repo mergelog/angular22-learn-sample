@@ -58,6 +58,8 @@ describe('CafeTables', () => {
     const fixture = TestBed.createComponent(CafeTables);
     fixture.detectChanges();
 
+    expect(fixture.nativeElement.querySelector('router-outlet')).not.toBeNull();
+
     const row = fixture.nativeElement.querySelector('tbody tr');
     expect(dispatch).toHaveBeenCalledWith(loadDashboard());
     expect(row.textContent).toContain('T01');

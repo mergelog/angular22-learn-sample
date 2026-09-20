@@ -214,6 +214,10 @@ h1 {
   overflow: hidden;
 }
 
+.detail-route-outlet {
+  display: contents;
+}
+
 .table-toolbar {
   align-items: center;
   min-height: 64px;

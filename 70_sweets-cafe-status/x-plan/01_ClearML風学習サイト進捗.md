@@ -43,7 +43,8 @@
 現在は、既存APIから取得したテーブル状況をNgRx Store経由でSignalとして表示でき、
 Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomponentを用意し、
 `/cafe-status/:tableNumber` をoverviewへ正規化する子routeと、overviewから
-詳細ペインを遅延ロードするrouteを追加した段階である。
+詳細ペインを遅延ロードするrouteを追加し、親画面の子outletへ
+`CafeTableOutput` を描画できる段階である。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択はoverviewのURL遷移に変換できるが、対応するrouteと右ペインの表示、編集処理は
@@ -145,7 +146,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 - [x] `/cafe-status/:tableNumber` を追加
 - [x] `/cafe-status/:tableNumber/overview` を追加
-- [ ] `CafeTableOutput` を追加
+- [x] `CafeTableOutput` を追加
 - [ ] `CafeInfoHeader` を追加
 - [ ] `CafeTableOverview` を追加
 - [ ] `angular-split` で左右の分割レイアウトを作成
@@ -229,5 +230,5 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4の基底classと `/cafe-status/:tableNumber/overview` までのroute定義は完了。
-次は `CafeTableOutput` を一覧画面の右ペインとして組み込む。
+Phase 4のroute定義と `CafeTableOutput` の親画面への組み込みは完了。
+次は選択テーブルの要約とclose操作を担う `CafeInfoHeader` を追加する。
