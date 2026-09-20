@@ -10,3 +10,8 @@ export const loadDashboardSuccess = createAction(
   `[${CAFE_STATUS_ACTION_SOURCE}] Load Dashboard Success`,
   props<{ readonly dashboard: CafeDashboard }>(),
 );
+
+export const loadDashboardFailure = createAction(
+  `[${CAFE_STATUS_ACTION_SOURCE}] Load Dashboard Failure`,
+  props<{ readonly errorMessage: string }>(),
+);
