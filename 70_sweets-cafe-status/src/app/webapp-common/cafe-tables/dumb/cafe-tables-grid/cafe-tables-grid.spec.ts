@@ -54,4 +54,17 @@ describe('CafeTablesGrid', () => {
     expect(row.textContent).toContain('¥2,400');
     expect(row.textContent).toContain('2分 5秒');
   });
+
+  it('行をクリックするとtableSelectedでテーブル番号を通知する', () => {
+    const tableSelected = vi.fn();
+    component.tableSelected.subscribe(tableSelected);
+    fixture.componentRef.setInput('tables', [table]);
+    fixture.detectChanges();
+
+    const row = fixture.nativeElement.querySelector('tbody tr') as HTMLTableRowElement;
+    row.click();
+
+    expect(tableSelected).toHaveBeenCalledOnce();
+    expect(tableSelected).toHaveBeenCalledWith('T01');
+  });
 });

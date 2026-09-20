@@ -41,7 +41,7 @@
 - [ ] 初期完成版の受け入れ条件をすべて達成
 
 現在は、既存APIから取得したテーブル状況をSignalで表示でき、Phase 2の
-`CafeTablesGrid` へ一覧表を分離し、`tables` inputの描画をテストした段階である。
+`CafeTablesGrid` へ一覧表を分離し、inputの描画と行選択outputをテストした段階である。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択は親子間で受け渡せるが、右ペイン、NgRx、編集処理は追加していない。
 
@@ -89,7 +89,7 @@
 ### 完了条件
 
 - [x] inputで渡したテーブルを描画できる
-- [ ] 行操作で `tableSelected` が発火する
+- [x] 行操作で `tableSelected` が発火する
 - [ ] `CafeTablesGrid` のcomponent testが成功する
 
 ## 5. Phase 3: NgRxへ移行
@@ -225,6 +225,6 @@
 
 ## 9. 次に着手する項目
 
-Phase 2の実装項目とinputの描画確認は完了。次は完了条件の2番目の項目として、
-行操作で `tableSelected` が発火することを `CafeTablesGrid` のcomponent testで確認する。
+Phase 2の実装項目、inputの描画確認、行選択outputの確認は完了。次は完了条件の
+最後の項目として、`CafeTablesGrid` のcomponent test全体が成功することを確認する。
 この段階ではNgRxや右ペインへ進まず、input/outputによる親子component間のデータ受け渡しを学習対象とする。
