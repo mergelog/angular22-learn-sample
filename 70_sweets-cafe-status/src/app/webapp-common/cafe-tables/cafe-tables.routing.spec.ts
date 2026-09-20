@@ -1,5 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
@@ -46,6 +48,7 @@ function configureCafeStatusTestBed(): void {
   TestBed.configureTestingModule({
     providers: [
       provideRouter(routes),
+      provideLocationMocks(),
       provideStore(),
       provideHttpClient(),
       provideHttpClientTesting(),
@@ -54,6 +57,9 @@ function configureCafeStatusTestBed(): void {
 }
 
 async function openCafeStatus(url: string): Promise<RouterTestingHarness> {
+  // ブラウザの戻る・進むをRouterへ伝えるため、bootstrap時と同じlocation監視を開始する
+  TestBed.inject(Router).setUpLocationChangeListener();
+
   const harness = await RouterTestingHarness.create(url);
   TestBed.inject(HttpTestingController).expectOne('/api/cafe-status').flush(dashboard);
   harness.detectChanges();
@@ -86,6 +92,24 @@ async function clickTableRow(harness: RouterTestingHarness, tableNumber: string)
 
 async function closeDetailPane(harness: RouterTestingHarness): Promise<void> {
   detailPane(harness).querySelector<HTMLButtonElement>('[aria-label="詳細を閉じる"]')!.click();
+  await harness.fixture.whenStable();
+  harness.detectChanges();
+}
+
+async function navigateHistory(
+  harness: RouterTestingHarness,
+  direction: 'back' | 'forward',
+): Promise<void> {
+  const location = TestBed.inject(Location);
+
+  if (direction === 'back') {
+    location.back();
+  } else {
+    location.forward();
+  }
+
+  // Routerはpopstateをmacrotaskで受けてからナビゲーションするため、1tick進めてから待つ
+  await new Promise((resolve) => setTimeout(resolve));
   await harness.fixture.whenStable();
   harness.detectChanges();
 }
@@ -133,5 +157,32 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPaneArea(harness).visible()).toBe(false);
     expect(detailPane(harness)).toBeNull();
     expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('false');
+  });
+
+  it('戻る・進むで右ペインと行の選択状態が同期する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status');
+    await clickTableRow(harness, 'T01');
+    await clickTableRow(harness, 'T02');
+
+    await navigateHistory(harness, 'back');
+
+    expect(TestBed.inject(Router).url).toBe('/cafe-status/T01/overview');
+    expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T01');
+    expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('true');
+
+    await navigateHistory(harness, 'back');
+
+    expect(TestBed.inject(Router).url).toBe('/cafe-status');
+    expect(detailPaneArea(harness).visible()).toBe(false);
+    expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('false');
+
+    await navigateHistory(harness, 'forward');
+
+    expect(TestBed.inject(Router).url).toBe('/cafe-status/T01/overview');
+    expect(detailPaneArea(harness).visible()).toBe(true);
+    expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T01');
+    expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('true');
   });
 });
