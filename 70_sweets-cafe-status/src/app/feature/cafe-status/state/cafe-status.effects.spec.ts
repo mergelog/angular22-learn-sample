@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
@@ -119,6 +120,22 @@ describe('CafeStatusEffects', () => {
       }),
     );
     expect(api.updateTable).toHaveBeenCalledWith(request);
+  });
+
+  it.each([
+    [400, '入力内容が正しくありません。'],
+    [404, '更新対象のテーブルが見つかりません。'],
+  ])('更新APIのHTTP %iを区別したメッセージへ変換する', async (status, message) => {
+    api.updateTable.mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status, statusText: 'API error' })),
+    );
+
+    const result = firstValueFrom(effects.updateTable$);
+    actions$.next(updateTable({ request }));
+
+    await expect(result).resolves.toEqual(
+      updateTableFailure({ tableNumber: request.tableNumber, message }),
+    );
   });
 
   it('複数の更新要求を受信順に直列実行する', async () => {
