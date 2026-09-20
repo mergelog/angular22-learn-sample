@@ -55,6 +55,30 @@ describe('CafeInfoHeader', () => {
     expect(componentRef.location.nativeElement.textContent).toContain('取得時刻 —');
   });
 
+  it('表示中テーブルの現在値でフォームを初期化する', () => {
+    expect(componentRef.instance.form.getRawValue()).toEqual({
+      status: '提供済',
+      people: 2,
+      billingAmount: 1_360,
+    });
+  });
+
+  it('別テーブルへ切り替えるとフォームを初期化する', () => {
+    componentRef.instance.form.patchValue({ people: 8 });
+    componentRef.setInput('table', { ...table, tableNumber: 'T02', people: 4 });
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.instance.form.getRawValue().people).toBe(4);
+  });
+
+  it('同じテーブルの再取得では入力内容を保持する', () => {
+    componentRef.instance.form.patchValue({ people: 8 });
+    componentRef.setInput('table', { ...table, people: 4 });
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.instance.form.getRawValue().people).toBe(8);
+  });
+
   it('close操作を親へ通知する', () => {
     const closeRequested = vi.fn();
     componentRef.instance.closeRequested.subscribe(closeRequested);

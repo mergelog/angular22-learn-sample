@@ -62,7 +62,9 @@ Storeにもcomponentにも開閉用のbooleanを持たない。一覧と詳細�
 分割比率はStoreに残るため、テーブル間の遷移やペインの開閉後も維持される。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
-テーブルの編集処理はまだ追加していない。
+`CafeInfoHeader` には状態、人数、会計金額のReactive Formsを追加し、表示対象の
+テーブル番号が変わったときだけ入力内容を現在値へ戻すようにした。同じテーブルの
+再取得では入力中の値を保持する。入力欄と更新処理はまだ追加していない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -195,7 +197,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ### 編集UI
 
-- [ ] `CafeInfoHeader` にReactive Formsを追加
+- [x] `CafeInfoHeader` にReactive Formsを追加
 - [ ] 編集中かどうかをSignalで管理
 - [ ] 状態の入力欄を追加
 - [ ] 人数の入力欄を追加
@@ -244,7 +246,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4は完了。実routeを使った結合testで、URL直接入力と行クリックによる
-右ペイン表示、closeと戻る・進むの同期、loadingとnot-foundの出し分け、
-一覧と詳細のselector共有、分割比率の維持までを確認済み。
-次はPhase 5の編集UIの最初の項目として、`CafeInfoHeader` へReactive Formsを追加する。
+Phase 5の編集UIに着手し、`CafeInfoHeader` へ状態、人数、会計金額を持つ
+Reactive Formsを追加した。表示対象の切り替えでのみ初期化し、同じテーブルの
+再取得では入力内容を保持することをcomponent testで確認済み。
+次は編集中かどうかをSignalで管理する。
