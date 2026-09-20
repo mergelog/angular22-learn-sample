@@ -72,7 +72,8 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 `nonNegativeInteger` で0以上の整数だけを許可し、未入力や小数、負の値では
 入力欄の下にエラーを表示する。保存ボタンはinvalidまたは `saving` inputがtrueの
 あいだ無効化し、`save()` でも同じ条件で親への通知を止めている。
-`updateTable` などの更新処理はまだ追加していないため、保存しても通信は発生しない。
+保存時は `updateTable` actionをdispatchする。成功・失敗actionやeffectなどの更新処理は
+まだ追加していないため、通信は発生しない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -216,7 +217,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ### 更新処理
 
-- [ ] `updateTable` actionを追加
+- [x] `updateTable` actionを追加
 - [ ] `updateTableSuccess` actionを追加
 - [ ] `updateTableFailure` actionを追加
 - [ ] 更新effectを `concatMap` で実装
@@ -258,5 +259,5 @@ Phase 5の「編集UI」は完了。Reactive Formsの追加、`editing` Signal�
 状態・人数・会計金額の入力欄、人数と会計金額の `nonNegativeInteger` 検証、
 invalidと送信中の保存ボタン無効化までをcomponent testで確認済み。`select` の
 表示値は `afterNextRender` で同期されるため、testでは `TestBed.tick()` を使う。
-次は「更新処理」の最初の項目として `updateTable` actionを追加し、
-`CafeInfoHeader` の `saveRequested` を親componentのdispatchへ接続していく。
+`updateTable` actionを追加し、`CafeInfoHeader` の `saveRequested` を
+`CafeTableOutput` のdispatchへ接続済み。次は `updateTableSuccess` actionを追加する。

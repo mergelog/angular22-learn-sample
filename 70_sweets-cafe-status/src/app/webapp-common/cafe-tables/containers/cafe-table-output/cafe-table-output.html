@@ -4,6 +4,7 @@
       [table]="table"
       [generatedAt]="generatedAt()"
       (closeRequested)="closePanel()"
+      (saveRequested)="saveTable($event)"
     />
     <router-outlet />
   } @else if (loading()) {

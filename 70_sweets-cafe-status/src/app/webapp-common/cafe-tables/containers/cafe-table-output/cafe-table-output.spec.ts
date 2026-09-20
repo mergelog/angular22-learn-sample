@@ -1,14 +1,17 @@
 import { DatePipe } from '@angular/common';
+import { By } from '@angular/platform-browser';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
-import { CafeDashboard } from '../../../../core/model/cafe-status.model';
+import { CafeDashboard, UpdateTableRequest } from '../../../../core/model/cafe-status.model';
+import { updateTable } from '../../../../feature/cafe-status/state/cafe-status.actions';
 import {
   CAFE_STATUS_FEATURE_KEY,
   initialCafeStatusState,
 } from '../../../../feature/cafe-status/state/cafe-status.reducer';
+import { CafeInfoHeader } from '../../dumb/cafe-info-header/cafe-info-header';
 import { BaseCafeTableOutput } from './base-cafe-table-output';
 import { CafeTableOutput } from './cafe-table-output';
 
@@ -111,6 +114,43 @@ describe('CafeTableOutput', () => {
     expect(fixture.nativeElement.querySelector('.snapshot-time').textContent).toContain(
       `取得時刻 ${formatted}`,
     );
+  });
+
+  it('保存要求をupdateTable actionとしてdispatchする', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTableOutput],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ tableNumber: 'T01' })) },
+        },
+        { provide: Router, useValue: { navigate: vi.fn().mockResolvedValue(true) } },
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              dashboard,
+            },
+          },
+        }),
+      ],
+    });
+    const fixture = TestBed.createComponent(CafeTableOutput);
+    const store = TestBed.inject(MockStore);
+    const dispatch = vi.spyOn(store, 'dispatch');
+    fixture.detectChanges();
+    const request: UpdateTableRequest = {
+      tableNumber: 'T01',
+      status: '片付け中',
+      people: 3,
+      billingAmount: 980,
+    };
+
+    const header = fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+    header.saveRequested.emit(request);
+
+    expect(dispatch).toHaveBeenCalledWith(updateTable({ request }));
   });
 
   for (const unknownTableNumber of ['T99', 't01']) {

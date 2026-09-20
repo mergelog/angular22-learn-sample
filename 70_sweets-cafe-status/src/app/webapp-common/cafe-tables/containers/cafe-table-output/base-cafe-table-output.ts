@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, map } from 'rxjs';
 
+import { UpdateTableRequest } from '../../../../core/model/cafe-status.model';
+import { updateTable } from '../../../../feature/cafe-status/state/cafe-status.actions';
 import {
   selectDashboard,
   selectLoading,
@@ -37,5 +39,9 @@ export abstract class BaseCafeTableOutput {
 
   protected closePanel(): Promise<boolean> {
     return this.router.navigate(['..'], { relativeTo: this.route });
+  }
+
+  protected saveTable(request: UpdateTableRequest): void {
+    this.store.dispatch(updateTable({ request }));
   }
 }
