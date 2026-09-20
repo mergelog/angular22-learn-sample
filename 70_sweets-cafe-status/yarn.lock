@@ -986,6 +986,13 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.3"
 
+"@ngrx/store@^22.0.1":
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-22.0.1.tgz#e28c1d0c41ceb660fc9457d7f4ef2b37b2c0f539"
+  integrity sha512-CWCqqG+qepatkH9HE4+a17x/uyU/sTDO75IQWEntJi0xGTeE++iZH/QUm4MWB7mmb43Y+PnwydI3515DzfINtg==
+  dependencies:
+    tslib "^2.0.0"
+
 "@oxc-parser/binding-android-arm-eabi@0.142.0":
   version "0.142.0"
   resolved "https://registry.yarnpkg.com/@oxc-parser/binding-android-arm-eabi/-/binding-android-arm-eabi-0.142.0.tgz#12951a56ed573c0246ceacbc94e29d7e90d3925a"
