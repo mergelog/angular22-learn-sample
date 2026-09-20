@@ -395,6 +395,32 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).textContent).not.toContain('テーブルを更新できませんでした。');
   });
 
+  it('同じフォームからの二重送信を防止する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const pane = detailPane(harness);
+    const header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+
+    pane.querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+    harness.detectChanges();
+    pane.querySelector<HTMLButtonElement>('.save-button')!.click();
+    harness.detectChanges();
+
+    expect(pane.querySelector<HTMLButtonElement>('.save-button')!.disabled).toBe(true);
+    pane.querySelector<HTMLFormElement>('.edit-form')!.dispatchEvent(new Event('submit'));
+    harness.detectChanges();
+
+    const updateRequests = TestBed.inject(HttpTestingController).match('/api/cafe-status');
+    expect(updateRequests).toHaveLength(1);
+    updateRequests[0].flush(
+      createTable('T01', { status: '片付け中', people: 3, billingAmount: 980 }),
+    );
+    await harness.fixture.whenStable();
+  });
+
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
     configureCafeStatusTestBed();
 
