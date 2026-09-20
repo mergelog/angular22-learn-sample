@@ -318,6 +318,31 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('提供済');
   });
 
+  it('更新失敗時にStoreのテーブルを変更しない', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+
+    TestBed.inject(HttpTestingController)
+      .expectOne('/api/cafe-status')
+      .flush(null, { status: 500, statusText: 'Internal Server Error' });
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(tableRow(harness, 'T01').textContent).toContain('提供済');
+    expect(tableRow(harness, 'T01').textContent).toContain('2名');
+    expect(tableRow(harness, 'T01').textContent).toContain('¥1,360');
+    expect(tableRow(harness, 'T01').textContent).not.toContain('片付け中');
+    expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('提供済');
+  });
+
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
     configureCafeStatusTestBed();
 
