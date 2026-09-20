@@ -259,7 +259,7 @@ dashboard内の該当行だけを置換する。
 - [x] closeで一覧だけの表示へ戻れる
 - [x] 状態、人数、会計金額を更新できる
 - [x] `generatedAt` と手動再読み込みを利用できる
-- [ ] URL、NgRx、Form/Signalの正本が重複していない
+- [x] URL、NgRx、Form/Signalの正本が重複していない
 - [ ] 一覧、ルート、reducer、effect、更新の自動テストが成功する
 - [x] production buildが成功する
 
@@ -288,5 +288,9 @@ invalidと送信中の保存ボタン無効化までをcomponent testで確認�
 1件だけであることを確認済み。T01の応答待ち中にT02を保存するtestで、T02の更新が
 破棄されずT01の完了後に開始し、両方が一覧へ反映されることも確認済み。更新成功、
 更新失敗、二重送信防止、後続更新を含む全98testとproduction buildが成功し、Phase 5は
-完了。次は「初期完成版の最終確認」で、URL、NgRx、Form/Signalの正本が重複していないことを
-確認する。
+完了。最終確認では、選択中テーブルと右ペイン開閉はURL、取得済みデータ・通信状態・
+分割比率はNgRx Store、未保存の編集値はReactive Formをそれぞれ唯一の正本にしていることを
+ソース全体から確認済み。`selectedTableNumber`と`tableNumber`はURLからの派生値、
+`selectedTable`と`generatedAt`はStoreからの派生値で、`editing`は編集欄の表示だけを担う。
+ペイン開閉用booleanや複製した選択状態はない。次は「一覧、ルート、reducer、effect、
+更新の自動テストが成功する」を最終確認する。
