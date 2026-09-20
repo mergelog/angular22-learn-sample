@@ -1,0 +1,10 @@
+<label>
+  名前
+  <input
+    type="text"
+    [value]="value"
+    [disabled]="disabled"
+    (input)="updateValue($event)"
+    (blur)="touch()"
+  />
+</label>

@@ -25,6 +25,11 @@ export const routes: Routes = [
       import('./feature/p03-compo/p03-compo.routes').then((m) => m.P03_COMPO_ROUTES),
   },
   {
+    path: 'p04-store',
+    loadChildren: () =>
+      import('./feature/p04-store/p04-store.routes').then((m) => m.P04_STORE_ROUTES),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'dashboard',

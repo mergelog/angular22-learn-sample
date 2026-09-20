@@ -1,0 +1,12 @@
+<main>
+  <h1>CVA のシンプル版</h1>
+
+  <p>独自コンポーネントを、通常の input と同じように FormControl へ接続します。</p>
+
+  <app-simple-input [formControl]="name" />
+
+  <p>親の FormControl の値: {{ name.value }}</p>
+  <button type="button" (click)="reset()">親から Angular に戻す</button>
+
+  <app-p04-store-navi />
+</main>
