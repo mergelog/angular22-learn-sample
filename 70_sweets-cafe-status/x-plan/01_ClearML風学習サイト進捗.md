@@ -40,9 +40,10 @@
 - [ ] Phase 5: 編集とエラー処理
 - [ ] 初期完成版の受け入れ条件をすべて達成
 
-現在は、既存APIから取得したテーブル状況をSignalで表示できる段階である。
+現在は、既存APIから取得したテーブル状況をSignalで表示でき、Phase 2の
+`CafeTablesGrid` のひな形を追加した段階である。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
-行選択、右ペイン、NgRx、編集処理はまだ追加していない。
+一覧表はまだ `CafeTables` 内にあり、行選択、右ペイン、NgRx、編集処理は追加していない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -77,7 +78,7 @@
 
 ### 実装
 
-- [ ] `CafeTablesGrid` を追加
+- [x] `CafeTablesGrid` を追加
 - [ ] 一覧表のHTMLと表示処理を `CafeTablesGrid` へ移動
 - [ ] `tables` inputを追加
 - [ ] `selectedTableNumber` inputを追加
@@ -224,5 +225,6 @@
 
 ## 9. 次に着手する項目
 
-Phase 2として、現在 `CafeTables` に含まれている一覧表を `CafeTablesGrid` へ分離する。
+Phase 2として、現在 `CafeTables` に含まれている一覧表のHTMLと表示処理を
+追加済みの `CafeTablesGrid` へ移動する。
 この段階ではNgRxや右ペインへ進まず、input/outputによる親子component間のデータ受け渡しを学習対象とする。
