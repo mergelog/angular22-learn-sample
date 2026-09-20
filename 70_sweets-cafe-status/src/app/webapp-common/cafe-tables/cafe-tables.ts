@@ -29,6 +29,7 @@ export class CafeTables implements OnInit {
   protected readonly dashboard = signal<CafeDashboard | null>(null);
   protected readonly loading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly selectedTableNumber = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -52,5 +53,9 @@ export class CafeTables implements OnInit {
         next: (dashboard) => this.dashboard.set(dashboard),
         error: () => this.errorMessage.set('カフェの状況を取得できませんでした。'),
       });
+  }
+
+  protected selectTable(tableNumber: string): void {
+    this.selectedTableNumber.set(tableNumber);
   }
 }

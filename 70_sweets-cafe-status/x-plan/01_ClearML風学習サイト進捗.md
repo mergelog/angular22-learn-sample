@@ -83,7 +83,7 @@
 - [x] `tables` inputを追加
 - [x] `selectedTableNumber` inputを追加
 - [x] `tableSelected` outputを追加
-- [ ] 親componentをデータ取得とイベント処理に限定
+- [x] 親componentをデータ取得とイベント処理に限定
 - [ ] 子componentからAPI、Store、Routerへの依存を排除
 
 ### 完了条件
@@ -225,5 +225,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 2として、親の `CafeTables` をデータ取得と子からのイベント処理に限定する。
+Phase 2として、子の `CafeTablesGrid` がAPI、Store、Routerに依存していないことをテストで固定する。
 この段階ではNgRxや右ペインへ進まず、input/outputによる親子component間のデータ受け渡しを学習対象とする。

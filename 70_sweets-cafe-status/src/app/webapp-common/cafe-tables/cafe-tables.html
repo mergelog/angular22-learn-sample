@@ -105,7 +105,11 @@
           </div>
         } @else if (dashboard(); as data) {
           @if (data.tables.length > 0) {
-            <app-cafe-tables-grid [tables]="data.tables" />
+            <app-cafe-tables-grid
+              [tables]="data.tables"
+              [selectedTableNumber]="selectedTableNumber()"
+              (tableSelected)="selectTable($event)"
+            />
           } @else {
             <div class="state-message">
               <strong>表示できるテーブルがありません</strong>
