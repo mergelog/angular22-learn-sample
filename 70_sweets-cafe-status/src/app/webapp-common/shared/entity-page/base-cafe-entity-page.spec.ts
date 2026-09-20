@@ -15,7 +15,7 @@ class TestCafeEntityPage extends BaseCafeEntityPage {
 }
 
 describe('BaseCafeEntityPage', () => {
-  it('URLのtableNumberを初期表示とナビゲーション後に取得する', () => {
+  it('URLのtableNumberを初期表示と戻る・進む相当のナビゲーション後に取得する', () => {
     const events = new Subject<NavigationEnd>();
     const route = {
       firstChild: {
@@ -36,6 +36,16 @@ describe('BaseCafeEntityPage', () => {
 
     route.firstChild.snapshot.paramMap = convertToParamMap({ tableNumber: 'T02' });
     events.next(new NavigationEnd(1, '/cafe-status/T02/overview', '/cafe-status/T02/overview'));
+
+    expect(fixture.componentInstance.currentTableNumber()).toBe('T02');
+
+    route.firstChild.snapshot.paramMap = convertToParamMap({ tableNumber: 'T01' });
+    events.next(new NavigationEnd(2, '/cafe-status/T01/overview', '/cafe-status/T01/overview'));
+
+    expect(fixture.componentInstance.currentTableNumber()).toBe('T01');
+
+    route.firstChild.snapshot.paramMap = convertToParamMap({ tableNumber: 'T02' });
+    events.next(new NavigationEnd(3, '/cafe-status/T02/overview', '/cafe-status/T02/overview'));
 
     expect(fixture.componentInstance.currentTableNumber()).toBe('T02');
   });
