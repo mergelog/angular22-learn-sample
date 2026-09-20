@@ -42,7 +42,7 @@
 
 現在は、既存APIから取得したテーブル状況をSignalで表示でき、Phase 2の
 `CafeTablesGrid` への一覧表分離とcomponent testまで完了し、Phase 3で使用する
-`@ngrx/store` を追加した段階である。
+`@ngrx/store` と `@ngrx/effects` を追加した段階である。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択は親子間で受け渡せるが、右ペイン、NgRx、編集処理は追加していない。
 
@@ -98,7 +98,7 @@
 ### 依存関係
 
 - [x] `@ngrx/store@^22.0.1` を追加
-- [ ] `@ngrx/effects@^22.0.1` を追加
+- [x] `@ngrx/effects@^22.0.1` を追加
 
 ### State
 
@@ -226,6 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3の依存関係として `@ngrx/store@^22.0.1` を追加済み。
-次は `@ngrx/effects@^22.0.1` を追加する。
-この段階ではNgRxの実装へ進まず、依存パッケージ1件の追加と既存機能への影響確認に限定する。
+Phase 3の依存関係として `@ngrx/store@^22.0.1` と `@ngrx/effects@^22.0.1` を追加済み。
+次はPhase 3のStateの最初の項目として、`cafe-status.actions.ts` を追加する。

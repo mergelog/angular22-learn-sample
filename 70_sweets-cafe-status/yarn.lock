@@ -986,6 +986,13 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.3"
 
+"@ngrx/effects@^22.0.1":
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-22.0.1.tgz#c488832049ccf082ae1232bea2ea1f84835aff72"
+  integrity sha512-SRI6Q04rJfrf/qUwphzoJU8IJsPAPzP0MmmXK5qbMUuZ24V1JbAyI5+c0bEVzIFMMOooAU7wkO6iuJg5TVjmsw==
+  dependencies:
+    tslib "^2.0.0"
+
 "@ngrx/store@^22.0.1":
   version "22.0.1"
   resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-22.0.1.tgz#e28c1d0c41ceb660fc9457d7f4ef2b37b2c0f539"
