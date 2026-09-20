@@ -38,7 +38,7 @@
 - [x] Phase 3: NgRxへ移行
 - [x] Phase 4: URL連動の右ペイン
 - [x] Phase 5: 編集とエラー処理
-- [ ] 初期完成版の受け入れ条件をすべて達成
+- [x] 初期完成版の受け入れ条件をすべて達成
 
 現在は、既存APIから取得したテーブル状況をNgRx Store経由でSignalとして表示でき、
 Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomponentを用意し、
@@ -293,5 +293,6 @@ invalidと送信中の保存ボタン無効化までをcomponent testで確認�
 ソース全体から確認済み。`selectedTableNumber`と`tableNumber`はURLからの派生値、
 `selectedTable`と`generatedAt`はStoreからの派生値で、`editing`は編集欄の表示だけを担う。
 ペイン開閉用booleanや複製した選択状態はない。一覧、ルート、reducer、effect、
-更新の経路を含む全15test file・98testの成功も再確認済み。次はすべての受け入れ条件が
-揃ったことを確認し、「初期完成版の受け入れ条件をすべて達成」を完了にする。
+更新の経路を含む全15test file・98testの成功も再確認済み。初期完成版の受け入れ条件は
+すべて達成し、本資料で計画したPhase 1からPhase 5までの実装と最終確認は完了。
+次の開発項目は未定。
