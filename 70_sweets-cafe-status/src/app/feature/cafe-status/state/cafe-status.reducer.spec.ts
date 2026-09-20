@@ -164,6 +164,51 @@ describe('cafeStatusReducer', () => {
     expect(result.updatingTableNumber).toBeNull();
   });
 
+  it('先の更新成功で後続テーブルの送信中状態を解除しない', () => {
+    const updatedTable: CafeTable = {
+      tableNumber: 'T01',
+      classification: 'テーブル',
+      status: '片付け中',
+      guestIds: [],
+      予約: [],
+      stateElapsedSeconds: 0,
+      statusDurationsSeconds: {
+        空き: 0,
+        未オーダー: 0,
+        調理中: 0,
+        提供済: 0,
+        片付け中: 0,
+      },
+      people: 0,
+      billingAmount: 0,
+      dailyUsageRate: 0,
+    };
+    const state = {
+      ...initialCafeStatusState,
+      dashboard,
+      updatingTableNumber: 'T02',
+    };
+
+    const result = cafeStatusReducer(state, updateTableSuccess({ table: updatedTable }));
+
+    expect(result.updatingTableNumber).toBe('T02');
+  });
+
+  it('先の更新失敗で後続テーブルの送信中状態を解除しない', () => {
+    const state = {
+      ...initialCafeStatusState,
+      dashboard,
+      updatingTableNumber: 'T02',
+    };
+
+    const result = cafeStatusReducer(
+      state,
+      updateTableFailure({ tableNumber: 'T01', message: '更新できませんでした。' }),
+    );
+
+    expect(result.updatingTableNumber).toBe('T02');
+  });
+
   it('分割比率の変更を保持する', () => {
     const result = cafeStatusReducer(
       initialCafeStatusState,
