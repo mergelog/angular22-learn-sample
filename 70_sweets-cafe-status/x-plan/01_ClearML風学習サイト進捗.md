@@ -133,7 +133,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ### 基底class
 
-- [ ] `BaseCafeEntityPage` を追加
+- [x] `BaseCafeEntityPage` を追加
 - [ ] `CafeTables` を `BaseCafeEntityPage` の継承へ変更
 - [ ] `BaseCafeTableOutput` を追加
 - [ ] `CafeTableOutput` を `BaseCafeTableOutput` の継承で作成
@@ -226,7 +226,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 3は完了。componentはStoreを `selectSignal()` で読み、初期表示と再読み込みで
-`loadDashboard` をdispatchする。effect testで取得成功と取得失敗、reducer testで
-取得開始・成功・失敗の状態遷移を確認済み。次はPhase 4の基底classの最初の項目として、
-`BaseCafeEntityPage` を追加する。
+Phase 4の基底classに `BaseCafeEntityPage` を追加し、子routeの `tableNumber`を
+Signalへ同期する処理とoverviewを開く共通遷移を用意した。次は `CafeTables` を
+`BaseCafeEntityPage` の継承へ変更する。
