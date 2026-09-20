@@ -1,4 +1,11 @@
 import { Routes } from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+import {
+  DispatchFalseTracker,
+  trackDispatchFalseRun,
+} from './learn-04-dispatch-false/dispatch-false.effect';
+import { signalComparisonFeature } from './learn-03-store-select-signal-to-signal/comparison.store';
 
 export const P04_STORE_ROUTES: Routes = [
   {
@@ -10,6 +17,22 @@ export const P04_STORE_ROUTES: Routes = [
     loadComponent: () =>
       import('./learn-02-with-latest-from/learn-02-with-latest-from').then(
         (m) => m.Learn02WithLatestFrom,
+      ),
+  },
+  {
+    path: 'learn-03-store-select-signal-to-signal',
+    providers: [provideState(signalComparisonFeature)],
+    loadComponent: () =>
+      import('./learn-03-store-select-signal-to-signal/learn-03-store-select-signal-to-signal').then(
+        (m) => m.Learn03StoreSelectSignalToSignal,
+      ),
+  },
+  {
+    path: 'learn-04-dispatch-false',
+    providers: [DispatchFalseTracker, provideEffects({ trackDispatchFalseRun })],
+    loadComponent: () =>
+      import('./learn-04-dispatch-false/learn-04-dispatch-false').then(
+        (m) => m.Learn04DispatchFalse,
       ),
   },
   {

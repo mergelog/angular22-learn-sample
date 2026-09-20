@@ -1,0 +1,11 @@
+<main>
+  <h1>createEffect() の dispatch: false</h1>
+
+  <p>Actionを受け取って副作用だけを実行し、新しいActionは返しません。</p>
+
+  <p>Effect実行回数: {{ executionCount() }}</p>
+
+  <button type="button" (click)="run()">副作用を実行</button>
+
+  <app-p04-store-navi />
+</main>

@@ -1,0 +1,17 @@
+<main>
+  <h1>store.selectSignal() と toSignal()</h1>
+
+  <p>どちらも同じ selector の値を Signal として表示します。</p>
+
+  <dl>
+    <dt>store.selectSignal(selector)</dt>
+    <dd>{{ countBySelectSignal() }}</dd>
+
+    <dt>toSignal(store.select(selector))</dt>
+    <dd>{{ countByToSignal() }}</dd>
+  </dl>
+
+  <button type="button" (click)="increment()">両方の値を +1</button>
+
+  <app-p04-store-navi />
+</main>
