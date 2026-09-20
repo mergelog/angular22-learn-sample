@@ -369,6 +369,32 @@ describe('cafe-statusのURL連動', () => {
     );
   });
 
+  it('別テーブルへ以前の更新エラーを表示しない', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+    TestBed.inject(HttpTestingController)
+      .expectOne('/api/cafe-status')
+      .flush(null, { status: 500, statusText: 'Internal Server Error' });
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(detailPane(harness).querySelector('.update-error')).not.toBeNull();
+
+    await clickTableRow(harness, 'T02');
+
+    expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T02');
+    expect(detailPane(harness).querySelector('.update-error')).toBeNull();
+    expect(detailPane(harness).textContent).not.toContain('テーブルを更新できませんでした。');
+  });
+
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
     configureCafeStatusTestBed();
 
