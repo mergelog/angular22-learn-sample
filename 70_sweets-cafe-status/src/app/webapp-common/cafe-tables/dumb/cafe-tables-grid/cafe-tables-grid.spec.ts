@@ -12,7 +12,7 @@ describe('CafeTablesGrid', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(CafeTablesGrid);
-    fixture.componentRef.setInput('rows', []);
+    fixture.componentRef.setInput('tables', []);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

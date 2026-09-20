@@ -11,7 +11,7 @@ import { CafeTable, TableStatus } from '../../../../core/model/cafe-status.model
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CafeTablesGrid {
-  readonly rows = input.required<readonly CafeTable[]>();
+  readonly tables = input.required<readonly CafeTable[]>();
 
   protected statusClass(status: TableStatus): string {
     switch (status) {

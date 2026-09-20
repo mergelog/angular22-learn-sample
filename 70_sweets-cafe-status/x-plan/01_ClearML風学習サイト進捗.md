@@ -80,7 +80,7 @@
 
 - [x] `CafeTablesGrid` を追加
 - [x] 一覧表のHTMLと表示処理を `CafeTablesGrid` へ移動
-- [ ] `tables` inputを追加
+- [x] `tables` inputを追加
 - [ ] `selectedTableNumber` inputを追加
 - [ ] `tableSelected` outputを追加
 - [ ] 親componentをデータ取得とイベント処理に限定
@@ -225,6 +225,6 @@
 
 ## 9. 次に着手する項目
 
-Phase 2として、`CafeTablesGrid` の一時的な `rows` inputを、学習計画で定義した
-`tables` inputに変更する。
+Phase 2として、`CafeTablesGrid` に選択中の行を受け取る
+`selectedTableNumber` inputを追加する。
 この段階ではNgRxや右ペインへ進まず、input/outputによる親子component間のデータ受け渡しを学習対象とする。
