@@ -214,8 +214,13 @@ h1 {
   overflow: hidden;
 }
 
+.table-split {
+  min-height: 430px;
+}
+
 .detail-route-outlet {
-  display: contents;
+  height: 100%;
+  padding-left: 16px;
 }
 
 .table-toolbar {

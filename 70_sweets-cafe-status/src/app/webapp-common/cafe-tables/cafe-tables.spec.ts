@@ -58,6 +58,8 @@ describe('CafeTables', () => {
     const fixture = TestBed.createComponent(CafeTables);
     fixture.detectChanges();
 
+    expect(fixture.nativeElement.querySelector('as-split')).not.toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('as-split-area')).toHaveLength(2);
     expect(fixture.nativeElement.querySelector('router-outlet')).not.toBeNull();
 
     const row = fixture.nativeElement.querySelector('tbody tr');

@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { SplitAreaComponent, SplitComponent } from 'angular-split';
 
 import { loadDashboard } from '../../feature/cafe-status/state/cafe-status.actions';
 import {
@@ -14,7 +15,7 @@ import { CafeTablesGrid } from './dumb/cafe-tables-grid/cafe-tables-grid';
 
 @Component({
   selector: 'app-cafe-tables',
-  imports: [CafeTablesGrid, DatePipe, RouterLink, RouterOutlet],
+  imports: [CafeTablesGrid, DatePipe, RouterLink, RouterOutlet, SplitComponent, SplitAreaComponent],
   templateUrl: './cafe-tables.html',
   styleUrl: './cafe-tables.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
