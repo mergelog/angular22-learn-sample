@@ -74,8 +74,8 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 あいだ無効化し、`save()` でも同じ条件で親への通知を止めている。
 保存時は `updateTable` actionをdispatchする。更新成功時のAPI応答を受ける
 `updateTableSuccess` actionと、対象番号・メッセージを保持する
-`updateTableFailure` actionも定義済み。effectなどの更新処理はまだ追加していないため、
-通信は発生しない。
+`updateTableFailure` actionも定義済み。更新effectは `concatMap` で更新要求を受信順に
+APIへ送り、成功・失敗actionへ変換する。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -222,7 +222,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] `updateTable` actionを追加
 - [x] `updateTableSuccess` actionを追加
 - [x] `updateTableFailure` actionを追加
-- [ ] 更新effectを `concatMap` で実装
+- [x] 更新effectを `concatMap` で実装
 - [ ] 更新成功時に該当する一覧データを置換
 - [ ] 更新失敗時に入力内容を維持
 - [ ] 更新対象と一致するエラーだけを詳細ペインへ表示
@@ -264,4 +264,6 @@ invalidと送信中の保存ボタン無効化までをcomponent testで確認�
 `updateTable` actionを追加し、`CafeInfoHeader` の `saveRequested` を
 `CafeTableOutput` のdispatchへ接続済み。API応答の `CafeTable` をpayloadに持つ
 `updateTableSuccess` actionと、対象番号・メッセージをpayloadに持つ
-`updateTableFailure` actionも追加した。次は更新effectを `concatMap` で実装する。
+`updateTableFailure` actionも追加した。更新effectは `concatMap` で実装し、複数要求を
+受信順に直列実行することをeffect testで確認済み。次は更新成功時に該当する一覧データを
+置換する。
