@@ -84,6 +84,12 @@ async function clickTableRow(harness: RouterTestingHarness, tableNumber: string)
   harness.detectChanges();
 }
 
+async function closeDetailPane(harness: RouterTestingHarness): Promise<void> {
+  detailPane(harness).querySelector<HTMLButtonElement>('[aria-label="詳細を閉じる"]')!.click();
+  await harness.fixture.whenStable();
+  harness.detectChanges();
+}
+
 describe('cafe-statusのURL連動', () => {
   it('URLを直接指定すると対象テーブルの右ペインが開く', async () => {
     configureCafeStatusTestBed();
@@ -110,6 +116,22 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPaneArea(harness).visible()).toBe(true);
     expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T02');
     expect(tableRow(harness, 'T02').getAttribute('aria-selected')).toBe('true');
+    expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('false');
+  });
+
+  it('closeで右ペインと行の選択状態が解除される', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+
+    expect(detailPaneArea(harness).visible()).toBe(true);
+    expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('true');
+
+    await closeDetailPane(harness);
+
+    expect(TestBed.inject(Router).url).toBe('/cafe-status');
+    expect(detailPaneArea(harness).visible()).toBe(false);
+    expect(detailPane(harness)).toBeNull();
     expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('false');
   });
 });
