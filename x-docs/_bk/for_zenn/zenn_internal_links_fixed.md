@@ -13,52 +13,46 @@ RxJS欄では、Observableを作る関数を **`[func]`**、`source$.pipe(...)` 
 
 | 大分類                   | やりたいこと                                     | 判断基準                                                    | RxJS                                                                                                                                                                                     | NgRx（Store / SignalStore）                                                                                                         | Angular Signal系                                                                                                          |
 | ------------------------ | ------------------------------------------------ | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| 状態                     | 単純な現在値を持つ                               | コンポーネント等の同期状態                                  | [`BehaviorSubject`](#behaviorsubject-rxjs) でも可能                                                                                                                                      | 通常は過剰                                                                                                                          | **[`signal()`](#signal-angular)**                                                                                         |
-| 状態                     | 共有状態を持つ                                   | 複数コンポーネント・機能から利用                            | Service + [`BehaviorSubject`](#behaviorsubject-rxjs)                                                                                                                                     | [`[Store] Store`](#store-ngrx) / `[SignalStore]` [`signalStore`](#signalstore-ngrx) + [`withState`](#withstate-signalstore)         | [`Service + signal()`](#shared-service-state-angular)                                                                     |
-| 状態                     | 状態変更の理由をイベントとして明示               | 「何が起きたか」をAction / Eventとして表したい              | —                                                                                                                                                                                        | `[Store]` [`createActionGroup → Reducer`](#action-creators-ngrx) / `[SignalStore]` [`eventGroup / injectDispatch`](#events-signalstore) | —                                                                                                                         |
-| 状態                     | メソッド中心で状態を変更                         | Action層を必須にしたくない                                  | —                                                                                                                                                                                        | [`[SignalStore] withMethods + patchState`](#withmethods-signalstore)                                                                | [`Service method + signal.set/update`](#shared-service-state-angular)                                                     |
-| 提供範囲                 | lazy routeでStore featureを登録                  | route injector生成時（preload含む）に登録。自動解除は前提にしない | —                                                                                                                                                                                        | **[`provideState()` / `provideEffects()`](#store-providers-ngrx)**                                                                 | —                                                                                                                         |
-| 派生                     | 1つの値から別の値を作る                          | A → B                                                       | [`map()`](#map-pipe) **[pipe]**                                                                                                                                                          | [`[Store] Selector`](#selector-ngrx) / [`[SignalStore] withComputed`](#withcomputed-signalstore)                                    | **[`computed()`](#computed-angular)**                                                                                     |
-| 派生                     | 複数の現在状態から値を作る                       | A+B → Cという同期的な状態計算                               | Observableなら [`combineLatest()`](#combinelatest-func) **[func]** / [`combineLatestWith()`](#combinelatestwith-pipe) **[pipe]** + [`map()`](#map-pipe) **[pipe]**。通知タイミングに注意 | [`[Store] createSelector`](#selector-ngrx) / [`[SignalStore] withComputed`](#withcomputed-signalstore)                              | **[`computed()`](#computed-angular)**                                                                                     |
-| 派生状態                 | 派生するがユーザー変更も許可                     | 依存元の変更で再計算し、自分でも更新したい                  | —                                                                                                                                                                                        | [`[SignalStore] withLinkedState`](#withlinkedstate-signalstore)                                                                     | **[`linkedSignal()`](#linkedsignal-angular)**                                                                             |
-| ストリーム合流           | 複数の最新値を継続的に組み合わせる               | 全ソースが一度emit後、どれかが変化するたび処理              | **[`combineLatest()`](#combinelatest-func) [func] / [`combineLatestWith()`](#combinelatestwith-pipe) [pipe]**                                                                            | [`Effect`](#effects-ngrx)等では利用可。ただしStore状態同士なら[`Selector`](#selector-ngrx)合成を優先                                | —                                                                                                                         |
-| 完了待ち                 | 全処理終了後にまとめる                           | 全入力が1回以上emitし、全てcompleteした時の最後の値が欲しい | **[`forkJoin()`](#forkjoin-func) [func]**                                                                                                                                                | [`Effect`](#effects-ngrx)内 [`forkJoin`](#forkjoin-func)                                                                            | —                                                                                                                         |
-| 反復取得                 | APIの全ページを取得してまとめる                  | 終了条件・順序・蓄積量を決める                              | **[`expand()`](#expand-pipe) + [`reduce()`](#reduce-pipe) [pipe]**                                                                                                                       | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore)内で利用                                                             | —                                                                                                                         |
-| ストリーム合流           | 同じ順番の値同士を組にする                       | A1+B1、A2+B2…                                               | **[`zip()`](#zip-func) [func] / [`zipWith()`](#zipwith-pipe) [pipe]**                                                                                                                    | [`Effect`](#effects-ngrx)等で [`zip`](#zip-func)                                                                                    | —                                                                                                                         |
-| ストリーム合流           | 複数ストリームを1本化                            | 組にはせず到着順に流す                                      | **[`merge()`](#merge-func) [func] / [`mergeWith()`](#mergewith-pipe) [pipe]**                                                                                                            | [`Effect`](#effects-ngrx)等で [`merge`](#merge-func)                                                                                | —                                                                                                                         |
-| ストリーム合流           | 順番に連結する                                   | 前のObservableがcompleteしてから次を購読                    | **[`concat()`](#concat-func) [func] / [`concatWith()`](#concatwith-pipe) [pipe]**                                                                                                        | [`Effect`](#effects-ngrx)等で利用                                                                                                   | —                                                                                                                         |
-| 最新値参照               | A発生時にBの最新値も欲しい                       | Aがトリガー。Bの値が利用可能であることが前提                | **[`withLatestFrom()`](#withlatestfrom-pipe) [pipe]**                                                                                                                                    | **[`concatLatestFrom()`](#concatlatestfrom-pipe) [pipe]**（参照先は同期emitが必要）                                                 | —                                                                                                                         |
-| 内部Observableの購読制御 | 新しい入力で以前の内部Observableの購読を解除する | 最新の検索・画面切替結果だけを採用したい                    | **[`switchMap()`](#switchmap-pipe) [pipe]**                                                                                                                                              | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore) + [`switchMap`](#switchmap-pipe)                                    | —                                                                                                                         |
-| 内部Observableの購読制御 | 要求を並行処理する                               | 完了順は問わない。必要なら同時実行数を制限                  | **[`mergeMap()`](#mergemap-pipe) [pipe]**                                                                                                                                                | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore) + [`mergeMap`](#mergemap-pipe)                                      | —                                                                                                                         |
-| 内部Observableの購読制御 | 内部Observableを入力順に処理する                 | 前の内部Observableのcompleteを待って次を開始                | **[`concatMap()`](#concatmap-pipe) [pipe]**                                                                                                                                              | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore) + [`concatMap`](#concatmap-pipe)                                    | —                                                                                                                         |
-| 内部Observableの購読制御 | 実行中の後続入力を無視する                       | 内部Observableがcompleteするまで新規入力を捨てる            | **[`exhaustMap()`](#exhaustmap-pipe) [pipe]**                                                                                                                                            | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore) + [`exhaustMap`](#exhaustmap-pipe)                                  | —                                                                                                                         |
-| Reactive Read            | パラメータ変更で古い読み取りを破棄して再取得     | loading/value/errorも状態として扱いたい                     | [`switchMap()`](#switchmap-pipe) **[pipe]** 等で自作                                                                                                                                     | [`Effect`](#effects-ngrx) / [`SignalStore`](#signalstore-ngrx)でも構成可能                                                          | **[`resource()`](#resource-angular) / [`rxResource()`](#rxresource-angular) / [`httpResource()`](#httpresource-angular)** |
-| 時間制御                 | 入力が止まるまで待つ                             | 固定時間か、値ごとに待機時間を変えるか                      | **[`debounceTime()`](#debouncetime-pipe) / [`debounce()`](#debounce-pipe) [pipe]**                                                                                                       | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore)内で利用                                                             | **[`debounced()`](#debounced-angular)** ※experimental・戻り値はResource                                                   |
-| 定期実行                 | 一定間隔でAPIを再取得する                        | 要求の重複方針と停止契機を決める                            | **[`timer()`](#interval-timer-rxjs) + [`switchMap()`](#switchmap-pipe) / [`exhaustMap()`](#exhaustmap-pipe)**                                                                            | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore)内で利用                                                             | —                                                                                                                         |
-| 時間制御                 | 一定時間内の大量イベントを間引く                 | 既定は先頭を通知し、期間内の後続値を捨てる                  | **[`throttleTime()`](#throttletime-pipe) [pipe]**（末尾通知は設定が必要）                                                                                                                | [`Effect`](#effects-ngrx)等で利用                                                                                                   | —                                                                                                                         |
-| 時間軸上の状態           | 通知ごとに値を累積する                           | reducerのように前回結果と今回値から次を作る                 | **[`scan()`](#scan-pipe) [pipe]**                                                                                                                                                        | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore)内で利用。Store状態の累積はReducerを優先                             | 現在状態の累積は [`signal.update()`](#signal-angular) 等                                                                  |
-| 初期通知                 | sourceの通知前に初期値を流す                     | 購読ごとに指定値を同期通知したい                            | **[`startWith()`](#startwith-pipe) [pipe]**                                                                                                                                              | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore)内で必要時のみ利用                                                   | [`signal(initialValue)`](#signal-angular) は初めから現在値を持つ                                                          |
-| 選別                     | 条件に合う通知だけ流す                           | 不要なイベントを捨てる                                      | **[`filter()`](#filter-pipe) [pipe]**                                                                                                                                                    | [`Effect`](#effects-ngrx)内 [`filter`](#filter-pipe)                                                                                | —                                                                                                                         |
-| 同値判定                 | 前回と同じ値なら通知不要                         | 同値更新を抑制する                                          | **[`distinctUntilChanged()`](#distinctuntilchanged-pipe) [pipe]**                                                                                                                        | [`Store selector`](#selector-ngrx)は既定でメモ化されるため通常不要。必要時のみ使用                                                  | [`signal / computed の equal`](#signal-equality-angular)                                                                  |
-| 回数                     | 最初の1件だけ欲しい                              | 取得後終了。値なしcompleteも正常終了                        | **[`take(1)`](#take1-pipe) [pipe]**                                                                                                                                                      | [`Effect`](#effects-ngrx)では通常、内部Observableに適用                                                                             | —                                                                                                                         |
-| 回数                     | 条件を満たす最初の1件が必須                      | 値なしcompleteでerror（default値未指定時）                  | **[`first(predicate)`](#first-firstpredicate-pipe) [pipe]**（条件なしなら [`first()`](#first-firstpredicate-pipe)）                                                                      | [`Effect`](#effects-ngrx)では通常、内部Observableに適用                                                                             | —                                                                                                                         |
-| エラー                   | エラーを別のObservableへ変換                     | ストリームを回復させたい                                    | **[`catchError()`](#catcherror-pipe) [pipe]**                                                                                                                                            | [`Effect`](#effects-ngrx)の非同期処理内で [`catchError`](#catcherror-pipe)                                                          | —                                                                                                                         |
-| エラー                   | error時に上流へ再購読する                        | 回数・間隔・対象エラー・処理の冪等性を決める                | **[`retry({ count, delay })`](#retry-pipe) [pipe]**                                                                                                                                      | [`Effect`](#effects-ngrx)の内部Observableに適用                                                                                     | —                                                                                                                         |
-| 共有                     | Observableの上流処理を共有・再生                 | 同一の共有Observableを再利用する                            | **[`shareReplay({ bufferSize: 1, refCount: true })`](#sharereplay-pipe) [pipe]**（寿命は本文参照）                                                                                       | [`Store`](#store-ngrx)へ状態化する選択肢もある                                                                                      | [`computed()`](#computed-angular) に遅延評価・メモ化は組み込み済み。Observableの共有・replayとは別物                      |
-| 非同期状態               | Promise-like読み取りを状態化                     | value/loading/errorをSignalとして扱う                       | —                                                                                                                                                                                        | —                                                                                                                                   | **[`resource()`](#resource-angular)**                                                                                     |
-| 非同期状態               | 既存ObservableをResourceとして扱う               | RxJSベースのServiceをSignal世界へ接続                       | Observableがデータ源                                                                                                                                                                     | —                                                                                                                                   | **[`rxResource()`](#rxresource-angular)**                                                                                 |
-| 非同期状態               | HttpClient読み取りをSignal状態化                 | HTTPの状態を宣言的に扱う                                    | —                                                                                                                                                                                        | —                                                                                                                                   | **[`httpResource()`](#httpresource-angular)**                                                                             |
-| Resource連鎖             | 先行Resourceの値で次の読み取りを決める           | loading / errorを子Resourceへ伝播させたい                   | [`switchMap`](#switchmap-pipe) 等で構成                                                                                                                                                  | [`SignalStore`](#signalstore-ngrx)内でもResourceを構成可能                                                                          | **[`params: ({ chain }) => chain(parentResource)`](#resource-chain-angular)**                                             |
-| テンプレート表示         | Observable / Promiseを表示する                   | 新規は `async`。既存の `ngrxPush` は維持・移行を判断          | **[`async`](#async-push-pipe)** ※Angular pipe                                                                                                                                             | [`ngrxPush`](#async-push-pipe) ※maintenance mode                                                                                   | Signalはテンプレートから直接読む                                                                                          |
-| 変換                     | Observable → Signal                              | Observableの最新値をSignalとして読みたい                    | 元Observable                                                                                                                                                                             | `[Store]` なら [`store.selectSignal()`](#selector-ngrx) を優先（[`toSignal`](#tosignal-angular) 不要）                              | **[`toSignal()`](#tosignal-angular)**                                                                                     |
-| 変換                     | Signal → Observable                              | RxJS operatorを使いたい                                     | 変換後にRxJS処理                                                                                                                                                                         | [`rxMethod`](#rxmethod-signalstore) はSignalを直接受け取れるため変換不要                                                            | **[`toObservable()`](#toobservable-angular)**                                                                             |
-| 変換                     | Observable → Promise                             | 最初の値か、complete時の最後の値か。未完了に注意              | **[`firstValueFrom()` / `lastValueFrom()`](#valuefrom-rxjs) [func]**                                                                                                                     | —                                                                                                                                   | —                                                                                                                         |
-| 購読管理                 | Component等の破棄でunsubscribe                   | 購読を所有するスコープの破棄に結び付ける                    | **[`takeUntilDestroyed()`](#takeuntildestroyed-pipe) [pipe]** ※Angular interop                                                                                                           | [`Effect`](#effects-ngrx) Observable自体の購読・寿命はNgRxが管理。手動購読は別途管理が必要                                          | 純粋な[`Signal`](#signal-angular)の読み取りには不要。外部リソースはcleanupが必要                                          |
-| 購読管理                 | 別Observableの通知時に停止する                   | notifierのemitで停止。completeだけでは停止しない            | **[`takeUntil(notifier$)`](#takeuntil-pipe) [pipe]**                                                                                                                                      | [`Effect`](#effects-ngrx) / [`rxMethod`](#rxmethod-signalstore)内でも利用                                                           | —                                                                                                                         |
-| 副作用                   | Observable中で値を変えず処理                     | ログ、計測など                                              | **[`tap()`](#tap-pipe) [pipe]**                                                                                                                                                          | [`Effect`](#effects-ngrx)内でも利用                                                                                                 | —                                                                                                                         |
-| 副作用                   | Action / EventからAPI・Router等を実行            | アプリケーション副作用                                      | —                                                                                                                                                                                        | [`[Store] Effects`](#effects-ngrx) / [`[SignalStore] Events plugin の withEventHandlers`](#events-signalstore)                      | —                                                                                                                         |
-| 副作用                   | Signal変更を非リアクティブAPIへ反映              | logging、storage等                                          | —                                                                                                                                                                                        | —                                                                                                                                   | **[`effect()`](#effect-angular)**                                                                                         |
-| DOM副作用                | Angular描画後、依存Signalの変更に応じてDOMへ作用 | Chart、Canvas、DOM計測等。ブラウザーのみ                    | —                                                                                                                                                                                        | —                                                                                                                                   | **[`afterRenderEffect()`](#afterrendereffect-angular)**（一度だけなら [`afterNextRender()`](#afterrendereffect-angular)） |
+| 状態                     | 単純な現在値を持つ                               | コンポーネント等の同期状態                                  | [`BehaviorSubject`](#rxjs%3A-behaviorsubject-%5Bsubject%5D) でも可能                                                                                                                                      | 通常は過剰                                                                                                                          | **[`signal()`](#angular%3A-signal()-%2F-set()-%2F-update())**                                                                                         |
+| 状態                     | 共有状態を持つ                                   | 複数コンポーネント・機能から利用                            | Service + [`BehaviorSubject`](#rxjs%3A-behaviorsubject-%5Bsubject%5D)                                                                                                                                     | [`[Store] Store`](#ngrx-store%3A-store) / `[SignalStore]` [`signalStore`](#ngrx-signalstore%3A-signalstore()-%E3%81%A8provider%E7%AF%84%E5%9B%B2) + [`withState`](#ngrx-signalstore%3A-withstate())         | [`Service + signal()`](#angular%3A-service-%2B-signal()-%E3%81%AB%E3%82%88%E3%82%8B%E5%85%B1%E6%9C%89%E7%8A%B6%E6%85%8B)                                                                     |
+| 状態                     | 状態変更の理由をイベントとして明示               | 「何が起きたか」をAction / Eventとして表したい              | —                                                                                                                                                                                        | [`[Store] Action → Reducer`](#ngrx-store%3A-action-%E2%86%92-reducer) / [`[SignalStore] Events plugin`](#ngrx-signalstore%3A-events-plugin-%2F-withreducer()-%2F-witheventhandlers())（`@ngrx/signals/events`） | —                                                                                                                         |
+| 状態                     | メソッド中心で状態を変更                         | Action層を必須にしたくない                                  | —                                                                                                                                                                                        | [`[SignalStore] withMethods + patchState`](#ngrx-signalstore%3A-withmethods()-%2F-patchstate())                                                                | [`Service method + signal.set/update`](#angular%3A-service-%2B-signal()-%E3%81%AB%E3%82%88%E3%82%8B%E5%85%B1%E6%9C%89%E7%8A%B6%E6%85%8B)                                                     |
+| 派生                     | 1つの値から別の値を作る                          | A → B                                                       | [`map()`](#rxjs%3A-map()-%5Bpipe%5D) **[pipe]**                                                                                                                                                          | [`[Store] Selector`](#ngrx-store%3A-selector-%2F-createselector()) / [`[SignalStore] withComputed`](#ngrx-signalstore%3A-withcomputed())                                    | **[`computed()`](#angular%3A-computed())**                                                                                     |
+| 派生                     | 複数の現在状態から値を作る                       | A+B → Cという同期的な状態計算                               | Observableなら [`combineLatest()`](#rxjs%3A-combinelatest()-%5Bfunc%5D) **[func]** / [`combineLatestWith()`](#rxjs%3A-combinelatestwith()-%5Bpipe%5D) **[pipe]** + [`map()`](#rxjs%3A-map()-%5Bpipe%5D) **[pipe]**。通知タイミングに注意 | [`[Store] createSelector`](#ngrx-store%3A-selector-%2F-createselector()) / [`[SignalStore] withComputed`](#ngrx-signalstore%3A-withcomputed())                              | **[`computed()`](#angular%3A-computed())**                                                                                     |
+| 派生状態                 | 派生するがユーザー変更も許可                     | 依存元の変更で再計算し、自分でも更新したい                  | —                                                                                                                                                                                        | [`[SignalStore] withLinkedState`](#ngrx-signalstore%3A-withlinkedstate())                                                                     | **[`linkedSignal()`](#angular%3A-linkedsignal())**                                                                             |
+| ストリーム合流           | 複数の最新値を継続的に組み合わせる               | 全ソースが一度emit後、どれかが変化するたび処理              | **[`combineLatest()`](#rxjs%3A-combinelatest()-%5Bfunc%5D) [func] / [`combineLatestWith()`](#rxjs%3A-combinelatestwith()-%5Bpipe%5D) [pipe]**                                                                            | [`Effect`](#ngrx-store%3A-effects)等では利用可。ただしStore状態同士なら[`Selector`](#ngrx-store%3A-selector-%2F-createselector())合成を優先                                | —                                                                                                                         |
+| 完了待ち                 | 全処理終了後にまとめる                           | 全入力が1回以上emitし、全てcompleteした時の最後の値が欲しい | **[`forkJoin()`](#rxjs%3A-forkjoin()-%5Bfunc%5D) [func]**                                                                                                                                                | [`Effect`](#ngrx-store%3A-effects)内 [`forkJoin`](#rxjs%3A-forkjoin()-%5Bfunc%5D)                                                                            | —                                                                                                                         |
+| ストリーム合流           | 同じ順番の値同士を組にする                       | A1+B1、A2+B2…                                               | **[`zip()`](#rxjs%3A-zip()-%5Bfunc%5D) [func] / [`zipWith()`](#rxjs%3A-zipwith()-%5Bpipe%5D) [pipe]**                                                                                                                    | [`Effect`](#ngrx-store%3A-effects)等で [`zip`](#rxjs%3A-zip()-%5Bfunc%5D)                                                                                    | —                                                                                                                         |
+| ストリーム合流           | 複数ストリームを1本化                            | 組にはせず到着順に流す                                      | **[`merge()`](#rxjs%3A-merge()-%5Bfunc%5D) [func] / [`mergeWith()`](#rxjs%3A-mergewith()-%5Bpipe%5D) [pipe]**                                                                                                            | [`Effect`](#ngrx-store%3A-effects)等で [`merge`](#rxjs%3A-merge()-%5Bfunc%5D)                                                                                | —                                                                                                                         |
+| ストリーム合流           | 順番に連結する                                   | 前のObservableがcompleteしてから次を購読                    | **[`concat()`](#rxjs%3A-concat()-%5Bfunc%5D) [func] / [`concatWith()`](#rxjs%3A-concatwith()-%5Bpipe%5D) [pipe]**                                                                                                        | [`Effect`](#ngrx-store%3A-effects)等で利用                                                                                                   | —                                                                                                                         |
+| 最新値参照               | A発生時にBの最新値も欲しい                       | Aがトリガー。Bの値が利用可能であることが前提                | **[`withLatestFrom()`](#rxjs%3A-withlatestfrom()-%5Bpipe%5D) [pipe]**                                                                                                                                    | **[`concatLatestFrom()`](#ngrx%3A-concatlatestfrom()-%5Bpipe%5D) [pipe]**（参照先は同期emitが必要）                                                 | —                                                                                                                         |
+| 内部Observableの購読制御 | 新しい入力で以前の内部Observableの購読を解除する | 最新の検索・画面切替結果だけを採用したい                    | **[`switchMap()`](#rxjs%3A-switchmap()-%5Bpipe%5D) [pipe]**                                                                                                                                              | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod()) + [`switchMap`](#rxjs%3A-switchmap()-%5Bpipe%5D)                                    | —                                                                                                                         |
+| 内部Observableの購読制御 | 要求を並行処理する                               | 完了順は問わない。必要なら同時実行数を制限                  | **[`mergeMap()`](#rxjs%3A-mergemap()-%5Bpipe%5D) [pipe]**                                                                                                                                                | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod()) + [`mergeMap`](#rxjs%3A-mergemap()-%5Bpipe%5D)                                      | —                                                                                                                         |
+| 内部Observableの購読制御 | 内部Observableを入力順に処理する                 | 前の内部Observableのcompleteを待って次を開始                | **[`concatMap()`](#rxjs%3A-concatmap()-%5Bpipe%5D) [pipe]**                                                                                                                                              | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod()) + [`concatMap`](#rxjs%3A-concatmap()-%5Bpipe%5D)                                    | —                                                                                                                         |
+| 内部Observableの購読制御 | 実行中の後続入力を無視する                       | 内部Observableがcompleteするまで新規入力を捨てる            | **[`exhaustMap()`](#rxjs%3A-exhaustmap()-%5Bpipe%5D) [pipe]**                                                                                                                                            | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod()) + [`exhaustMap`](#rxjs%3A-exhaustmap()-%5Bpipe%5D)                                  | —                                                                                                                         |
+| Reactive Read            | パラメータ変更で古い読み取りを破棄して再取得     | loading/value/errorも状態として扱いたい                     | [`switchMap()`](#rxjs%3A-switchmap()-%5Bpipe%5D) **[pipe]** 等で自作                                                                                                                                     | [`Effect`](#ngrx-store%3A-effects) / [`SignalStore`](#ngrx-signalstore%3A-signalstore()-%E3%81%A8provider%E7%AF%84%E5%9B%B2)でも構成可能                                                          | **[`resource()`](#angular%3A-resource()) / [`rxResource()`](#angular%2Frxjs-interop%3A-rxresource()) / [`httpResource()`](#angular-http%3A-httpresource())** |
+| 時間制御                 | 入力が止まるまで待つ                             | 検索文字入力など                                            | **[`debounceTime()`](#rxjs%3A-debouncetime()-%5Bpipe%5D) [pipe]**                                                                                                                                        | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod())内 [`debounceTime`](#rxjs%3A-debouncetime()-%5Bpipe%5D)                              | **[`debounced()`](#angular%3A-debounced())** ※experimental・戻り値はResource                                                   |
+| 時間制御                 | 一定時間内の大量イベントを間引く                 | 既定は先頭を通知し、期間内の後続値を捨てる                  | **[`throttleTime()`](#rxjs%3A-throttletime()-%5Bpipe%5D) [pipe]**（末尾通知は設定が必要）                                                                                                                | [`Effect`](#ngrx-store%3A-effects)等で利用                                                                                                   | —                                                                                                                         |
+| 時間軸上の状態           | 通知ごとに値を累積する                           | reducerのように前回結果と今回値から次を作る                 | **[`scan()`](#rxjs%3A-scan()-%5Bpipe%5D) [pipe]**                                                                                                                                                        | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod())内で利用。Store状態の累積はReducerを優先                             | 現在状態の累積は [`signal.update()`](#angular%3A-signal()-%2F-set()-%2F-update()) 等                                                                  |
+| 初期通知                 | sourceの通知前に初期値を流す                     | 購読ごとに指定値を同期通知したい                            | **[`startWith()`](#rxjs%3A-startwith()-%5Bpipe%5D) [pipe]**                                                                                                                                              | [`Effect`](#ngrx-store%3A-effects) / [`rxMethod`](#ngrx-signalstore%3A-rxmethod())内で必要時のみ利用                                                   | [`signal(initialValue)`](#angular%3A-signal()-%2F-set()-%2F-update()) は初めから現在値を持つ                                                          |
+| 選別                     | 条件に合う通知だけ流す                           | 不要なイベントを捨てる                                      | **[`filter()`](#rxjs%3A-filter()-%5Bpipe%5D) [pipe]**                                                                                                                                                    | [`Effect`](#ngrx-store%3A-effects)内 [`filter`](#rxjs%3A-filter()-%5Bpipe%5D)                                                                                | —                                                                                                                         |
+| 同値判定                 | 前回と同じ値なら通知不要                         | 同値更新を抑制する                                          | **[`distinctUntilChanged()`](#rxjs%3A-distinctuntilchanged()-%5Bpipe%5D) [pipe]**                                                                                                                        | [`Store selector`](#ngrx-store%3A-selector-%2F-createselector())は既定でメモ化されるため通常不要。必要時のみ使用                                                  | [`signal / computed の equal`](#angular%3A-signal%E3%81%AEequal%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3)                                                                  |
+| 回数                     | 最初の1件だけ欲しい                              | 取得後終了。値なしcompleteも正常終了                        | **[`take(1)`](#rxjs%3A-take(1)-%5Bpipe%5D) [pipe]**                                                                                                                                                      | [`Effect`](#ngrx-store%3A-effects)では通常、内部Observableに適用                                                                             | —                                                                                                                         |
+| 回数                     | 条件を満たす最初の1件が必須                      | 値なしcompleteでerror（default値未指定時）                  | **[`first(predicate)`](#rxjs%3A-first()-%2F-first(predicate)-%5Bpipe%5D) [pipe]**（条件なしなら [`first()`](#rxjs%3A-first()-%2F-first(predicate)-%5Bpipe%5D)）                                                                      | [`Effect`](#ngrx-store%3A-effects)では通常、内部Observableに適用                                                                             | —                                                                                                                         |
+| エラー                   | エラーを別のObservableへ変換                     | ストリームを回復させたい                                    | **[`catchError()`](#rxjs%3A-catcherror()-%5Bpipe%5D) [pipe]**                                                                                                                                            | [`Effect`](#ngrx-store%3A-effects)の非同期処理内で [`catchError`](#rxjs%3A-catcherror()-%5Bpipe%5D)                                                          | —                                                                                                                         |
+| エラー                   | error時に上流へ再購読する                        | 回数・間隔・対象エラー・処理の冪等性を決める                | **[`retry({ count, delay })`](#rxjs%3A-retry()-%5Bpipe%5D) [pipe]**                                                                                                                                      | [`Effect`](#ngrx-store%3A-effects)の内部Observableに適用                                                                                     | —                                                                                                                         |
+| 共有                     | Observableの上流処理を共有・再生                 | 同一の共有Observableを再利用する                            | **[`shareReplay({ bufferSize: 1, refCount: true })`](#rxjs%3A-sharereplay()-%5Bpipe%5D) [pipe]**（寿命は本文参照）                                                                                       | [`Store`](#ngrx-store%3A-store)へ状態化する選択肢もある                                                                                      | [`computed()`](#angular%3A-computed()) に遅延評価・メモ化は組み込み済み。Observableの共有・replayとは別物                      |
+| 非同期状態               | Promise-like読み取りを状態化                     | value/loading/errorをSignalとして扱う                       | —                                                                                                                                                                                        | —                                                                                                                                   | **[`resource()`](#angular%3A-resource())**                                                                                     |
+| 非同期状態               | 既存ObservableをResourceとして扱う               | RxJSベースのServiceをSignal世界へ接続                       | Observableがデータ源                                                                                                                                                                     | —                                                                                                                                   | **[`rxResource()`](#angular%2Frxjs-interop%3A-rxresource())**                                                                                 |
+| 非同期状態               | HttpClient読み取りをSignal状態化                 | HTTPの状態を宣言的に扱う                                    | —                                                                                                                                                                                        | —                                                                                                                                   | **[`httpResource()`](#angular-http%3A-httpresource())**                                                                             |
+| Resource連鎖             | 先行Resourceの値で次の読み取りを決める           | loading / errorを子Resourceへ伝播させたい                   | [`switchMap`](#rxjs%3A-switchmap()-%5Bpipe%5D) 等で構成                                                                                                                                                  | [`SignalStore`](#ngrx-signalstore%3A-signalstore()-%E3%81%A8provider%E7%AF%84%E5%9B%B2)内でもResourceを構成可能                                                                          | **[`params: ({ chain }) => chain(parentResource)`](#angular-resource%3A-params%E3%81%AEchain())**                                             |
+| 変換                     | Observable → Signal                              | Observableの最新値をSignalとして読みたい                    | 元Observable                                                                                                                                                                             | `[Store]` なら [`store.selectSignal()`](#ngrx-store%3A-selector-%2F-createselector()) を優先（[`toSignal`](#angular%2Frxjs-interop%3A-tosignal()) 不要）                              | **[`toSignal()`](#angular%2Frxjs-interop%3A-tosignal())**                                                                                     |
+| 変換                     | Signal → Observable                              | RxJS operatorを使いたい                                     | 変換後にRxJS処理                                                                                                                                                                         | [`rxMethod`](#ngrx-signalstore%3A-rxmethod()) はSignalを直接受け取れるため変換不要                                                            | **[`toObservable()`](#angular%2Frxjs-interop%3A-toobservable())**                                                                             |
+| 購読管理                 | Component等の破棄でunsubscribe                   | 購読を所有するスコープの破棄に結び付ける                    | **[`takeUntilDestroyed()`](#angular%2Frxjs-interop%3A-takeuntildestroyed()-%5Bpipe%5D) [pipe]** ※Angular interop                                                                                                           | [`Effect`](#ngrx-store%3A-effects) Observable自体の購読・寿命はNgRxが管理。手動購読は別途管理が必要                                          | 純粋な[`Signal`](#angular%3A-signal()-%2F-set()-%2F-update())の読み取りには不要。外部リソースはcleanupが必要                                          |
+| 副作用                   | Observable中で値を変えず処理                     | ログ、計測など                                              | **[`tap()`](#rxjs%3A-tap()-%5Bpipe%5D) [pipe]**                                                                                                                                                          | [`Effect`](#ngrx-store%3A-effects)内でも利用                                                                                                 | —                                                                                                                         |
+| 副作用                   | Action / EventからAPI・Router等を実行            | アプリケーション副作用                                      | —                                                                                                                                                                                        | [`[Store] Effects`](#ngrx-store%3A-effects) / [`[SignalStore] Events plugin の withEventHandlers`](#ngrx-signalstore%3A-events-plugin-%2F-withreducer()-%2F-witheventhandlers())                      | —                                                                                                                         |
+| 副作用                   | Signal変更を非リアクティブAPIへ反映              | logging、storage等                                          | —                                                                                                                                                                                        | —                                                                                                                                   | **[`effect()`](#angular%3A-effect())**                                                                                         |
+| DOM副作用                | Angular描画後、依存Signalの変更に応じてDOMへ作用 | Chart、Canvas、DOM計測等。ブラウザーのみ                    | —                                                                                                                                                                                        | —                                                                                                                                   | **[`afterRenderEffect()`](#angular%3A-afterrendereffect()-%2F-afternextrender())**（一度だけなら [`afterNextRender()`](#angular%3A-afterrendereffect()-%2F-afternextrender())） |
 
 ## よくある誤解の訂正
 
@@ -303,14 +297,14 @@ RxJS 7.8.xの `shareReplay()` は既定でバッファ数が無制限、`refCoun
 
 | 問題                                             | まず考えるもの                                                                                                                                                 |
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 「今の値」は何か                                 | [`signal()`](#signal-angular) / [`Store`](#store-ngrx) / [`SignalStore`](#signalstore-ngrx)                                                                    |
-| 「今の値」から何を計算するか                     | [`computed()`](#computed-angular) / [`Selector`](#selector-ngrx)                                                                                               |
+| 「今の値」は何か                                 | [`signal()`](#angular%3A-signal()-%2F-set()-%2F-update()) / [`Store`](#ngrx-store%3A-store) / [`SignalStore`](#ngrx-signalstore%3A-signalstore()-%E3%81%A8provider%E7%AF%84%E5%9B%B2)                                                                    |
+| 「今の値」から何を計算するか                     | [`computed()`](#angular%3A-computed()) / [`Selector`](#ngrx-store%3A-selector-%2F-createselector())                                                                                               |
 | 時間とともに通知が複数流れる                     | RxJS                                                                                                                                                           |
-| 非同期処理が重なったらどうするか                 | [`switchMap()`](#switchmap-pipe) / [`mergeMap()`](#mergemap-pipe) / [`concatMap()`](#concatmap-pipe) / [`exhaustMap()`](#exhaustmap-pipe)（すべて **[pipe]**） |
-| Actionを中心に状態遷移を管理したい               | [`NgRx Store`](#store-ngrx) + [`Effects`](#effects-ngrx)                                                                                                       |
-| Signalベースで構造化した状態管理が欲しい         | [`NgRx SignalStore`](#signalstore-ngrx)                                                                                                                        |
-| reactiveな読み取り + loading/value/errorが欲しい | [`Resource系`](#resource-angular)                                                                                                                              |
-| Observable世界とSignal世界を接続したい           | [`toSignal()`](#tosignal-angular) / [`toObservable()`](#toobservable-angular) / [`rxResource()`](#rxresource-angular)                                          |
+| 非同期処理が重なったらどうするか                 | [`switchMap()`](#rxjs%3A-switchmap()-%5Bpipe%5D) / [`mergeMap()`](#rxjs%3A-mergemap()-%5Bpipe%5D) / [`concatMap()`](#rxjs%3A-concatmap()-%5Bpipe%5D) / [`exhaustMap()`](#rxjs%3A-exhaustmap()-%5Bpipe%5D)（すべて **[pipe]**） |
+| Actionを中心に状態遷移を管理したい               | [`NgRx Store`](#ngrx-store%3A-store) + [`Effects`](#ngrx-store%3A-effects)                                                                                                       |
+| Signalベースで構造化した状態管理が欲しい         | [`NgRx SignalStore`](#ngrx-signalstore%3A-signalstore()-%E3%81%A8provider%E7%AF%84%E5%9B%B2)                                                                                                                        |
+| reactiveな読み取り + loading/value/errorが欲しい | [`Resource系`](#angular%3A-resource())                                                                                                                              |
+| Observable世界とSignal世界を接続したい           | [`toSignal()`](#angular%2Frxjs-interop%3A-tosignal()) / [`toObservable()`](#angular%2Frxjs-interop%3A-toobservable()) / [`rxResource()`](#angular%2Frxjs-interop%3A-rxresource())                                          |
 
 つまり最上位では、
 
@@ -328,7 +322,6 @@ RxJS 7.8.xの `shareReplay()` は既定でバッファ数が無制限、`refCoun
 
 以下の `source$` は処理元のObservable、`a$` / `b$` は合流するObservableを表します。変数名末尾の `$` はObservableであることを表す慣例です。`[func]` は関数として呼び出し、`[pipe]` は `source$.pipe(...)` 内で使います。
 
-<a id="behaviorsubject-rxjs"></a>
 
 ### RxJS: `BehaviorSubject` [Subject]
 
@@ -348,7 +341,6 @@ export class CounterService {
 
 値を同期的に読むには `.value` または `getValue()` を使えます。ただしerror後はどちらもthrowし、complete後の新規subscriberは保持値を受け取らず即completeします。コンポーネント内だけの単純な現在値ならAngularの `signal()` の方が簡潔で、状態遷移や派生状態が増えるならStoreやSignalStoreも検討します。
 
-<a id="subject-rxjs"></a>
 
 ### RxJS: `Subject` [Subject]
 
@@ -363,7 +355,6 @@ refresh(): void {
 }
 ```
 
-<a id="of-from-rxjs"></a>
 
 ### RxJS: `of()` / `from()` [func]
 
@@ -374,7 +365,6 @@ of([1, 2, 3]);   // [1, 2, 3] を1件通知
 from([1, 2, 3]); // 1, 2, 3 を順に通知
 ```
 
-<a id="fromevent-rxjs"></a>
 
 ### RxJS: `fromEvent()` [func]
 
@@ -386,13 +376,11 @@ const resize$ = fromEvent(window, "resize").pipe(
 );
 ```
 
-<a id="interval-timer-rxjs"></a>
 
 ### RxJS: `interval()` / `timer()` [func]
 
 `interval(period)` は購読から `period` 後に `0`、以後一定間隔で `1, 2, ...` を通知します。`timer(dueTime)` は指定時間後に1件通知してcompleteし、`timer(dueTime, period)` は初回だけ別の待機時間を指定できます。`timer(0, period)` は「直ちに1回、以後定期実行」となるためポーリングで使われますが、`takeUntil` 等で停止条件を必ず設計します。
 
-<a id="empty-throwerror-iif-rxjs"></a>
 
 ### RxJS: `EMPTY` / `throwError()` / `iif()` [func]
 
@@ -400,7 +388,6 @@ const resize$ = fromEvent(window, "resize").pipe(
 - `throwError(() => error)` は購読時にerrorになるObservableを作ります。`switchMap` 等の返り値としてエラーをObservableの契約に戻す用途に向きます。
 - `iif(condition, true$, false$)` は購読時に `condition` を評価し、どちらか一方だけを購読します。Actionごとに参照selectorを変える `concatLatestFrom(() => iif(...))` のように、選択を購読時まで遅延させたい場合に使います。
 
-<a id="fromfetch-rxjs"></a>
 
 ### RxJS: `fromFetch()` [func]
 
@@ -415,13 +402,11 @@ const user$ = fromFetch("/api/user", {
 });
 ```
 
-<a id="valuefrom-rxjs"></a>
 
 ### RxJS: `firstValueFrom()` / `lastValueFrom()` [func]
 
 ObservableをPromiseの待機に変換します。`firstValueFrom` は最初の1件でunsubscribeし、`lastValueFrom` はcompleteを待って最後の値をresolveします。値なしでcompleteすると、`defaultValue` を指定しない限りrejectされます。特に `lastValueFrom` はsourceがcompleteしないとPromiseが決着しないため、HTTPのようにcompleteが保証されるsourceか、`take` / `timeout` 等で終了を明示したsourceに限定します。 ([RxJS lastValueFrom][44])
 
-<a id="map-pipe"></a>
 
 ### RxJS: `map()` [pipe]
 
@@ -431,7 +416,6 @@ sourceが通知する値を1件ずつ別の値へ変換します。配列の `ma
 const priceWithTax$ = price$.pipe(map((price) => Math.floor(price * 1.1)));
 ```
 
-<a id="combinelatest-func"></a>
 
 ### RxJS: `combineLatest()` [func]
 
@@ -443,7 +427,6 @@ combineLatest([a$, b$]).subscribe(([a, b]) => {
 });
 ```
 
-<a id="combinelatestwith-pipe"></a>
 
 ### RxJS: `combineLatestWith()` [pipe]
 
@@ -455,7 +438,6 @@ a$.pipe(combineLatestWith(b$)).subscribe(([a, b]) => {
 });
 ```
 
-<a id="forkjoin-func"></a>
 
 ### RxJS: `forkJoin()` [func]
 
@@ -467,19 +449,16 @@ forkJoin({ user: user$, posts: posts$ }).subscribe(({ user, posts }) => {
 });
 ```
 
-<a id="zip-func"></a>
 
 ### RxJS: `zip()` [func]
 
 各Observableの1件目同士、2件目同士というように、同じ順番の値を組にします。片方だけ先に何件届いても、相手側の対応する値が来るまで待ちます。速い側の未対応値は内部に保持されるため、通知頻度の差が長く続く無限ストリーム同士には向きません。「常に最新値」ではなく「対応する順番」が重要な場合に使います。いずれかの入力がcompleteし、その入力に未使用の値がなくなると、以後は組を作れないため全体もcompleteします。
 
-<a id="zipwith-pipe"></a>
 
 ### RxJS: `zipWith()` [pipe]
 
 sourceと他のObservableを順番ごとに組にするpipe operatorです。`a$.pipe(zipWith(b$))` は、`zip(a$, b$)` と同様に `[aの1件目, bの1件目]`、`[aの2件目, bの2件目]` と流します。
 
-<a id="merge-func"></a>
 
 ### RxJS: `merge()` [func]
 
@@ -489,13 +468,11 @@ sourceと他のObservableを順番ごとに組にするpipe operatorです。`a$
 merge(click$, keydown$).subscribe((event) => handleInput(event));
 ```
 
-<a id="mergewith-pipe"></a>
 
 ### RxJS: `mergeWith()` [pipe]
 
 sourceへ他のObservableの通知を到着順に合流するpipe operatorです。`a$.pipe(mergeWith(b$))` は値を配列にせず、`a$` と `b$` の通知をそのまま1本のObservableへ流します。
 
-<a id="concat-func"></a>
 
 ### RxJS: `concat()` [func]
 
@@ -505,13 +482,11 @@ Observableを指定順につなぎます。最初のObservableが完了してか
 concat(first$, second$).subscribe(); // first$ 完了後に second$ を購読
 ```
 
-<a id="concatwith-pipe"></a>
 
 ### RxJS: `concatWith()` [pipe]
 
 sourceの完了後に別のObservableへつなぐpipe operatorです。`first$.pipe(concatWith(second$))` と書くと、先に `first$` の全通知、その後に `second$` の通知が流れます。
 
-<a id="withlatestfrom-pipe"></a>
 
 ### RxJS: `withLatestFrom()` [pipe]
 
@@ -523,7 +498,6 @@ saveClick$.pipe(withLatestFrom(formValue$)).subscribe(([event, formValue]) => {
 });
 ```
 
-<a id="concatlatestfrom-pipe"></a>
 
 ### NgRx: `concatLatestFrom()` [pipe]
 
@@ -537,7 +511,6 @@ actions$.pipe(
 );
 ```
 
-<a id="switchmap-pipe"></a>
 
 ### RxJS: `switchMap()` [pipe]
 
@@ -547,7 +520,6 @@ sourceの値ごとに内部Observableを作り、新しい値が来ると以前�
 const results$ = query$.pipe(switchMap((query) => search$(query)));
 ```
 
-<a id="mergemap-pipe"></a>
 
 ### RxJS: `mergeMap()` [pipe]
 
@@ -557,7 +529,6 @@ sourceの値ごとに作った内部Observableを並行して購読します。�
 items$.pipe(mergeMap((item) => saveItem$(item), 3)); // 最大3件を並行処理
 ```
 
-<a id="concatmap-pipe"></a>
 
 ### RxJS: `concatMap()` [pipe]
 
@@ -567,7 +538,6 @@ sourceの値を待ち行列に入れ、1件の内部Observableが完了してか
 saveRequests$.pipe(concatMap((request) => save$(request)));
 ```
 
-<a id="exhaustmap-pipe"></a>
 
 ### RxJS: `exhaustMap()` [pipe]
 
@@ -577,13 +547,11 @@ saveRequests$.pipe(concatMap((request) => save$(request)));
 submitClick$.pipe(exhaustMap(() => submitForm$()));
 ```
 
-<a id="debouncetime-pipe"></a>
 
 ### RxJS: `debounceTime()` [pipe]
 
 通知後、指定時間だけ次の通知が来なければその値を流します。待機中に次が来るたびタイマーをやり直すため、文字入力が止まってから検索する用途に向きます。すべての値を残したい処理には使いません。
 
-<a id="debounce-pipe"></a>
 
 ### RxJS: `debounce()` [pipe]
 
@@ -595,19 +563,16 @@ autoRefresh$.pipe(
 );
 ```
 
-<a id="audittime-pipe"></a>
 
 ### RxJS: `auditTime()` [pipe]
 
 最初の通知で一定時間の窓を開始し、その間の最後の値を窓の終了時に流します。通知の度に待機をやり直す `debounceTime` と違い、入力が絶えなくても窓ごとに最新値を流せます。連続更新の中間値は不要だが、定期的に最新値を反映したい場合に向きます。 ([RxJS auditTime][45])
 
-<a id="buffertime-pipe"></a>
 
 ### RxJS: `bufferTime()` [pipe]
 
 指定時間に届いた複数の通知を配列にまとめて流します。通知数を間引くoperatorではなく、ログやイベントを一定間隔でbatch処理する用途に向きます。窓内に通知がないと空配列も流れ得るため、必要なら後段で `filter((items) => items.length > 0)` します。
 
-<a id="throttletime-pipe"></a>
 
 ### RxJS: `throttleTime()` [pipe]
 
@@ -621,7 +586,6 @@ source$.pipe(
 );
 ```
 
-<a id="scan-pipe"></a>
 
 ### RxJS: `scan()` [pipe]
 
@@ -631,13 +595,11 @@ source$.pipe(
 const total$ = value$.pipe(scan((total, value) => total + value, 0));
 ```
 
-<a id="reduce-pipe"></a>
 
 ### RxJS: `reduce()` / `toArray()` [pipe]
 
 `reduce` は通知を累積し、sourceがcompleteした時に最終結果を1件だけ流します。通知ごとに途中結果を流す `scan` とは異なります。`toArray()` はすべての通知を配列に蓄え、complete時にその配列を1件流す特化形です。どちらもcompleteしないsourceでは結果が出ず、通知数が多いとメモリ使用量が増えます。
 
-<a id="expand-pipe"></a>
 
 ### RxJS: `expand()` [pipe]
 
@@ -652,13 +614,11 @@ api.getPage(1).pipe(
 );
 ```
 
-<a id="startwith-pipe"></a>
 
 ### RxJS: `startWith()` [pipe]
 
 購読されるたび、sourceより先に指定値を同期的に流します。初回値がないObservableを `combineLatest` へ渡す場合や、画面に初期表示用の値をすぐ出したい場合に使います。sourceの内部状態を書き換えるものではありません。
 
-<a id="filter-pipe"></a>
 
 ### RxJS: `filter()` [pipe]
 
@@ -670,31 +630,26 @@ const users$ = nullableUser$.pipe(
 );
 ```
 
-<a id="skip-pairwise-rxjs"></a>
 
 ### RxJS: `skip()` / `pairwise()` [pipe]
 
 `skip(count)` はsourceの先頭 `count` 件を捨て、それ以降だけを流します。`BehaviorSubject` や `startWith` の初回値だけを無視したい場合に使えますが、順番依存なので「なぜ初回だけ不要か」を明確にします。`pairwise()` は2件目以降を `[previous, current]` として流し、前回値との差分や遷移を判定できます。sourceが1件しか通知しなければ何も流しません。
 
-<a id="distinctuntilchanged-pipe"></a>
 
 ### RxJS: `distinctUntilChanged()` [pipe]
 
 直前に流した値と今回値を比較し、同じなら今回値を捨てます。既定比較は `===` なので、内容が同じ別オブジェクトは異なる値として流れます。必要な場合だけ比較関数を渡します。
 
-<a id="distinctuntilkeychanged-pipe"></a>
 
 ### RxJS: `distinctUntilKeyChanged()` [pipe]
 
 オブジェクト全体ではなく、指定keyの値だけを直前に流した値と比較します。`distinctUntilKeyChanged("id")` なら、その他のpropertyが変わっても `id` が同じ通知は捨てます。後段が本当にそのkeyのみに依存する場合に限定し、他propertyの更新まで止めないようにします。
 
-<a id="take1-pipe"></a>
 
 ### RxJS: `take(1)` [pipe]
 
 最初の1件を流した直後に購読を完了します。sourceが1件も出さず完了した場合も正常完了するため、「値がなくてもよい1回取得」に向きます。sourceが通知も完了もしなければ待ち続けます。
 
-<a id="takeuntil-pipe"></a>
 
 ### RxJS: `takeUntil()` [pipe]
 
@@ -707,19 +662,16 @@ timer(0, 30_000).pipe(
 );
 ```
 
-<a id="takewhile-pipe"></a>
 
 ### RxJS: `takeWhile()` [pipe]
 
 predicateが `true` の間だけ値を流し、初めて `false` になった時点でunsubscribeしてcompleteします。第2引数の `inclusive: true` を使うと、初めて条件を外れた値も1件流してからcompleteします。処理結果が「継続中か」を表すポーリングで最終結果も必要な場合などに使えます。
 
-<a id="first-firstpredicate-pipe"></a>
 
 ### RxJS: `first()` / `first(predicate)` [pipe]
 
 `first()` は最初の値、`first(predicate)` は条件に合う最初の値を流して完了します。該当値なしでsourceが完了すると、default値を指定していない限りerrorになるため、「条件を満たす値が必ず必要」という契約を表せます。
 
-<a id="catcherror-pipe"></a>
 
 ### RxJS: `catchError()` [pipe]
 
@@ -729,25 +681,21 @@ predicateが `true` の間だけ値を流し、初めて `false` になった時
 request$.pipe(catchError((error) => of({ kind: "failed", error })));
 ```
 
-<a id="timeout-pipe"></a>
 
 ### RxJS: `timeout()` [pipe]
 
 最初の通知または通知間隔が指定時間を超えたとき、元のsourceからunsubscribeして `TimeoutError` を通知します。`timeout({ first: 5_000 })` は初回だけ、`timeout({ each: 5_000 })` は各通知の間隔を制限します。`with` で代替Observableへ切り替えられますが、HTTP自体のサーバー側処理が取り消される保証はありません。
 
-<a id="delay-pipe"></a>
 
 ### RxJS: `delay()` [pipe]
 
 sourceの通知を指定時間だけ後へずらします。HTTP要求の開始自体を遅らせるわけではなく、sourceから届いた通知の配送を遅らせるoperatorです。「購読や処理開始をN秒後に行う」なら `timer(N).pipe(switchMap(...))` などと意味を区別します。
 
-<a id="finalize-pipe"></a>
 
 ### RxJS: `finalize()` [pipe]
 
 sourceがcompleteした場合、errorになった場合、または明示的にunsubscribeされた場合のいずれでもcallbackを1回実行します。loading flagの復帰やリソース解放のように、成功・失敗・取消しで共通の後始末を行う場合に使います。成功の通知値を変換する場所ではありません。
 
-<a id="retry-pipe"></a>
 
 ### RxJS: `retry()` [pipe]
 
@@ -761,13 +709,11 @@ request$.pipe(
 );
 ```
 
-<a id="share-pipe"></a>
 
 ### RxJS: `share()` [pipe]
 
 同時に存在する複数subscriberで上流の1購読を共有します。既定では過去値を保持しないため、後から購読したsubscriberは購読後の通知だけを受け取ります。「現在の同時購読の重複実行を防ぐ」なら `share`、後発subscriberへ直近値も再生するなら `shareReplay` と、キャッシュ契約を区別します。
 
-<a id="sharereplay-pipe"></a>
 
 ### RxJS: `shareReplay()` [pipe]
 
@@ -781,13 +727,11 @@ readonly user$ = this.http.get<User>("/api/user").pipe(
 
 `refCount: true` でも、HTTPのように成功してcompleteした結果のキャッシュは残ります。未完了の上流はsubscriberが0になると解除され、後の購読で再実行されます。errorは保持されず、後の購読で上流へ再購読します。
 
-<a id="takeuntildestroyed-pipe"></a>
 
 ### Angular/RxJS interop: `takeUntilDestroyed()` [pipe]
 
 AngularのコンポーネントやDirectiveなど、指定した `DestroyRef` のスコープが破棄されたときに購読を完了します。手動subscribeをライフサイクルへ結び付けるために使います。注入コンテキスト内なら引数を省略でき、その場所の `DestroyRef` が使われます。`switchMap` 等の内部Observableも破棄時に解除したい場合は、通常それらより後ろへ置きます。
 
-<a id="subscription-rxjs"></a>
 
 ### RxJS: `Subscription` の手動管理
 
@@ -805,7 +749,6 @@ ngOnDestroy(): void {
 }
 ```
 
-<a id="tap-pipe"></a>
 
 ### RxJS: `tap()` [pipe]
 
@@ -818,7 +761,6 @@ source$.pipe(
 );
 ```
 
-<a id="async-push-pipe"></a>
 
 ### Angular / NgRx: `async` / `ngrxPush` テンプレートpipe
 
@@ -835,7 +777,6 @@ source$.pipe(
 
 NgRx StoreとSignalStoreはどちらも共有状態を構造化しますが、操作の入口が異なります。StoreはActionをdispatchしてReducerで状態を変え、SignalStoreは公開メソッドから `patchState` する構成を基本にできます。アプリ全体で必ずどちらか一方に統一する必要はありません。
 
-<a id="store-ngrx"></a>
 
 ### NgRx Store: `Store`
 
@@ -849,7 +790,6 @@ reload(): void {
 }
 ```
 
-<a id="action-creators-ngrx"></a>
 
 ### NgRx Store: `createAction()` / `createActionGroup()` / `props()`
 
@@ -867,7 +807,6 @@ export const UsersPageActions = createActionGroup({
 export const legacyReload = createAction("[Users Page] Reload");
 ```
 
-<a id="action-reducer-ngrx"></a>
 
 ### NgRx Store: `Action → Reducer`
 
@@ -884,7 +823,6 @@ export const usersReducer = createReducer(
 );
 ```
 
-<a id="createfeature-ngrx"></a>
 
 ### NgRx Store: `createFeature()` / `createFeatureSelector()`
 
@@ -899,7 +837,6 @@ export const usersFeature = createFeature({
 store.selectSignal(usersFeature.selectUsers);
 ```
 
-<a id="selector-ngrx"></a>
 
 ### NgRx Store: `Selector` / `createSelector()`
 
@@ -913,7 +850,6 @@ export const selectVisibleUsers = createSelector(
 );
 ```
 
-<a id="effects-ngrx"></a>
 
 ### NgRx Store: `Effects`
 
@@ -931,13 +867,10 @@ readonly loadUsers$ = createEffect(() => this.actions$.pipe(
 
 class fieldで定義する場合、`createEffect` が参照する `actions$` やServiceはEffect fieldより前に初期化します。外側の `actions$.pipe(...)` に `catchError` や `take(1)` を置いて完了させると以後のActionを処理できないため、通常は上例のように内部Observableで処理します。
 
-<a id="store-providers-ngrx"></a>
 
 ### NgRx Store: `provideStore()` / `provideState()` / `provideEffects()`
 
-`provideStore()` はルートStore基盤を登録し、通常はapplication configに1回置きます。lazy routeの `providers` に `provideState()` / `provideEffects()` を置くと、route injector生成時にfeatureを登録します。preloading時に画面表示より先に登録される場合もあります。
-
-登録先はrootの `ReducerManager` / `EffectSources` です。NgRx 22のstandalone APIはroute injector破棄時に登録を自動解除しないため、route providerは**遅延登録の入口**であり、画面離脱時のunload境界ではありません。必要ならreset Action等で状態を明示的に初期化します。 ([Angular Router実装][50], [NgRx provideState実装][51], [NgRx provideEffects実装][52])
+`provideStore()` はルートStore基盤とroot stateを登録し、通常はapplication configに1回置きます。`provideState(feature)` はfeature reducerをそのproviderスコープで追加し、`provideEffects(...)` はEffectをrootまたはfeatureスコープで起動します。lazy routeの `providers` にfeature stateとEffectsを置くと、routeが有効になると登録され、そのroute injectorの破棄時に解除されます。rootに置くかfeatureに置くかは、状態と副作用の共有範囲・寿命を決める設計です。
 
 ```ts
 export const routes: Routes = [{
@@ -952,13 +885,11 @@ export const routes: Routes = [{
 
 `provideStoreDevtools()` はActionとstate遷移をRedux DevToolsへ接続します。記録量やstate内の機密情報に注意し、本番bundleに含めるかをenvironmentごとに決めます。 ([NgRx Store Devtools][48])
 
-<a id="metareducer-ngrx"></a>
 
 ### NgRx Store: `MetaReducer`
 
 `MetaReducer` はreducerを包み、Actionが処理される前後に横断処理を適用します。開発時のlogging、hydration、特定Actionでの一括resetなどに使えますが、すべてのstate遷移へ影響するため、機能固有の処理を入れません。非同期処理やRouter遷移はMetaReducerではなくEffectsで扱います。
 
-<a id="signalstore-ngrx"></a>
 
 ### NgRx SignalStore: `signalStore()` とprovider範囲
 
@@ -974,15 +905,13 @@ export const CounterStore = signalStore(
 readonly counterStore = inject(CounterStore);
 ```
 
-画面と同時に状態を捨てたいなら、通常はコンポーネントの `providers` に置きます。route providerのinjectorは画面離脱時に必ず破棄されるわけではなく、自動cleanupも実験的なオプトインです。ログインユーザー情報などアプリ全体で共有する状態はroot提供を検討します。 ([Angular Route injector cleanup][53])
+画面を離れたときに状態を捨てたいなら、その画面のコンポーネントやRoute providerで提供します。ログインユーザー情報などアプリ全体で共有したい状態ならroot提供を検討します。
 
-<a id="withstate-signalstore"></a>
 
 ### NgRx SignalStore: `withState()`
 
 `withState` はSignalStoreが保持する初期状態を定義します。各プロパティはSignalとして公開されるため、利用側は `store.users()` のように現在値を同期的に読めます。SignalStoreのstateは既定で保護され、Store外から `patchState(store, ...)` できません。外部更新を許す `{ protectedState: false }` もありますが、通常は `withMethods` で公開した操作へ更新を集約します。
 
-<a id="withmethods-signalstore"></a>
 
 ### NgRx SignalStore: `withMethods()` / `patchState()`
 
@@ -997,7 +926,6 @@ export const CounterStore = signalStore(
 );
 ```
 
-<a id="withcomputed-signalstore"></a>
 
 ### NgRx SignalStore: `withComputed()`
 
@@ -1009,7 +937,6 @@ withComputed(({ firstName, lastName }) => ({
 }));
 ```
 
-<a id="withlinkedstate-signalstore"></a>
 
 ### NgRx SignalStore: `withLinkedState()`
 
@@ -1027,7 +954,6 @@ export const OptionsStore = signalStore(
 );
 ```
 
-<a id="rxmethod-signalstore"></a>
 
 ### NgRx SignalStore: `rxMethod()`
 
@@ -1052,7 +978,6 @@ loadByQuery: rxMethod<string>(
 
 上例のように内部Observableへ置いた `tapResponse` は `next` / `error` / `complete` / `finalize` の処理を分け、errorを捕捉して接続元の `rxMethod` を終了させません。SignalやObservableの接続は呼出元の注入コンテキスト（または第2引数の `injector`）の破棄時に解除されます。root提供のStoreから画面固有のSignal等を接続するなら、画面の注入コンテキスト内で呼ぶかその `injector` を渡します。戻り値の `destroy()` はその接続だけ、`rxMethod` 自体の `destroy()` はpipeline全体を終了します。
 
-<a id="events-signalstore"></a>
 
 ### NgRx SignalStore: Events plugin / `withReducer()` / `withEventHandlers()`
 
@@ -1078,7 +1003,6 @@ select(userId: string): void {
 
 `withReducer(on(userEvents.userSelected, ...))` で同期状態を更新し、`withEventHandlers((_store, events = inject(Events)) => ({ ... }))` で外部処理を定義します。NgRx StoreのActionとSignalStoreのeventは別の仕組みですが、event handler内から従来StoreへActionをdispatchするbridgeを作れるため、段階的な共存も可能です。
 
-<a id="signalstore-feature-ngrx"></a>
 
 ### NgRx SignalStore: `signalStoreFeature()`
 
@@ -1095,7 +1019,6 @@ export function withRequestStatus() {
 }
 ```
 
-<a id="signalstore-devtools-ngrx"></a>
 
 ### SignalStore: `withDevtools()`
 
@@ -1107,7 +1030,6 @@ Signalは「現在値」を同期的に読み、依存関係に応じて派生�
 
 `resource` 系、`debounced`、`toSignal` / `toObservable`、`effect` 系は通常、生成時の注入コンテキストと寿命を共有します。その外で生成する場合は各APIの `injector` オプションを渡し、どのスコープで破棄するかを明示します。
 
-<a id="shared-service-state-angular"></a>
 
 ### Angular: `Service + signal()` による共有状態
 
@@ -1127,7 +1049,6 @@ export class CounterService {
 
 `providedIn: "root"` ならアプリ全体で同じService instanceを共有します。コンポーネントの `providers` にServiceを置けば、そのコンポーネント配下ごとに別instanceとなり、破棄時には状態も破棄されます。小規模な共有状態には簡潔ですが、Action履歴、複雑な状態遷移、開発ツールによる追跡が必要ならNgRxも検討します。
 
-<a id="signal-angular"></a>
 
 ### Angular: `signal()` / `set()` / `update()`
 
@@ -1141,7 +1062,6 @@ count.update((current) => current + 1);
 console.log(count()); // 11
 ```
 
-<a id="computed-angular"></a>
 
 ### Angular: `computed()`
 
@@ -1153,7 +1073,6 @@ const lastName = signal("Yamada");
 const fullName = computed(() => `${firstName()} ${lastName()}`);
 ```
 
-<a id="signal-equality-angular"></a>
 
 ### Angular: Signalの`equal`オプション
 
@@ -1167,7 +1086,6 @@ const selectedUser = signal<User | null>(null, {
 
 この例では同じIDのユーザーを設定しても通知されないため、名前など他のプロパティ変更も無視されます。不要な再計算を減らす利点と、必要な更新まで止める危険を比較して使います。また、同じオブジェクトを直接変更して同じ参照を再設定するのではなく、新しいオブジェクトや配列を作るのが基本です。
 
-<a id="linkedsignal-angular"></a>
 
 ### Angular: `linkedSignal()`
 
@@ -1182,7 +1100,6 @@ selected.set("express"); // ユーザーによる上書きも可能
 
 依存元が変わっても有効な選択を維持したい場合は、`{ source, computation }` 形式の `previous?.value` を使います。
 
-<a id="resource-angular"></a>
 
 ### Angular: `resource()`
 
@@ -1200,7 +1117,6 @@ const user = resource({
 
 SSR結果をhydration時に再利用するには一意な `id` を指定します。値はHTMLへserializeされるため、HTMLが共有cacheされ得る画面のユーザー固有データでは `id` による再利用を避けます。 ([Angular][29])
 
-<a id="resource-chain-angular"></a>
 
 ### Angular Resource: `params`の`chain()`
 
@@ -1215,7 +1131,6 @@ const orders = resource({
 
 `chain()` はResource自身のmethodではなく、`params` のcontextから受け取る関数です。親の値自体が `undefined` になり得る場合、`chain(userResource)` を直接返せば子はidleになりますが、`{ user: chain(userResource) }` と包むとparamsは定義済みになりloaderが実行されます。複数の親をまとめる場合も、この `undefined` の扱いを明示してからオブジェクトを作ります。
 
-<a id="rxresource-angular"></a>
 
 ### Angular/RxJS interop: `rxResource()`
 
@@ -1228,7 +1143,6 @@ const user = rxResource({
 });
 ```
 
-<a id="httpresource-angular"></a>
 
 ### Angular HTTP: `httpResource()`
 
@@ -1241,13 +1155,11 @@ const user = httpResource<User>(() => `/api/users/${userId()}`);
 
 返される `HttpResourceRef` はResource共通のSignalに加えて `headers()` / `statusCode()` / `progress()` を持ちます。`<User>` はTypeScript上の型指定で実行時検証はしないため、外部応答を検証する場合は `parse` オプションを使います。Interceptorがerrorを `EMPTY` 等へ変えて応答なしでcompleteさせると `NG0991` になり得るため、errorを無通知で握りつぶしません。 ([Angular NG0991][41])
 
-<a id="debounced-angular"></a>
 
 ### Angular: `debounced()`
 
 `debounced(source, duration)` はsource Signalの変更が指定時間止まってから値を確定するResourceを返します。通常のSignalではないため、値は `result.value()`、待機中かどうかは `result.isLoading()` で読みます。待機中の `value()` は直前に確定した値を保持します。sourceの読み取りがthrowした場合は待機せずerror状態になります。Angular 22ではexperimentalなので、採用時は変更可能性を考慮します。
 
-<a id="tosignal-angular"></a>
 
 ### Angular/RxJS interop: `toSignal()`
 
@@ -1257,7 +1169,6 @@ const user = httpResource<User>(() => `/api/users/${userId()}`);
 readonly user = toSignal(this.user$, { initialValue: null });
 ```
 
-<a id="toobservable-angular"></a>
 
 ### Angular/RxJS interop: `toObservable()`
 
@@ -1270,7 +1181,6 @@ const query$ = toObservable(query).pipe(
 );
 ```
 
-<a id="effect-angular"></a>
 
 ### Angular: `effect()`
 
@@ -1284,17 +1194,34 @@ effect((onCleanup) => {
 });
 ```
 
-<a id="untracked-effectref-angular"></a>
 
 ### Angular: `untracked()` / `EffectRef`
 
 `untracked(() => value())` はSignalを読んでも、現在実行中の `computed` や `effect` の依存元に追加しません。依存更新で再実行すべき値に使うと更新が止まるため、ログに付帯する値など、読み取るが依存にしないことが明確な場合に限定します。`effect()` の戻り値の `EffectRef` は `destroy()` で手動終了できますが、通常は生成元の `DestroyRef` による自動cleanupを使います。`manualCleanup: true` を選ぶなら、所有者と `destroy()` するタイミングを必ず決めます。
 
-<a id="afterrendereffect-angular"></a>
 
 ### Angular: `afterRenderEffect()` / `afterNextRender()`
 
 `afterRenderEffect` はAngularがDOMを更新した後に、依存Signalの変更へ反応してDOMの読み書きを行います。ChartやCanvasの更新、要素サイズの計測など、描画済みDOMが必要な処理に限定します。phaseは `earlyRead` → `write` → `mixedReadWrite` → `read` の順で、DOMの書き込みと読み取りを分けて不要なlayout再計算を避けます。phaseを省略すると `mixedReadWrite` になるため、可能なら `write` と `read` を明示して分離します。一度だけ描画後に初期化するなら `afterNextRender` を使います。SSR中はどちらも実行されず、clientでもcallback実行時にcomponentのhydration完了は保証されないため、直接DOM操作はその前提で行います。
+
+## 「逆引き辞書」の表への変更提案
+
+本修正では冒頭の「逆引き辞書」表は変更していません。次回表を更新する場合は、以下の「やりたいこと」を優先して追加することを提案します。
+
+1. **Observableをテンプレートに表示したい** — Angular標準は `async`、既存ClearMLの主要パターンは `ngrxPush`。`@ngrx/component` のmaintenance modeも判断基準に付記する。
+2. **APIの全ページを逐次取得して1つにまとめたい** — `expand()` + `reduce()`。終了条件と直列化を判断基準にする。
+3. **画面を離れるまで定期取得したい** — `timer(0, period)` + `takeWhile()` / `takeUntil(ofType(...))`。ライフサイクル破棄なら `takeUntilDestroyed()` と区別する。
+4. **Observableの発生源を作りたい** — eventは `fromEvent()`、定期実行は `interval()` / `timer()`、Promise・配列変換は `from()`、条件分岐は `iif()`。
+5. **NgRx StoreのAction群を定義したい** — `createActionGroup()` + `props()` / `emptyProps()`。単独定義の `createAction()` と使い分ける。
+6. **NgRx Storeのfeatureをlazy routeへ登録したい** — rootの `provideStore()` と、route単位の `provideState()` / `provideEffects()`。共有範囲と寿命を判断基準にする。
+7. **SignalStoreのeventを定義・発火したい** — `eventGroup()` + `injectDispatch()`。汎用的な発火は `Dispatcher`、受信は `Events.on()`。
+8. **ObservableをPromiseとして待ちたい** — 最初の値は `firstValueFrom()`、complete時の最後の値は `lastValueFrom()`。必ずcomplete条件を判断基準にする。
+
+表の既存行には、以下の判断基準の追記を提案します。
+
+- `retry()` の行: `retryWhen()` はRxJS 7.8でdeprecated。待機の制御も `retry({ delay })` を使う。
+- `debounceTime()` の行: 通知値ごとに待機時間を変えるなら `debounce()` を使う。
+- `takeUntilDestroyed()` の行: Angularの破棄ではなくActionや別Observableを停止条件にするなら `takeUntil()`。`Subscription.add()` + `ngOnDestroy` は既存コードの手動管理として位置付ける。
 
 [1]: https://ngrx.io/api/signals/withMethods "NgRx - withMethods"
 [2]: https://ngrx.io/guide/eslint-plugin/rules/avoid-combining-selectors "NgRx - avoid-combining-selectors"
@@ -1345,7 +1272,3 @@ effect((onCleanup) => {
 [47]: https://ngrx.io/guide/entity/recipes/entity-adapter-with-feature-creator "NgRx - Feature Creator"
 [48]: https://ngrx.io/guide/store-devtools "NgRx - Store Devtools"
 [49]: https://github.com/angular-architects/ngrx-toolkit "Angular Architects - NgRx Toolkit"
-[50]: https://github.com/angular/angular/blob/main/packages/router/src/router_preloader.ts "Angular - RouterPreloader implementation"
-[51]: https://github.com/ngrx/platform/blob/22.0.1/modules/store/src/provide_store.ts "NgRx 22.0.1 - provideState implementation"
-[52]: https://github.com/ngrx/platform/blob/22.0.1/modules/effects/src/provide_effects.ts "NgRx 22.0.1 - provideEffects implementation"
-[53]: https://angular.dev/api/router/withExperimentalAutoCleanupInjectors "Angular - Route injector cleanup"

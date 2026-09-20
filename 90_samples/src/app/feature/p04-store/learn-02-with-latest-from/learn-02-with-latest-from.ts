@@ -16,11 +16,15 @@ export class Learn02WithLatestFrom {
   private readonly orderClick$ = new Subject<void>();
   readonly selectedDrink$ = new BehaviorSubject('コーヒー');
   readonly orderResult = signal('まだ注文していません');
+  private readonly orderWithSelectedDrink$ = this.orderClick$.pipe(
+    withLatestFrom(this.selectedDrink$),
+    takeUntilDestroyed(this.destroyRef),
+  );
 
   constructor() {
-    this.orderClick$
-      .pipe(withLatestFrom(this.selectedDrink$), takeUntilDestroyed(this.destroyRef))
-      .subscribe(([, drink]) => this.orderResult.set(`${drink}を注文しました`));
+    this.orderWithSelectedDrink$.subscribe(([, drink]) =>
+      this.orderResult.set(`${drink}を注文しました`),
+    );
   }
 
   selectDrink(drink: string): void {
