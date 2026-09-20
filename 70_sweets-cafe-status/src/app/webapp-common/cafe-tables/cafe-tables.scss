@@ -23,8 +23,7 @@
 .topbar nav,
 .sidebar-item,
 .refresh-button,
-.snapshot-time,
-.status {
+.snapshot-time {
   display: flex;
   align-items: center;
 }
@@ -204,8 +203,7 @@ h1 {
   font-size: 0.75rem;
 }
 
-.live-dot,
-.status > span {
+.live-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -238,67 +236,6 @@ h1 {
 .future-tools {
   display: flex;
   gap: 20px;
-}
-
-.table-scroll {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  min-width: 760px;
-  border-collapse: collapse;
-  font-size: 0.8rem;
-}
-
-th,
-td {
-  height: 54px;
-  padding: 0 18px;
-  border-bottom: 1px solid #eceef1;
-  text-align: left;
-  white-space: nowrap;
-}
-
-th {
-  height: 42px;
-  background: #f8f9fa;
-  color: #7b8290;
-  font-size: 0.66rem;
-  letter-spacing: 0.035em;
-}
-
-td {
-  color: #596170;
-}
-
-td strong {
-  color: var(--ink);
-}
-
-tbody tr:hover {
-  background: #faf9ff;
-}
-
-.numeric {
-  text-align: right;
-}
-
-.status {
-  gap: 7px;
-  min-width: 80px;
-}
-
-.status.waiting {
-  color: #b6792c;
-}
-
-.status.cooking {
-  color: #5f53c1;
-}
-
-.status.served {
-  color: #248660;
 }
 
 .state-message {

@@ -1,4 +1,4 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,11 +12,12 @@ import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { CafeDashboardApi } from '../../core/api/cafe-dashboard.api';
-import { CafeDashboard, TableStatus } from '../../core/model/cafe-status.model';
+import { CafeDashboard } from '../../core/model/cafe-status.model';
+import { CafeTablesGrid } from './dumb/cafe-tables-grid/cafe-tables-grid';
 
 @Component({
   selector: 'app-cafe-tables',
-  imports: [DatePipe, DecimalPipe, RouterLink],
+  imports: [CafeTablesGrid, DatePipe, RouterLink],
   templateUrl: './cafe-tables.html',
   styleUrl: './cafe-tables.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,36 +52,5 @@ export class CafeTables implements OnInit {
         next: (dashboard) => this.dashboard.set(dashboard),
         error: () => this.errorMessage.set('カフェの状況を取得できませんでした。'),
       });
-  }
-
-  protected statusClass(status: TableStatus): string {
-    switch (status) {
-      case '空き':
-        return 'available';
-      case '未オーダー':
-        return 'waiting';
-      case '調理中':
-        return 'cooking';
-      case '提供済':
-        return 'served';
-      case '片付け中':
-        return 'cleaning';
-    }
-  }
-
-  protected formatDuration(totalSeconds: number): string {
-    const hours = Math.floor(totalSeconds / 3_600);
-    const minutes = Math.floor((totalSeconds % 3_600) / 60);
-    const seconds = totalSeconds % 60;
-
-    if (hours > 0) {
-      return `${hours}時間 ${minutes}分`;
-    }
-
-    if (minutes > 0) {
-      return `${minutes}分 ${seconds}秒`;
-    }
-
-    return `${seconds}秒`;
   }
 }

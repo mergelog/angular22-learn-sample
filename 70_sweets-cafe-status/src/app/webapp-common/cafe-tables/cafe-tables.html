@@ -105,38 +105,7 @@
           </div>
         } @else if (dashboard(); as data) {
           @if (data.tables.length > 0) {
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col">テーブル番号</th>
-                    <th scope="col">分類</th>
-                    <th scope="col">状態</th>
-                    <th scope="col" class="numeric">人数</th>
-                    <th scope="col" class="numeric">会計金額</th>
-                    <th scope="col">現状態の経過時間</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (table of data.tables; track table.tableNumber) {
-                    <tr>
-                      <td>
-                        <strong>{{ table.tableNumber }}</strong>
-                      </td>
-                      <td>{{ table.classification }}</td>
-                      <td>
-                        <span class="status" [class]="'status ' + statusClass(table.status)">
-                          <span aria-hidden="true"></span>{{ table.status }}
-                        </span>
-                      </td>
-                      <td class="numeric">{{ table.people }}名</td>
-                      <td class="numeric">¥{{ table.billingAmount | number }}</td>
-                      <td>{{ formatDuration(table.stateElapsedSeconds) }}</td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
+            <app-cafe-tables-grid [rows]="data.tables" />
           } @else {
             <div class="state-message">
               <strong>表示できるテーブルがありません</strong>

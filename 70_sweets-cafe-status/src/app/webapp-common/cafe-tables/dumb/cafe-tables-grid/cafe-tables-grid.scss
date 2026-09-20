@@ -1,0 +1,73 @@
+:host {
+  display: block;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+th,
+td {
+  height: 54px;
+  padding: 0 18px;
+  border-bottom: 1px solid #eceef1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+th {
+  height: 42px;
+  background: #f8f9fa;
+  color: #7b8290;
+  font-size: 0.66rem;
+  letter-spacing: 0.035em;
+}
+
+td {
+  color: #596170;
+}
+
+td strong {
+  color: #202634;
+}
+
+tbody tr:hover {
+  background: #faf9ff;
+}
+
+.numeric {
+  text-align: right;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 80px;
+}
+
+.status > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status.waiting {
+  color: #b6792c;
+}
+
+.status.cooking {
+  color: #5f53c1;
+}
+
+.status.served {
+  color: #248660;
+}
