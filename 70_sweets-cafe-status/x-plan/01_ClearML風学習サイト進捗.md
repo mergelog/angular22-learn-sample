@@ -115,7 +115,7 @@
 - [x] `loadDashboard` actionを追加
 - [x] `loadDashboardSuccess` actionを追加
 - [x] `loadDashboardFailure` actionを追加
-- [ ] 一覧取得effectを `exhaustMap` で実装
+- [x] 一覧取得effectを `exhaustMap` で実装
 - [ ] HTTPエラーを画面表示用メッセージへ変換
 - [ ] componentからの直接API呼び出しを削除
 - [ ] Storeの読み出しを `selectSignal()` に統一
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3のStateファイルと登録、一覧取得の開始・成功・失敗actionまで追加済み。
-次は一覧取得effectを `exhaustMap` で実装する。
+Phase 3のStateファイルと登録、一覧取得action・effectまで追加済み。
+次はHTTPエラーを画面表示用メッセージへ変換する。
