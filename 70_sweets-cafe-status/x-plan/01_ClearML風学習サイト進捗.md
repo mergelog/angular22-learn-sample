@@ -157,7 +157,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] URLから選択中のテーブル番号を取得
 - [x] 選択中の行を強調表示
 - [x] 行選択でoverviewへ遷移
-- [ ] closeで `/cafe-status` へ遷移
+- [x] closeで `/cafe-status` へ遷移
 - [ ] 戻る・進むで選択状態を同期
 - [ ] 存在しないテーブルのnot-found表示を追加
 - [ ] 初回取得中のloading表示を追加
@@ -234,5 +234,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示と
-overviewへの遷移は完了。次はclose操作で `/cafe-status` へ戻す。
+Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示、
+overviewへの遷移とcloseによる一覧復帰は完了。
+次は戻る・進む操作と選択状態の同期を確認する。
