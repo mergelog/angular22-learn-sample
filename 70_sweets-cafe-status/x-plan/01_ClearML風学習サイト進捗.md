@@ -102,7 +102,7 @@
 
 ### State
 
-- [ ] `cafe-status.actions.ts` を追加
+- [x] `cafe-status.actions.ts` を追加
 - [ ] `cafe-status.reducer.ts` を追加
 - [ ] `cafe-status.selectors.ts` を追加
 - [ ] `cafe-status.effects.ts` を追加
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3の依存関係として `@ngrx/store@^22.0.1` と `@ngrx/effects@^22.0.1` を追加済み。
-次はPhase 3のStateの最初の項目として、`cafe-status.actions.ts` を追加する。
+Phase 3のStateに `cafe-status.actions.ts` を追加済み。
+次は `cafe-status.reducer.ts` を追加する。
