@@ -4,7 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, map } from 'rxjs';
 
-import { selectDashboard } from '../../../../feature/cafe-status/state/cafe-status.selectors';
+import {
+  selectDashboard,
+  selectLoading,
+} from '../../../../feature/cafe-status/state/cafe-status.selectors';
 
 @Directive()
 export abstract class BaseCafeTableOutput {
@@ -14,6 +17,7 @@ export abstract class BaseCafeTableOutput {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly dashboard = this.store.selectSignal(selectDashboard);
+  protected readonly loading = this.store.selectSignal(selectLoading);
   protected readonly tableNumber = signal<string | null>(null);
   protected readonly selectedTable = computed(() => {
     const tableNumber = this.tableNumber();

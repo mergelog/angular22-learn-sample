@@ -31,3 +31,18 @@
   color: #5144ad;
   cursor: pointer;
 }
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #ddd8f5;
+  border-top-color: #6657c7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -116,4 +116,30 @@ describe('CafeTableOutput', () => {
       );
     });
   }
+
+  it('初回取得中はnot-foundではなくloadingを表示する', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTableOutput],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ tableNumber: 'T01' })) },
+        },
+        { provide: Router, useValue: { navigate: vi.fn().mockResolvedValue(true) } },
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              loading: true,
+            },
+          },
+        }),
+      ],
+    });
+    const fixture = TestBed.createComponent(CafeTableOutput);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('テーブル詳細を読み込んでいます');
+    expect(fixture.nativeElement.textContent).not.toContain('テーブルが見つかりません');
+  });
 });

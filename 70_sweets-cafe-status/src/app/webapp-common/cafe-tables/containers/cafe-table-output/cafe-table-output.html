@@ -2,6 +2,11 @@
   @if (selectedTable(); as table) {
     <app-cafe-info-header [table]="table" (closeRequested)="closePanel()" />
     <router-outlet />
+  } @else if (loading()) {
+    <div class="detail-state" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <strong>テーブル詳細を読み込んでいます</strong>
+    </div>
   } @else if (dashboard()) {
     <div class="detail-state" role="status">
       <strong>テーブルが見つかりません</strong>
