@@ -12,7 +12,14 @@
     </thead>
     <tbody>
       @for (table of tables(); track table.tableNumber) {
-        <tr [class.selected]="table.tableNumber === selectedTableNumber()">
+        <tr
+          tabindex="0"
+          [class.selected]="table.tableNumber === selectedTableNumber()"
+          [attr.aria-selected]="table.tableNumber === selectedTableNumber()"
+          (click)="selectTable(table.tableNumber)"
+          (keydown.enter)="selectTable(table.tableNumber)"
+          (keydown.space)="$event.preventDefault(); selectTable(table.tableNumber)"
+        >
           <td>
             <strong>{{ table.tableNumber }}</strong>
           </td>

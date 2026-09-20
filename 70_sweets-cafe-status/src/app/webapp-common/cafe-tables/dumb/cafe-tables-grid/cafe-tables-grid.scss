@@ -40,6 +40,12 @@ td strong {
 
 tbody tr:hover {
   background: #faf9ff;
+  cursor: pointer;
+}
+
+tbody tr:focus-visible {
+  outline: 2px solid #6b5bd2;
+  outline-offset: -2px;
 }
 
 tbody tr.selected {

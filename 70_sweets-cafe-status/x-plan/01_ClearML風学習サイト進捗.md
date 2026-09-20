@@ -82,7 +82,7 @@
 - [x] 一覧表のHTMLと表示処理を `CafeTablesGrid` へ移動
 - [x] `tables` inputを追加
 - [x] `selectedTableNumber` inputを追加
-- [ ] `tableSelected` outputを追加
+- [x] `tableSelected` outputを追加
 - [ ] 親componentをデータ取得とイベント処理に限定
 - [ ] 子componentからAPI、Store、Routerへの依存を排除
 
@@ -225,6 +225,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 2として、`CafeTablesGrid` の行操作を親componentへ通知する
-`tableSelected` outputを追加する。
+Phase 2として、親の `CafeTables` をデータ取得と子からのイベント処理に限定する。
 この段階ではNgRxや右ペインへ進まず、input/outputによる親子component間のデータ受け渡しを学習対象とする。

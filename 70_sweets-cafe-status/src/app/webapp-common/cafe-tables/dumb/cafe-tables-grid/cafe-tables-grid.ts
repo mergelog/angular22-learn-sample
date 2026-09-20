@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 import { CafeTable, TableStatus } from '../../../../core/model/cafe-status.model';
 
@@ -13,6 +13,11 @@ import { CafeTable, TableStatus } from '../../../../core/model/cafe-status.model
 export class CafeTablesGrid {
   readonly tables = input.required<readonly CafeTable[]>();
   readonly selectedTableNumber = input<string | null>(null);
+  readonly tableSelected = output<string>();
+
+  protected selectTable(tableNumber: string): void {
+    this.tableSelected.emit(tableNumber);
+  }
 
   protected statusClass(status: TableStatus): string {
     switch (status) {
