@@ -62,5 +62,11 @@ describe('CafeTables', () => {
     expect(row.textContent).toContain('T01');
     expect(row.textContent).toContain('提供済');
     expect(row.textContent).toContain('¥1,360');
+
+    const refreshButton: HTMLButtonElement = fixture.nativeElement.querySelector('.refresh-button');
+    refreshButton.click();
+
+    expect(dispatch).toHaveBeenCalledTimes(2);
+    expect(dispatch).toHaveBeenLastCalledWith(loadDashboard());
   });
 });

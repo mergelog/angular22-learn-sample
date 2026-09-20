@@ -119,7 +119,7 @@
 - [x] HTTPエラーを画面表示用メッセージへ変換
 - [x] componentからの直接API呼び出しを削除
 - [x] Storeの読み出しを `selectSignal()` に統一
-- [ ] 再読み込みを `loadDashboard` のdispatchへ変更
+- [x] 再読み込みを `loadDashboard` のdispatchへ変更
 
 ### 完了条件
 
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3の一覧取得をNgRxへ接続し、Storeの読み出しを `selectSignal()` に統一済み。
-次は再読み込みを `loadDashboard` のdispatchへ変更する。
+Phase 3の一覧取得をNgRxへ移行済み。componentはStoreを `selectSignal()` で読み、
+初期表示と再読み込みで `loadDashboard` をdispatchする。次はeffect testで取得成功を確認する。
