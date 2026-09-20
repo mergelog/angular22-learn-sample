@@ -2,5 +2,11 @@
   @if (selectedTable(); as table) {
     <app-cafe-info-header [table]="table" (closeRequested)="closePanel()" />
     <router-outlet />
+  } @else if (dashboard()) {
+    <div class="detail-state" role="status">
+      <strong>テーブルが見つかりません</strong>
+      <span>「{{ tableNumber() }}」に一致するテーブルはありません。</span>
+      <button type="button" (click)="closePanel()">一覧へ戻る</button>
+    </div>
   }
 </section>

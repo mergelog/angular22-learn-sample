@@ -13,7 +13,7 @@ export abstract class BaseCafeTableOutput {
   protected readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly dashboard = this.store.selectSignal(selectDashboard);
+  protected readonly dashboard = this.store.selectSignal(selectDashboard);
   protected readonly tableNumber = signal<string | null>(null);
   protected readonly selectedTable = computed(() => {
     const tableNumber = this.tableNumber();
