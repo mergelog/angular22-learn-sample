@@ -206,6 +206,42 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).textContent).not.toContain('テーブルが見つかりません');
   });
 
+  it('再読み込み後も一覧と詳細が同じselectorのdashboardを参照する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+
+    expect(tableRow(harness, 'T01').textContent).toContain('提供済');
+    expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('提供済');
+    expect(detailPane(harness).querySelector('app-cafe-table-overview')?.textContent).toContain(
+      '24%',
+    );
+
+    const refreshButton: HTMLButtonElement =
+      harness.fixture.nativeElement.querySelector('.refresh-button');
+
+    refreshButton.click();
+    harness.detectChanges();
+
+    TestBed.inject(HttpTestingController)
+      .expectOne('/api/cafe-status')
+      .flush({
+        ...dashboard,
+        tables: [
+          createTable('T01', { status: '片付け中', people: 4, dailyUsageRate: 57 }),
+          dashboard.tables[1],
+        ],
+      });
+    harness.detectChanges();
+
+    expect(tableRow(harness, 'T01').textContent).toContain('片付け中');
+    expect(tableRow(harness, 'T01').textContent).toContain('4名');
+    expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('片付け中');
+    expect(detailPane(harness).querySelector('app-cafe-table-overview')?.textContent).toContain(
+      '57%',
+    );
+  });
+
   for (const unknownTableNumber of ['T99', 't01']) {
     it(`存在しないテーブル番号 ${unknownTableNumber} のURLでnot-foundを表示する`, async () => {
       configureCafeStatusTestBed();
