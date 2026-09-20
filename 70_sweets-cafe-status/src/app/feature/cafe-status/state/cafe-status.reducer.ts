@@ -1,6 +1,7 @@
-import { createReducer } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 
 import { CafeDashboard } from '../../../core/model/cafe-status.model';
+import { loadDashboard, loadDashboardFailure, loadDashboardSuccess } from './cafe-status.actions';
 
 export const CAFE_STATUS_FEATURE_KEY = 'cafeStatus';
 
@@ -22,4 +23,21 @@ export const initialCafeStatusState: CafeStatusState = {
   splitPercent: 65,
 };
 
-export const cafeStatusReducer = createReducer(initialCafeStatusState);
+export const cafeStatusReducer = createReducer(
+  initialCafeStatusState,
+  on(loadDashboard, (state) => ({
+    ...state,
+    loading: true,
+    loadError: null,
+  })),
+  on(loadDashboardSuccess, (state, { dashboard }) => ({
+    ...state,
+    dashboard,
+    loading: false,
+  })),
+  on(loadDashboardFailure, (state, { errorMessage }) => ({
+    ...state,
+    loading: false,
+    loadError: errorMessage,
+  })),
+);

@@ -1,9 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
 
-import { CafeDashboardApi } from '../../core/api/cafe-dashboard.api';
 import { CafeDashboard } from '../../core/model/cafe-status.model';
+import { loadDashboard } from '../../feature/cafe-status/state/cafe-status.actions';
+import {
+  CAFE_STATUS_FEATURE_KEY,
+  initialCafeStatusState,
+} from '../../feature/cafe-status/state/cafe-status.reducer';
 import { CafeTables } from './cafe-tables';
 
 describe('CafeTables', () => {
@@ -33,18 +38,27 @@ describe('CafeTables', () => {
         },
       ],
     };
-    const getDashboard = vi.fn(() => of(dashboard));
-
     TestBed.configureTestingModule({
       imports: [CafeTables],
-      providers: [provideRouter([]), { provide: CafeDashboardApi, useValue: { getDashboard } }],
+      providers: [
+        provideRouter([]),
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              dashboard,
+            },
+          },
+        }),
+      ],
     });
 
+    const dispatch = vi.spyOn(TestBed.inject(Store), 'dispatch');
     const fixture = TestBed.createComponent(CafeTables);
     fixture.detectChanges();
 
     const row = fixture.nativeElement.querySelector('tbody tr');
-    expect(getDashboard).toHaveBeenCalledOnce();
+    expect(dispatch).toHaveBeenCalledWith(loadDashboard());
     expect(row.textContent).toContain('T01');
     expect(row.textContent).toContain('提供済');
     expect(row.textContent).toContain('¥1,360');

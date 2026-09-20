@@ -1,18 +1,15 @@
 import { DatePipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import { CafeDashboardApi } from '../../core/api/cafe-dashboard.api';
-import { CafeDashboard } from '../../core/model/cafe-status.model';
+import { loadDashboard } from '../../feature/cafe-status/state/cafe-status.actions';
+import {
+  selectDashboard,
+  selectLoading,
+  selectLoadError,
+} from '../../feature/cafe-status/state/cafe-status.selectors';
 import { CafeTablesGrid } from './dumb/cafe-tables-grid/cafe-tables-grid';
 
 @Component({
@@ -23,12 +20,17 @@ import { CafeTablesGrid } from './dumb/cafe-tables-grid/cafe-tables-grid';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CafeTables implements OnInit {
-  private readonly api = inject(CafeDashboardApi);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly store = inject(Store);
 
-  protected readonly dashboard = signal<CafeDashboard | null>(null);
-  protected readonly loading = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
+  protected readonly dashboard = toSignal(this.store.select(selectDashboard), {
+    initialValue: null,
+  });
+  protected readonly loading = toSignal(this.store.select(selectLoading), {
+    initialValue: false,
+  });
+  protected readonly errorMessage = toSignal(this.store.select(selectLoadError), {
+    initialValue: null,
+  });
   protected readonly selectedTableNumber = signal<string | null>(null);
 
   ngOnInit(): void {
@@ -36,23 +38,7 @@ export class CafeTables implements OnInit {
   }
 
   protected loadDashboard(): void {
-    if (this.loading()) {
-      return;
-    }
-
-    this.loading.set(true);
-    this.errorMessage.set(null);
-
-    this.api
-      .getDashboard()
-      .pipe(
-        finalize(() => this.loading.set(false)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe({
-        next: (dashboard) => this.dashboard.set(dashboard),
-        error: () => this.errorMessage.set('カフェの状況を取得できませんでした。'),
-      });
+    this.store.dispatch(loadDashboard());
   }
 
   protected selectTable(tableNumber: string): void {

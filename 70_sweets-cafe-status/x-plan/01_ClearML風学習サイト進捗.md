@@ -117,7 +117,7 @@
 - [x] `loadDashboardFailure` actionを追加
 - [x] 一覧取得effectを `exhaustMap` で実装
 - [x] HTTPエラーを画面表示用メッセージへ変換
-- [ ] componentからの直接API呼び出しを削除
+- [x] componentからの直接API呼び出しを削除
 - [ ] Storeの読み出しを `selectSignal()` に統一
 - [ ] 再読み込みを `loadDashboard` のdispatchへ変更
 
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3の一覧取得action・effectと、HTTPエラーの画面表示用メッセージ変換まで追加済み。
-次はcomponentからの直接API呼び出しを削除する。
+Phase 3の一覧取得をNgRxへ接続し、componentからの直接API呼び出しを削除済み。
+次はStoreの読み出しを `selectSignal()` に統一する。
