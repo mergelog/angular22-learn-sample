@@ -164,6 +164,24 @@ describe('CafeInfoHeader', () => {
     expect(componentRef.instance.form.getRawValue().people).toBe(5);
   });
 
+  it('会計金額の入力欄に現在値を表示する', () => {
+    click('.edit-button');
+    const input = query('input[formControlName="billingAmount"]') as HTMLInputElement;
+
+    expect(input.type).toBe('number');
+    expect(input.value).toBe('1360');
+  });
+
+  it('会計金額の入力をフォームへ反映する', () => {
+    click('.edit-button');
+    const input = query('input[formControlName="billingAmount"]') as HTMLInputElement;
+
+    input.value = '2480';
+    input.dispatchEvent(new Event('input'));
+
+    expect(componentRef.instance.form.getRawValue().billingAmount).toBe(2_480);
+  });
+
   it('保存で入力値とテーブル番号を親へ通知する', () => {
     const saveRequested = vi.fn();
     componentRef.instance.saveRequested.subscribe(saveRequested);
