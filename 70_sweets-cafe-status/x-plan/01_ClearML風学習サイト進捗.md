@@ -68,7 +68,9 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 編集ボタンで開き、キャンセルで閉じて入力内容を破棄し、保存で更新内容を
 `saveRequested` として親へ通知する。表示対象が別テーブルへ変わったときは編集を
 終了する。編集欄には `TABLE_STATUSES` を選択肢とする状態の `select` と、人数と
-会計金額の数値入力欄を用意した。入力値の検証と更新処理はまだ追加していない。
+会計金額の数値入力欄を用意した。人数は共通validator `nonNegativeInteger` で
+0以上の整数だけを許可し、未入力や小数、負の値では入力欄の下にエラーを表示する。
+会計金額の検証と更新処理はまだ追加していない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -206,7 +208,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] 状態の入力欄を追加
 - [x] 人数の入力欄を追加
 - [x] 会計金額の入力欄を追加
-- [ ] 人数を0以上の整数として検証
+- [x] 人数を0以上の整数として検証
 - [ ] 会計金額を0以上の整数として検証
 - [ ] invalidまたは送信中は保存ボタンを無効化
 
@@ -251,7 +253,8 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 ## 9. 次に着手する項目
 
 Phase 5の編集UIでは、Reactive Formsの追加と `editing` Signalでの開閉管理に続き、
-状態の `select` と、人数・会計金額の数値入力欄を追加した。現在値の表示と入力の
-フォーム反映をcomponent testで確認済み。`select` の表示値は `afterNextRender` で
-同期されるため、testでは `TestBed.tick()` を使う。
-次は人数を0以上の整数として検証する。
+状態の `select` と、人数・会計金額の数値入力欄を追加し、人数に共通validator
+`nonNegativeInteger` を適用した。負の値、小数、未入力でinvalidとエラー表示になり、
+0はvalidになることをcomponent testで確認済み。`select` の表示値は
+`afterNextRender` で同期されるため、testでは `TestBed.tick()` を使う。
+次は会計金額を0以上の整数として検証する。

@@ -36,6 +36,9 @@
     <label class="field">
       <span class="field-label">人数</span>
       <input type="number" inputmode="numeric" min="0" step="1" formControlName="people" />
+      @if (form.controls.people.invalid && form.controls.people.dirty) {
+        <span class="field-error" role="alert">人数は0以上の整数で入力してください。</span>
+      }
     </label>
 
     <label class="field">

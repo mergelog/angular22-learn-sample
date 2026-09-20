@@ -17,6 +17,7 @@ import {
   TableStatus,
   UpdateTableRequest,
 } from '../../../../core/model/cafe-status.model';
+import { nonNegativeInteger } from '../../../shared/forms/non-negative-integer.validator';
 
 @Component({
   selector: 'app-cafe-info-header',
@@ -34,7 +35,10 @@ export class CafeInfoHeader {
   // 詳細ペインの編集欄。値の正本はStoreではなくこのFormGroup
   readonly form = new FormGroup({
     status: new FormControl<TableStatus>('空き', { nonNullable: true }),
-    people: new FormControl<number>(0, { nonNullable: true }),
+    people: new FormControl<number>(0, {
+      nonNullable: true,
+      validators: nonNegativeInteger(),
+    }),
     billingAmount: new FormControl<number>(0, { nonNullable: true }),
   });
 

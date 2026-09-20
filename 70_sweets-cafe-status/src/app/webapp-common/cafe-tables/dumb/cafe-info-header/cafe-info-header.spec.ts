@@ -182,6 +182,34 @@ describe('CafeInfoHeader', () => {
     expect(componentRef.instance.form.getRawValue().billingAmount).toBe(2_480);
   });
 
+  it.each([
+    ['負の値', '-1'],
+    ['小数', '2.5'],
+    ['未入力', ''],
+  ])('人数が%sならエラーを表示する', (_label, value) => {
+    click('.edit-button');
+    const input = query('input[formControlName="people"]') as HTMLInputElement;
+
+    input.value = value;
+    input.dispatchEvent(new Event('input'));
+    TestBed.tick();
+
+    expect(componentRef.instance.form.controls.people.invalid).toBe(true);
+    expect(query('.field-error')?.textContent).toContain('人数は0以上の整数で入力してください。');
+  });
+
+  it('人数が0ならエラーを表示しない', () => {
+    click('.edit-button');
+    const input = query('input[formControlName="people"]') as HTMLInputElement;
+
+    input.value = '0';
+    input.dispatchEvent(new Event('input'));
+    TestBed.tick();
+
+    expect(componentRef.instance.form.controls.people.valid).toBe(true);
+    expect(query('.field-error')).toBeNull();
+  });
+
   it('保存で入力値とテーブル番号を親へ通知する', () => {
     const saveRequested = vi.fn();
     componentRef.instance.saveRequested.subscribe(saveRequested);
