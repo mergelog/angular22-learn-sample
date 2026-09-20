@@ -56,11 +56,15 @@ function configureCafeStatusTestBed(): void {
   });
 }
 
-async function openCafeStatus(url: string): Promise<RouterTestingHarness> {
+async function createCafeStatusHarness(url: string): Promise<RouterTestingHarness> {
   // ブラウザの戻る・進むをRouterへ伝えるため、bootstrap時と同じlocation監視を開始する
   TestBed.inject(Router).setUpLocationChangeListener();
 
-  const harness = await RouterTestingHarness.create(url);
+  return RouterTestingHarness.create(url);
+}
+
+async function openCafeStatus(url: string): Promise<RouterTestingHarness> {
+  const harness = await createCafeStatusHarness(url);
   TestBed.inject(HttpTestingController).expectOne('/api/cafe-status').flush(dashboard);
   harness.detectChanges();
 
@@ -184,5 +188,21 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPaneArea(harness).visible()).toBe(true);
     expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T01');
     expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('初回取得の完了前はnot-foundではなくloadingを表示する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await createCafeStatusHarness('/cafe-status/T01/overview');
+    const request = TestBed.inject(HttpTestingController).expectOne('/api/cafe-status');
+
+    expect(detailPane(harness).textContent).toContain('テーブル詳細を読み込んでいます');
+    expect(detailPane(harness).textContent).not.toContain('テーブルが見つかりません');
+
+    request.flush(dashboard);
+    harness.detectChanges();
+
+    expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T01');
+    expect(detailPane(harness).textContent).not.toContain('テーブルが見つかりません');
   });
 });
