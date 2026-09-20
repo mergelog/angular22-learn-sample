@@ -51,10 +51,12 @@ Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomp
 行選択からoverviewへの遷移、closeから一覧URLへの遷移を行える段階である。
 分割比率はStoreの `splitPercent` を正本にし、gutterのドラッグ終了で
 `changeSplitPercent` をdispatchして左右のsizeへ反映している。
+URL直接入力でも選択状態を取得できるよう、`BaseCafeEntityPage` は自routeの
+snapshotから子の `tableNumber` を読むようにし、実routeを使った結合testで
+右ペインが開くことを確認している。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
-行選択はoverviewのURL遷移に変換できるが、対応するrouteと右ペインの表示、編集処理は
-まだ追加していない。
+テーブルの編集処理はまだ追加していない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -173,7 +175,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ### 完了条件
 
-- [ ] URL直接入力で対象の右ペインが開く
+- [x] URL直接入力で対象の右ペインが開く
 - [ ] 行クリックで対象の右ペインが開く
 - [ ] closeで右ペインと行選択が解除される
 - [ ] 戻る・進むで右ペインと行選択が同期する
@@ -236,9 +238,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示、
-overviewへの遷移、closeによる一覧復帰、戻る・進む時の選択同期、
-loading表示、not-found表示、詳細ペインの取得時刻表示、分割比率の
-`changeSplitPercent` action追加、reducerでの保持、`dragEnd` の
-dispatch接続は完了。
-次はPhase 4の「完了条件」を上から1件ずつ確認する。
+Phase 4の実装はすべて完了。「完了条件」は
+「URL直接入力で対象の右ペインが開く」まで確認済み。
+次はPhase 4の「完了条件」の「行クリックで対象の右ペインが開く」を確認する。

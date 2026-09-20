@@ -16,7 +16,7 @@ export abstract class BaseCafeEntityPage {
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         startWith(null),
-        map(() => this.route.firstChild?.snapshot.paramMap.get('tableNumber') ?? null),
+        map(() => this.route.snapshot.firstChild?.paramMap.get('tableNumber') ?? null),
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef),
       )
