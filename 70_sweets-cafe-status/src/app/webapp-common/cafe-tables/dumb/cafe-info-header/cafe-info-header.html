@@ -3,6 +3,7 @@
     <p class="eyebrow">TABLE DETAILS</p>
     <h2>{{ table().tableNumber }}</h2>
     <p class="summary">{{ table().classification }} · {{ table().status }}</p>
+    <p class="snapshot-time">取得時刻 {{ (generatedAt() | date: 'yyyy/MM/dd HH:mm:ss') ?? '—' }}</p>
   </div>
 
   <button type="button" aria-label="詳細を閉じる" (click)="closeRequested.emit()">×</button>

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { ComponentRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -24,18 +25,34 @@ describe('CafeInfoHeader', () => {
     dailyUsageRate: 24,
   };
 
+  const generatedAt = '2026-09-20T01:00:00.000Z';
+
   let componentRef: ComponentRef<CafeInfoHeader>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [CafeInfoHeader] });
     componentRef = TestBed.createComponent(CafeInfoHeader).componentRef;
     componentRef.setInput('table', table);
+    componentRef.setInput('generatedAt', generatedAt);
     componentRef.changeDetectorRef.detectChanges();
   });
 
   it('選択テーブルの要約を表示する', () => {
     expect(componentRef.location.nativeElement.textContent).toContain('T01');
     expect(componentRef.location.nativeElement.textContent).toContain('テーブル · 提供済');
+  });
+
+  it('dashboardの取得時刻を表示する', () => {
+    const formatted = new DatePipe('en-US').transform(generatedAt, 'yyyy/MM/dd HH:mm:ss');
+
+    expect(componentRef.location.nativeElement.textContent).toContain(`取得時刻 ${formatted}`);
+  });
+
+  it('取得時刻が未設定なら—を表示する', () => {
+    componentRef.setInput('generatedAt', null);
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.location.nativeElement.textContent).toContain('取得時刻 —');
   });
 
   it('close操作を親へ通知する', () => {

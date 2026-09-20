@@ -18,6 +18,7 @@ export abstract class BaseCafeTableOutput {
 
   protected readonly dashboard = this.store.selectSignal(selectDashboard);
   protected readonly loading = this.store.selectSignal(selectLoading);
+  protected readonly generatedAt = computed(() => this.dashboard()?.generatedAt ?? null);
   protected readonly tableNumber = signal<string | null>(null);
   protected readonly selectedTable = computed(() => {
     const tableNumber = this.tableNumber();

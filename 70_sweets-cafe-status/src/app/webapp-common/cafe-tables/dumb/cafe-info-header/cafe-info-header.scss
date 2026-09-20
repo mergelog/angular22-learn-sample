@@ -13,7 +13,8 @@
 
 .eyebrow,
 h2,
-.summary {
+.summary,
+.snapshot-time {
   margin: 0;
 }
 
@@ -34,6 +35,12 @@ h2 {
   margin-top: 4px;
   color: #6d7482;
   font-size: 0.78rem;
+}
+
+.snapshot-time {
+  margin-top: 8px;
+  color: #8b91a0;
+  font-size: 0.72rem;
 }
 
 button {

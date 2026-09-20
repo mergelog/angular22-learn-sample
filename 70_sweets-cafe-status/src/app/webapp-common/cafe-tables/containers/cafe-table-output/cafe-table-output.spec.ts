@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -81,6 +82,35 @@ describe('CafeTableOutput', () => {
     fixture.nativeElement.querySelector('[aria-label="詳細を閉じる"]').click();
 
     expect(router.navigate).toHaveBeenCalledWith(['..'], { relativeTo: route });
+  });
+
+  it('詳細ペインにdashboardの取得時刻を表示する', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTableOutput],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ tableNumber: 'T01' })) },
+        },
+        { provide: Router, useValue: { navigate: vi.fn().mockResolvedValue(true) } },
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              dashboard,
+            },
+          },
+        }),
+      ],
+    });
+    const fixture = TestBed.createComponent(CafeTableOutput);
+    fixture.detectChanges();
+
+    const formatted = new DatePipe('en-US').transform(dashboard.generatedAt, 'yyyy/MM/dd HH:mm:ss');
+
+    expect(fixture.nativeElement.querySelector('.snapshot-time').textContent).toContain(
+      `取得時刻 ${formatted}`,
+    );
   });
 
   for (const unknownTableNumber of ['T99', 't01']) {

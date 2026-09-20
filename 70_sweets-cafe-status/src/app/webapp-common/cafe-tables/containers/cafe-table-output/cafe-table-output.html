@@ -1,6 +1,10 @@
 <section class="cafe-table-output" aria-label="テーブル詳細">
   @if (selectedTable(); as table) {
-    <app-cafe-info-header [table]="table" (closeRequested)="closePanel()" />
+    <app-cafe-info-header
+      [table]="table"
+      [generatedAt]="generatedAt()"
+      (closeRequested)="closePanel()"
+    />
     <router-outlet />
   } @else if (loading()) {
     <div class="detail-state" aria-live="polite">

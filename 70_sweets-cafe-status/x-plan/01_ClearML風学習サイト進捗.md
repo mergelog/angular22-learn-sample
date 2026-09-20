@@ -161,7 +161,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] 戻る・進むで選択状態を同期
 - [x] 存在しないテーブルのnot-found表示を追加
 - [x] 初回取得中のloading表示を追加
-- [ ] 詳細ペインに取得時刻を表示
+- [x] 詳細ペインに取得時刻を表示
 
 ### 分割比率
 
@@ -235,5 +235,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 ## 9. 次に着手する項目
 
 Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示、
-overviewへの遷移、closeによる一覧復帰、戻る・進む時の選択同期は完了。
-次は詳細ペインにdashboardの取得時刻を表示する。
+overviewへの遷移、closeによる一覧復帰、戻る・進む時の選択同期、
+loading表示、not-found表示、詳細ペインの取得時刻表示は完了。
+次は分割比率の `changeSplitPercent` actionを追加する。
