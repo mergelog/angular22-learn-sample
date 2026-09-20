@@ -254,7 +254,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 5の編集UIでは、Reactive Formsの追加と `editing` Signalでの開閉管理に続き、
 Phase 5の「編集UI」は完了。Reactive Formsの追加、`editing` Signalでの開閉管理、
 状態・人数・会計金額の入力欄、人数と会計金額の `nonNegativeInteger` 検証、
 invalidと送信中の保存ボタン無効化までをcomponent testで確認済み。`select` の
