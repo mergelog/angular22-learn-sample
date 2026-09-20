@@ -11,6 +11,7 @@ import { SplitAreaComponent, SplitComponent } from 'angular-split';
 
 import { routes } from '../../app.routes';
 import { CafeDashboard, CafeTable } from '../../core/model/cafe-status.model';
+import { CafeInfoHeader } from './dumb/cafe-info-header/cafe-info-header';
 
 function createTable(tableNumber: string, overrides: Partial<CafeTable> = {}): CafeTable {
   return {
@@ -257,6 +258,32 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).querySelector('app-cafe-table-overview')?.textContent).toContain(
       '57%',
     );
+  });
+
+  it('更新成功時に一覧と詳細を同時に更新する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+
+    const updateRequest = TestBed.inject(HttpTestingController).expectOne('/api/cafe-status');
+    expect(updateRequest.request.method).toBe('PUT');
+    updateRequest.flush(
+      createTable('T01', { status: '片付け中', people: 3, billingAmount: 980 }),
+    );
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(tableRow(harness, 'T01').textContent).toContain('片付け中');
+    expect(tableRow(harness, 'T01').textContent).toContain('3名');
+    expect(tableRow(harness, 'T01').textContent).toContain('¥980');
+    expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('片付け中');
   });
 
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
