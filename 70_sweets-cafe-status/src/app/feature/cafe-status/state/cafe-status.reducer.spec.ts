@@ -77,6 +77,14 @@ describe('cafeStatusReducer', () => {
     });
   });
 
+  it('右ペインの開閉はURLが正本なので開閉用のbooleanを持たない', () => {
+    const booleanKeys = Object.entries(initialCafeStatusState)
+      .filter(([, value]) => typeof value === 'boolean')
+      .map(([key]) => key);
+
+    expect(booleanKeys).toEqual(['loading']);
+  });
+
   it('分割比率の変更で他の状態を変えない', () => {
     const state = {
       ...initialCafeStatusState,
