@@ -17,7 +17,7 @@ describe('CafeTablesGrid', () => {
     fixture.detectChanges();
   });
 
-  it('作成できる', () => {
+  it('API・Store・Routerのproviderなしで作成できる', () => {
     expect(component).toBeTruthy();
   });
 });
