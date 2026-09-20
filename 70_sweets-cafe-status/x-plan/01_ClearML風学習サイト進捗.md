@@ -35,15 +35,14 @@
 - [x] `/cafe-status` の画面のガワを作成
 - [x] Phase 1: Signalで一覧を描画
 - [x] Phase 2: 表をinput/outputで分離
-- [ ] Phase 3: NgRxへ移行
+- [x] Phase 3: NgRxへ移行
 - [ ] Phase 4: URL連動の右ペイン
 - [ ] Phase 5: 編集とエラー処理
 - [ ] 初期完成版の受け入れ条件をすべて達成
 
-現在は、既存APIから取得したテーブル状況をSignalで表示でき、Phase 2の
-`CafeTablesGrid` への一覧表分離とcomponent testまで完了し、Phase 3で使用する
-`@ngrx/store` と `@ngrx/effects` を追加し、一覧取得のeffect testとreducer testまで
-完了した段階である。APIの直接参照は `ViewJson` とeffectだけに限定している。
+現在は、既存APIから取得したテーブル状況をNgRx Store経由でSignalとして表示でき、
+Phase 3の一覧取得、effect test、reducer testまで完了した段階である。
+APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択は親子間で受け渡せるが、右ペインと編集処理は追加していない。
 
@@ -128,7 +127,7 @@
 - [x] effect testで取得失敗を確認できる
 - [x] reducer testで状態遷移を確認できる
 - [x] `ViewJson` 以外のcomponentがAPIを直接呼んでいない
-- [ ] 再読み込み開始時に以前の取得エラーが消える
+- [x] 再読み込み開始時に以前の取得エラーが消える
 
 ## 6. Phase 4: URL連動の右ペイン
 
@@ -227,8 +226,7 @@
 
 ## 9. 次に着手する項目
 
-Phase 3の一覧取得をNgRxへ移行済み。componentはStoreを `selectSignal()` で読み、
-初期表示と再読み込みで `loadDashboard` をdispatchする。effect testで取得成功と取得失敗、
-reducer testで取得開始・成功・失敗の状態遷移を確認済み。次は `ViewJson` 以外のcomponentが
-APIを直接呼んでいないことも確認済み。次は再読み込み開始時に以前の取得エラーが消える
-ことを確認する。
+Phase 3は完了。componentはStoreを `selectSignal()` で読み、初期表示と再読み込みで
+`loadDashboard` をdispatchする。effect testで取得成功と取得失敗、reducer testで
+取得開始・成功・失敗の状態遷移を確認済み。次はPhase 4の基底classの最初の項目として、
+`BaseCafeEntityPage` を追加する。
