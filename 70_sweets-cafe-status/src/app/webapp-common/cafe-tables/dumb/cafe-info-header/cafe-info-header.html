@@ -37,13 +37,20 @@
       <span class="field-label">人数</span>
       <input type="number" inputmode="numeric" min="0" step="1" formControlName="people" />
       @if (form.controls.people.invalid && form.controls.people.dirty) {
-        <span class="field-error" role="alert">人数は0以上の整数で入力してください。</span>
+        <span class="field-error" data-error="people" role="alert">
+          人数は0以上の整数で入力してください。
+        </span>
       }
     </label>
 
     <label class="field">
       <span class="field-label">会計金額（円）</span>
       <input type="number" inputmode="numeric" min="0" step="1" formControlName="billingAmount" />
+      @if (form.controls.billingAmount.invalid && form.controls.billingAmount.dirty) {
+        <span class="field-error" data-error="billingAmount" role="alert">
+          会計金額は0以上の整数で入力してください。
+        </span>
+      }
     </label>
 
     <div class="form-actions">

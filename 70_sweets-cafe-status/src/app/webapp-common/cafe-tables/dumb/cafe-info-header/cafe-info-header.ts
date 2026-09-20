@@ -39,7 +39,10 @@ export class CafeInfoHeader {
       nonNullable: true,
       validators: nonNegativeInteger(),
     }),
-    billingAmount: new FormControl<number>(0, { nonNullable: true }),
+    billingAmount: new FormControl<number>(0, {
+      nonNullable: true,
+      validators: nonNegativeInteger(),
+    }),
   });
 
   // 編集欄を開いているかどうか。入力値そのものはFormGroupが持つ
