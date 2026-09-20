@@ -9,6 +9,7 @@ import { updateTable } from '../../../../feature/cafe-status/state/cafe-status.a
 import {
   selectDashboard,
   selectLoading,
+  selectUpdateError,
   selectUpdatingTableNumber,
 } from '../../../../feature/cafe-status/state/cafe-status.selectors';
 
@@ -22,11 +23,16 @@ export abstract class BaseCafeTableOutput {
   protected readonly dashboard = this.store.selectSignal(selectDashboard);
   protected readonly loading = this.store.selectSignal(selectLoading);
   protected readonly updatingTableNumber = this.store.selectSignal(selectUpdatingTableNumber);
+  private readonly storedUpdateError = this.store.selectSignal(selectUpdateError);
   protected readonly generatedAt = computed(() => this.dashboard()?.generatedAt ?? null);
   protected readonly tableNumber = signal<string | null>(null);
   protected readonly selectedTable = computed(() => {
     const tableNumber = this.tableNumber();
     return this.dashboard()?.tables.find((table) => table.tableNumber === tableNumber) ?? null;
+  });
+  protected readonly updateError = computed(() => {
+    const updateError = this.storedUpdateError();
+    return updateError?.tableNumber === this.tableNumber() ? updateError.message : null;
   });
 
   constructor() {

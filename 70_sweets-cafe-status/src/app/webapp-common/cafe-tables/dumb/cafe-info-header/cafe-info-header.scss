@@ -90,6 +90,15 @@ h2 {
   cursor: not-allowed;
 }
 
+.update-error {
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0c7c2;
+  background: #fff4f2;
+  color: #a93226;
+  font-size: 0.78rem;
+}
+
 .edit-form {
   padding: 16px 20px;
   border-bottom: 1px solid #e2e5ea;

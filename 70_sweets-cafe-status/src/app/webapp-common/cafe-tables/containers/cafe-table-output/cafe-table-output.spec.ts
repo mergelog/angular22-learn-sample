@@ -184,6 +184,61 @@ describe('CafeTableOutput', () => {
     expect(saveButton.textContent).toContain('保存中');
   });
 
+  it('表示中テーブルと一致する更新エラーだけを表示する', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTableOutput],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ tableNumber: 'T01' })) },
+        },
+        { provide: Router, useValue: { navigate: vi.fn().mockResolvedValue(true) } },
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              dashboard,
+              updateError: { tableNumber: 'T01', message: 'T01の更新エラー' },
+            },
+          },
+        }),
+      ],
+    });
+    const fixture = TestBed.createComponent(CafeTableOutput);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.update-error').textContent).toContain(
+      'T01の更新エラー',
+    );
+  });
+
+  it('表示中テーブルと一致しない更新エラーは表示しない', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTableOutput],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ tableNumber: 'T01' })) },
+        },
+        { provide: Router, useValue: { navigate: vi.fn().mockResolvedValue(true) } },
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              dashboard,
+              updateError: { tableNumber: 'T02', message: 'T02の更新エラー' },
+            },
+          },
+        }),
+      ],
+    });
+    const fixture = TestBed.createComponent(CafeTableOutput);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.update-error')).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('T02の更新エラー');
+  });
+
   for (const unknownTableNumber of ['T99', 't01']) {
     it(`存在しないテーブル番号 ${unknownTableNumber} をnot-found表示する`, () => {
       TestBed.configureTestingModule({

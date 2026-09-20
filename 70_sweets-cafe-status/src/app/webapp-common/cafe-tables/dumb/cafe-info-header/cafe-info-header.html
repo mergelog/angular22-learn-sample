@@ -22,6 +22,10 @@
   </div>
 </header>
 
+@if (updateError(); as message) {
+  <p class="update-error" role="alert">{{ message }}</p>
+}
+
 @if (editing()) {
   <form class="edit-form" aria-label="テーブルの編集" [formGroup]="form" (ngSubmit)="save()">
     <label class="field">

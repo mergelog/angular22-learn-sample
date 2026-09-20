@@ -64,6 +64,13 @@ describe('CafeInfoHeader', () => {
     expect(componentRef.location.nativeElement.textContent).toContain('取得時刻 —');
   });
 
+  it('更新エラーを表示する', () => {
+    componentRef.setInput('updateError', 'テーブルを更新できませんでした。');
+    TestBed.tick();
+
+    expect(query('.update-error')?.textContent).toContain('テーブルを更新できませんでした。');
+  });
+
   it('表示中テーブルの現在値でフォームを初期化する', () => {
     expect(componentRef.instance.form.getRawValue()).toEqual({
       status: '提供済',

@@ -30,6 +30,7 @@ export class CafeInfoHeader {
   readonly table = input.required<CafeTable>();
   readonly generatedAt = input<string | null>(null);
   readonly saving = input(false);
+  readonly updateError = input<string | null>(null);
   readonly closeRequested = output<void>();
   readonly saveRequested = output<UpdateTableRequest>();
 

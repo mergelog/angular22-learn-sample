@@ -4,6 +4,7 @@
       [table]="table"
       [generatedAt]="generatedAt()"
       [saving]="updatingTableNumber() === table.tableNumber"
+      [updateError]="updateError()"
       (closeRequested)="closePanel()"
       (saveRequested)="saveTable($event)"
     />
