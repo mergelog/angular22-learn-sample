@@ -146,6 +146,24 @@ describe('CafeInfoHeader', () => {
     expect(componentRef.instance.form.getRawValue().status).toBe('片付け中');
   });
 
+  it('人数の入力欄に現在値を表示する', () => {
+    click('.edit-button');
+    const input = query('input[formControlName="people"]') as HTMLInputElement;
+
+    expect(input.type).toBe('number');
+    expect(input.value).toBe('2');
+  });
+
+  it('人数の入力をフォームへ反映する', () => {
+    click('.edit-button');
+    const input = query('input[formControlName="people"]') as HTMLInputElement;
+
+    input.value = '5';
+    input.dispatchEvent(new Event('input'));
+
+    expect(componentRef.instance.form.getRawValue().people).toBe(5);
+  });
+
   it('保存で入力値とテーブル番号を親へ通知する', () => {
     const saveRequested = vi.fn();
     componentRef.instance.saveRequested.subscribe(saveRequested);

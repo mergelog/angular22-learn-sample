@@ -33,6 +33,11 @@
       </select>
     </label>
 
+    <label class="field">
+      <span class="field-label">人数</span>
+      <input type="number" inputmode="numeric" min="0" step="1" formControlName="people" />
+    </label>
+
     <div class="form-actions">
       <button type="button" class="cancel-button" (click)="cancelEditing()">キャンセル</button>
       <button type="submit" class="save-button">保存</button>
