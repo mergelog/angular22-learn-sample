@@ -29,6 +29,7 @@ import { nonNegativeInteger } from '../../../shared/forms/non-negative-integer.v
 export class CafeInfoHeader {
   readonly table = input.required<CafeTable>();
   readonly generatedAt = input<string | null>(null);
+  readonly saving = input(false);
   readonly closeRequested = output<void>();
   readonly saveRequested = output<UpdateTableRequest>();
 
@@ -75,6 +76,11 @@ export class CafeInfoHeader {
   }
 
   protected save(): void {
+    // 無効な入力と送信中の二重送信は親へ通知しない
+    if (this.form.invalid || this.saving()) {
+      return;
+    }
+
     this.saveRequested.emit({
       tableNumber: this.table().tableNumber,
       ...this.form.getRawValue(),

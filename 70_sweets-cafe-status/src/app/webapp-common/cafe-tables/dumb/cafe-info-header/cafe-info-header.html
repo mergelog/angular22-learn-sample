@@ -55,7 +55,9 @@
 
     <div class="form-actions">
       <button type="button" class="cancel-button" (click)="cancelEditing()">キャンセル</button>
-      <button type="submit" class="save-button">保存</button>
+      <button type="submit" class="save-button" [disabled]="form.invalid || saving()">
+        {{ saving() ? '保存中' : '保存' }}
+      </button>
     </div>
   </form>
 }

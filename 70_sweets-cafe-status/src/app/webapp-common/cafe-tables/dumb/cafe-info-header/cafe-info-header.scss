@@ -83,6 +83,13 @@ h2 {
   color: #fff;
 }
 
+.save-button:disabled {
+  border-color: #c9d3e6;
+  background: #c9d3e6;
+  color: #f5f7fb;
+  cursor: not-allowed;
+}
+
 .edit-form {
   padding: 16px 20px;
   border-bottom: 1px solid #e2e5ea;

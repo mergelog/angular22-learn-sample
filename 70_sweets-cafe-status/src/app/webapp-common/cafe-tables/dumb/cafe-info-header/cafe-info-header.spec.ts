@@ -242,6 +242,58 @@ describe('CafeInfoHeader', () => {
     expect(query('[data-error="billingAmount"]')).toBeNull();
   });
 
+  it('入力がinvalidなら保存ボタンを無効化する', () => {
+    click('.edit-button');
+    const input = query('input[formControlName="people"]') as HTMLInputElement;
+
+    input.value = '-1';
+    input.dispatchEvent(new Event('input'));
+    TestBed.tick();
+
+    expect((query('.save-button') as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it('送信中は保存ボタンを無効化して保存中と表示する', () => {
+    click('.edit-button');
+
+    componentRef.setInput('saving', true);
+    TestBed.tick();
+
+    const saveButton = query('.save-button') as HTMLButtonElement;
+
+    expect(saveButton.disabled).toBe(true);
+    expect(saveButton.textContent).toContain('保存中');
+  });
+
+  it('invalidなsubmitは親へ通知しない', () => {
+    const saveRequested = vi.fn();
+    componentRef.instance.saveRequested.subscribe(saveRequested);
+
+    click('.edit-button');
+    const input = query('input[formControlName="people"]') as HTMLInputElement;
+
+    input.value = '-1';
+    input.dispatchEvent(new Event('input'));
+    query('.edit-form')?.dispatchEvent(new Event('submit'));
+    TestBed.tick();
+
+    expect(saveRequested).not.toHaveBeenCalled();
+  });
+
+  it('送信中のsubmitは親へ通知しない', () => {
+    const saveRequested = vi.fn();
+    componentRef.instance.saveRequested.subscribe(saveRequested);
+
+    click('.edit-button');
+    componentRef.setInput('saving', true);
+    TestBed.tick();
+
+    query('.edit-form')?.dispatchEvent(new Event('submit'));
+    TestBed.tick();
+
+    expect(saveRequested).not.toHaveBeenCalled();
+  });
+
   it('保存で入力値とテーブル番号を親へ通知する', () => {
     const saveRequested = vi.fn();
     componentRef.instance.saveRequested.subscribe(saveRequested);

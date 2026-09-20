@@ -70,7 +70,9 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 終了する。編集欄には `TABLE_STATUSES` を選択肢とする状態の `select` と、人数と
 会計金額の数値入力欄を用意した。人数と会計金額は共通validator
 `nonNegativeInteger` で0以上の整数だけを許可し、未入力や小数、負の値では
-入力欄の下にエラーを表示する。更新処理はまだ追加していない。
+入力欄の下にエラーを表示する。保存ボタンはinvalidまたは `saving` inputがtrueの
+あいだ無効化し、`save()` でも同じ条件で親への通知を止めている。
+`updateTable` などの更新処理はまだ追加していないため、保存しても通信は発生しない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -210,7 +212,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] 会計金額の入力欄を追加
 - [x] 人数を0以上の整数として検証
 - [x] 会計金額を0以上の整数として検証
-- [ ] invalidまたは送信中は保存ボタンを無効化
+- [x] invalidまたは送信中は保存ボタンを無効化
 
 ### 更新処理
 
@@ -253,8 +255,9 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 ## 9. 次に着手する項目
 
 Phase 5の編集UIでは、Reactive Formsの追加と `editing` Signalでの開閉管理に続き、
-状態の `select` と、人数・会計金額の数値入力欄を追加し、人数と会計金額の両方へ
-共通validator `nonNegativeInteger` を適用した。負の値、小数、未入力でinvalidと
-エラー表示になり、0はvalidになることをcomponent testで確認済み。`select` の
+Phase 5の「編集UI」は完了。Reactive Formsの追加、`editing` Signalでの開閉管理、
+状態・人数・会計金額の入力欄、人数と会計金額の `nonNegativeInteger` 検証、
+invalidと送信中の保存ボタン無効化までをcomponent testで確認済み。`select` の
 表示値は `afterNextRender` で同期されるため、testでは `TestBed.tick()` を使う。
-次はinvalidまたは送信中に保存ボタンを無効化する。
+次は「更新処理」の最初の項目として `updateTable` actionを追加し、
+`CafeInfoHeader` の `saveRequested` を親componentのdispatchへ接続していく。
