@@ -1,0 +1,16 @@
+<main>
+  <h1>withLatestFrom</h1>
+
+  <p>飲み物を選んだだけでは結果は変わらず、注文時に選択中の最新値を取得します。</p>
+
+  <p>選択中: {{ selectedDrink$ | async }}</p>
+  <div class="actions">
+    <button type="button" (click)="selectDrink('コーヒー')">コーヒーを選ぶ</button>
+    <button type="button" (click)="selectDrink('紅茶')">紅茶を選ぶ</button>
+    <button type="button" (click)="order()">注文する</button>
+  </div>
+
+  <p>{{ orderResult() }}</p>
+
+  <app-p04-store-navi />
+</main>

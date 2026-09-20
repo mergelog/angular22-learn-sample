@@ -78,7 +78,7 @@ export class Foo implements OnInit {     // ...解説
 
 ## cps {関数名など} と指定された場合
 
-/Users/yasu/work/mergelog/angular22-sample/90_samples/src/app/feature/p04-store
+./90_samples/src/app/feature/p04-store
 にコンポーネント作成してサンプルコード作成し、dashboardからリンクしてください。
 
 コンポーネント名

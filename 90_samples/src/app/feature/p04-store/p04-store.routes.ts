@@ -6,6 +6,13 @@ export const P04_STORE_ROUTES: Routes = [
     loadComponent: () => import('./learn-01-cva/learn-01-cva').then((m) => m.Learn01Cva),
   },
   {
+    path: 'learn-02-with-latest-from',
+    loadComponent: () =>
+      import('./learn-02-with-latest-from/learn-02-with-latest-from').then(
+        (m) => m.Learn02WithLatestFrom,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'learn-01-cva',
