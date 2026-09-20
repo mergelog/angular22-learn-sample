@@ -29,6 +29,15 @@ describe('CafeInfoHeader', () => {
 
   let componentRef: ComponentRef<CafeInfoHeader>;
 
+  function query(selector: string): HTMLElement | null {
+    return componentRef.location.nativeElement.querySelector(selector);
+  }
+
+  function click(selector: string): void {
+    query(selector)?.click();
+    componentRef.changeDetectorRef.detectChanges();
+  }
+
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [CafeInfoHeader] });
     componentRef = TestBed.createComponent(CafeInfoHeader).componentRef;
@@ -83,8 +92,55 @@ describe('CafeInfoHeader', () => {
     const closeRequested = vi.fn();
     componentRef.instance.closeRequested.subscribe(closeRequested);
 
-    componentRef.location.nativeElement.querySelector('button').click();
+    click('.close-button');
 
     expect(closeRequested).toHaveBeenCalledOnce();
+  });
+
+  it('初期表示では編集欄を表示しない', () => {
+    expect(query('.edit-form')).toBeNull();
+    expect(query('.edit-button')).not.toBeNull();
+  });
+
+  it('編集ボタンで編集欄を表示する', () => {
+    click('.edit-button');
+
+    expect(query('.edit-form')).not.toBeNull();
+    expect(query('.edit-button')).toBeNull();
+  });
+
+  it('キャンセルで編集欄を閉じて入力内容を破棄する', () => {
+    click('.edit-button');
+    componentRef.instance.form.patchValue({ people: 8 });
+
+    click('.cancel-button');
+
+    expect(query('.edit-form')).toBeNull();
+    expect(componentRef.instance.form.getRawValue().people).toBe(2);
+  });
+
+  it('別テーブルへ切り替えると編集を終了する', () => {
+    click('.edit-button');
+
+    componentRef.setInput('table', { ...table, tableNumber: 'T02' });
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(query('.edit-form')).toBeNull();
+  });
+
+  it('保存で入力値とテーブル番号を親へ通知する', () => {
+    const saveRequested = vi.fn();
+    componentRef.instance.saveRequested.subscribe(saveRequested);
+
+    click('.edit-button');
+    componentRef.instance.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+    click('.save-button');
+
+    expect(saveRequested).toHaveBeenCalledWith({
+      tableNumber: 'T01',
+      status: '片付け中',
+      people: 3,
+      billingAmount: 980,
+    });
   });
 });

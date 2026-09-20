@@ -6,7 +6,27 @@
     <p class="snapshot-time">取得時刻 {{ (generatedAt() | date: 'yyyy/MM/dd HH:mm:ss') ?? '—' }}</p>
   </div>
 
-  <button type="button" aria-label="詳細を閉じる" (click)="closeRequested.emit()">×</button>
+  <div class="header-actions">
+    @if (!editing()) {
+      <button type="button" class="edit-button" (click)="startEditing()">編集</button>
+    }
+
+    <button
+      type="button"
+      class="close-button"
+      aria-label="詳細を閉じる"
+      (click)="closeRequested.emit()"
+    >
+      ×
+    </button>
+  </div>
 </header>
 
-<form class="edit-form" aria-label="テーブルの編集" [formGroup]="form"></form>
+@if (editing()) {
+  <form class="edit-form" aria-label="テーブルの編集" [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-actions">
+      <button type="button" class="cancel-button" (click)="cancelEditing()">キャンセル</button>
+      <button type="submit" class="save-button">保存</button>
+    </div>
+  </form>
+}

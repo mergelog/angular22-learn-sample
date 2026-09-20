@@ -43,7 +43,13 @@ h2 {
   font-size: 0.72rem;
 }
 
-button {
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.close-button {
   display: grid;
   width: 32px;
   height: 32px;
@@ -55,4 +61,35 @@ button {
   font-size: 1.2rem;
   line-height: 1;
   place-items: center;
+}
+
+.edit-button,
+.cancel-button,
+.save-button {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid #d4d7dd;
+  border-radius: 6px;
+  background: #fff;
+  color: #3f4655;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.save-button {
+  border-color: #2f6df6;
+  background: #2f6df6;
+  color: #fff;
+}
+
+.edit-form {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e5ea;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
