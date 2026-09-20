@@ -36,7 +36,7 @@
 - [x] Phase 1: Signalで一覧を描画
 - [x] Phase 2: 表をinput/outputで分離
 - [x] Phase 3: NgRxへ移行
-- [ ] Phase 4: URL連動の右ペイン
+- [x] Phase 4: URL連動の右ペイン
 - [ ] Phase 5: 編集とエラー処理
 - [ ] 初期完成版の受け入れ条件をすべて達成
 
@@ -232,10 +232,10 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] Dashboardから `/cafe-status` を開ける
 - [x] `/cafe-status` と `/view-json` を相互に移動できる
 - [x] 読み込み、エラー、空、通常の4状態を表示できる
-- [ ] 行クリックでoverviewの右ペインを開ける
-- [ ] URLと行選択と右ペインが同期する
-- [ ] 存在しないテーブルをnot-found表示できる
-- [ ] closeで一覧だけの表示へ戻れる
+- [x] 行クリックでoverviewの右ペインを開ける
+- [x] URLと行選択と右ペインが同期する
+- [x] 存在しないテーブルをnot-found表示できる
+- [x] closeで一覧だけの表示へ戻れる
 - [ ] 状態、人数、会計金額を更新できる
 - [x] `generatedAt` と手動再読み込みを利用できる
 - [ ] URL、NgRx、Form/Signalの正本が重複していない
@@ -244,6 +244,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4の実装はすべて完了。「完了条件」は
-すべて確認済み。
-次はPhase 4の完了をこの資料へ記録する。
+Phase 4は完了。実routeを使った結合testで、URL直接入力と行クリックによる
+右ペイン表示、closeと戻る・進むの同期、loadingとnot-foundの出し分け、
+一覧と詳細のselector共有、分割比率の維持までを確認済み。
+次はPhase 5の編集UIの最初の項目として、`CafeInfoHeader` へReactive Formsを追加する。
