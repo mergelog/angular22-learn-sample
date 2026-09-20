@@ -135,7 +135,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 - [x] `BaseCafeEntityPage` を追加
 - [x] `CafeTables` を `BaseCafeEntityPage` の継承へ変更
-- [ ] `BaseCafeTableOutput` を追加
+- [x] `BaseCafeTableOutput` を追加
 - [ ] `CafeTableOutput` を `BaseCafeTableOutput` の継承で作成
 
 ### ルートと画面
@@ -226,5 +226,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-`CafeTables` を `BaseCafeEntityPage` の継承へ変更し、行選択をローカルSignalの更新ではなく
-overviewへのURL遷移に変換した。次は `BaseCafeTableOutput` を追加する。
+`BaseCafeTableOutput` を追加し、routeの `tableNumber` とStoreのdashboardから選択中の
+テーブルを導出し、一覧へ閉じる共通遷移を用意した。次は `CafeTableOutput` を
+`BaseCafeTableOutput` の継承で作成する。
