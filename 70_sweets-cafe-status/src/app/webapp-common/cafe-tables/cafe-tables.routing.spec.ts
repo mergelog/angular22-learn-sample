@@ -343,6 +343,32 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('提供済');
   });
 
+  it('更新失敗時にフォーム入力とエラーを残す', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+    const editedValue = { status: '片付け中' as const, people: 3, billingAmount: 980 };
+
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue(editedValue);
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+
+    TestBed.inject(HttpTestingController)
+      .expectOne('/api/cafe-status')
+      .flush(null, { status: 500, statusText: 'Internal Server Error' });
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(detailPane(harness).querySelector('.edit-form')).not.toBeNull();
+    expect(header.form.getRawValue()).toEqual(editedValue);
+    expect(detailPane(harness).querySelector('.update-error')?.textContent).toContain(
+      'テーブルを更新できませんでした。',
+    );
+  });
+
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
     configureCafeStatusTestBed();
 
