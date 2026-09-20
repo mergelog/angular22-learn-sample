@@ -421,6 +421,56 @@ describe('cafe-statusのURL連動', () => {
     await harness.fixture.whenStable();
   });
 
+  it('別テーブルの後続更新を破棄せず受信順に処理する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const http = TestBed.inject(HttpTestingController);
+    let header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+    const firstUpdate = http.expectOne('/api/cafe-status');
+
+    await clickTableRow(harness, 'T02');
+    header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '未オーダー', people: 4, billingAmount: 0 });
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+
+    http.expectNone('/api/cafe-status');
+
+    firstUpdate.flush(
+      createTable('T01', { status: '片付け中', people: 3, billingAmount: 980 }),
+    );
+    const secondUpdate = http.expectOne('/api/cafe-status');
+    expect(secondUpdate.request.body).toEqual({
+      tableNumber: 'T02',
+      status: '未オーダー',
+      people: 4,
+      billingAmount: 0,
+    });
+    secondUpdate.flush(
+      createTable('T02', {
+        classification: 'カウンター',
+        status: '未オーダー',
+        people: 4,
+        billingAmount: 0,
+      }),
+    );
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(tableRow(harness, 'T01').textContent).toContain('片付け中');
+    expect(tableRow(harness, 'T02').textContent).toContain('未オーダー');
+    expect(tableRow(harness, 'T02').textContent).toContain('4名');
+  });
+
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
     configureCafeStatusTestBed();
 
