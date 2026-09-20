@@ -127,7 +127,7 @@
           </section>
         </as-split-area>
 
-        <as-split-area [size]="35" [minSize]="25">
+        <as-split-area [size]="35" [minSize]="25" [visible]="selectedTableNumber() !== null">
           <div class="detail-route-outlet">
             <router-outlet />
           </div>

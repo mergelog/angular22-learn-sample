@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
+import { SplitAreaComponent } from 'angular-split';
 
 import { CafeDashboard } from '../../core/model/cafe-status.model';
 import { loadDashboard } from '../../feature/cafe-status/state/cafe-status.actions';
@@ -61,6 +63,8 @@ describe('CafeTables', () => {
     expect(fixture.nativeElement.querySelector('as-split')).not.toBeNull();
     expect(fixture.nativeElement.querySelectorAll('as-split-area')).toHaveLength(2);
     expect(fixture.nativeElement.querySelector('router-outlet')).not.toBeNull();
+    const splitAreas = fixture.debugElement.queryAll(By.directive(SplitAreaComponent));
+    expect(splitAreas[1].componentInstance.visible()).toBe(false);
 
     const row = fixture.nativeElement.querySelector('tbody tr');
     expect(dispatch).toHaveBeenCalledWith(loadDashboard());
