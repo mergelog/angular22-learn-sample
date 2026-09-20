@@ -1,5 +1,12 @@
-import { createAction } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
+
+import { CafeDashboard } from '../../../core/model/cafe-status.model';
 
 export const CAFE_STATUS_ACTION_SOURCE = 'Cafe Status';
 
 export const loadDashboard = createAction(`[${CAFE_STATUS_ACTION_SOURCE}] Load Dashboard`);
+
+export const loadDashboardSuccess = createAction(
+  `[${CAFE_STATUS_ACTION_SOURCE}] Load Dashboard Success`,
+  props<{ readonly dashboard: CafeDashboard }>(),
+);

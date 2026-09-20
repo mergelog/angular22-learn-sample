@@ -113,7 +113,7 @@
 ### 一覧取得
 
 - [x] `loadDashboard` actionを追加
-- [ ] `loadDashboardSuccess` actionを追加
+- [x] `loadDashboardSuccess` actionを追加
 - [ ] `loadDashboardFailure` actionを追加
 - [ ] 一覧取得effectを `exhaustMap` で実装
 - [ ] HTTPエラーを画面表示用メッセージへ変換
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3のStateファイルと登録、一覧取得開始用の `loadDashboard` actionまで追加済み。
-次は `loadDashboardSuccess` actionを追加する。
+Phase 3のStateファイルと登録、一覧取得の開始・成功actionまで追加済み。
+次は `loadDashboardFailure` actionを追加する。
