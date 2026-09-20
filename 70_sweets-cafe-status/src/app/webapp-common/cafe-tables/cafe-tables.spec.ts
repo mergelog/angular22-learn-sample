@@ -3,10 +3,13 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SplitAreaComponent } from 'angular-split';
+import { SplitAreaComponent, SplitComponent } from 'angular-split';
 
 import { CafeDashboard } from '../../core/model/cafe-status.model';
-import { loadDashboard } from '../../feature/cafe-status/state/cafe-status.actions';
+import {
+  changeSplitPercent,
+  loadDashboard,
+} from '../../feature/cafe-status/state/cafe-status.actions';
 import {
   CAFE_STATUS_FEATURE_KEY,
   initialCafeStatusState,
@@ -83,5 +86,39 @@ describe('CafeTables', () => {
 
     expect(dispatch).toHaveBeenCalledTimes(2);
     expect(dispatch).toHaveBeenLastCalledWith(loadDashboard());
+  });
+
+  it('Storeの分割比率で左右の幅を決め、ドラッグ終了で変更をdispatchする', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTables],
+      providers: [
+        provideRouter([]),
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              splitPercent: 40,
+            },
+          },
+        }),
+      ],
+    });
+
+    const dispatch = vi.spyOn(TestBed.inject(Store), 'dispatch');
+    const fixture = TestBed.createComponent(CafeTables);
+    fixture.detectChanges();
+
+    const splitAreas = fixture.debugElement.queryAll(By.directive(SplitAreaComponent));
+    expect(splitAreas[0].componentInstance.size()).toBe(40);
+    expect(splitAreas[1].componentInstance.size()).toBe(60);
+
+    const split = fixture.debugElement.query(By.directive(SplitComponent));
+    split.componentInstance.dragEnd.emit({ gutterNum: 1, sizes: [30, 70] });
+
+    expect(dispatch).toHaveBeenLastCalledWith(changeSplitPercent({ splitPercent: 30 }));
+
+    split.componentInstance.dragEnd.emit({ gutterNum: 1, sizes: ['*', 70] });
+
+    expect(dispatch).toHaveBeenCalledTimes(2);
   });
 });

@@ -80,8 +80,14 @@
         </div>
       </section>
 
-      <as-split class="table-split" direction="horizontal" unit="percent" [gutterSize]="8">
-        <as-split-area [size]="65" [minSize]="35">
+      <as-split
+        class="table-split"
+        direction="horizontal"
+        unit="percent"
+        [gutterSize]="8"
+        (dragEnd)="changeSplitPercent($event)"
+      >
+        <as-split-area [size]="splitPercent()" [minSize]="35">
           <section class="table-panel">
             <div class="table-toolbar">
               <div>
@@ -127,7 +133,11 @@
           </section>
         </as-split-area>
 
-        <as-split-area [size]="35" [minSize]="25" [visible]="selectedTableNumber() !== null">
+        <as-split-area
+          [size]="100 - splitPercent()"
+          [minSize]="25"
+          [visible]="selectedTableNumber() !== null"
+        >
           <div class="detail-route-outlet">
             <router-outlet />
           </div>

@@ -49,6 +49,8 @@ Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomp
 `angular-split` で一覧と詳細の左右領域を分けている。URLの `tableNumber` を
 選択状態と右ペイン表示の正本にし、一致する一覧行の強調表示と、
 行選択からoverviewへの遷移、closeから一覧URLへの遷移を行える段階である。
+分割比率はStoreの `splitPercent` を正本にし、gutterのドラッグ終了で
+`changeSplitPercent` をdispatchして左右のsizeへ反映している。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択はoverviewのURL遷移に変換できるが、対応するrouteと右ペインの表示、編集処理は
@@ -167,7 +169,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 - [x] `changeSplitPercent` actionを追加
 - [x] reducerで分割比率を保持
-- [ ] `dragEnd` をactionのdispatchへ接続
+- [x] `dragEnd` をactionのdispatchへ接続
 
 ### 完了条件
 
@@ -237,5 +239,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 Phase 4のroute、詳細component、分割レイアウト、URL連動の行強調表示、
 overviewへの遷移、closeによる一覧復帰、戻る・進む時の選択同期、
 loading表示、not-found表示、詳細ペインの取得時刻表示、分割比率の
-`changeSplitPercent` action追加とreducerでの保持は完了。
-次は `dragEnd` をactionのdispatchへ接続する。
+`changeSplitPercent` action追加、reducerでの保持、`dragEnd` の
+dispatch接続は完了。
+次はPhase 4の「完了条件」を上から1件ずつ確認する。
