@@ -286,6 +286,38 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('片付け中');
   });
 
+  it('更新要求値ではなくAPI応答値を正として表示する', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+    const header = harness.fixture.debugElement.query(By.directive(CafeInfoHeader))
+      .componentInstance as CafeInfoHeader;
+
+    detailPane(harness).querySelector<HTMLButtonElement>('.edit-button')!.click();
+    header.form.patchValue({ status: '調理中', people: 3, billingAmount: 980 });
+    harness.detectChanges();
+    detailPane(harness).querySelector<HTMLButtonElement>('.save-button')!.click();
+
+    const updateRequest = TestBed.inject(HttpTestingController).expectOne('/api/cafe-status');
+    expect(updateRequest.request.body).toEqual({
+      tableNumber: 'T01',
+      status: '調理中',
+      people: 3,
+      billingAmount: 980,
+    });
+    updateRequest.flush(
+      createTable('T01', { status: '提供済', people: 2, billingAmount: 1_480 }),
+    );
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(tableRow(harness, 'T01').textContent).toContain('提供済');
+    expect(tableRow(harness, 'T01').textContent).toContain('2名');
+    expect(tableRow(harness, 'T01').textContent).toContain('¥1,480');
+    expect(tableRow(harness, 'T01').textContent).not.toContain('¥980');
+    expect(detailPane(harness).querySelector('.summary')?.textContent).toContain('提供済');
+  });
+
   it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
     configureCafeStatusTestBed();
 
