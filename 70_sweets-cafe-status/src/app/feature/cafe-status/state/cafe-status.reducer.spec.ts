@@ -1,9 +1,10 @@
-import { CafeDashboard } from '../../../core/model/cafe-status.model';
+import { CafeDashboard, CafeTable } from '../../../core/model/cafe-status.model';
 import {
   changeSplitPercent,
   loadDashboard,
   loadDashboardFailure,
   loadDashboardSuccess,
+  updateTableSuccess,
 } from './cafe-status.actions';
 import { cafeStatusReducer, initialCafeStatusState } from './cafe-status.reducer';
 
@@ -63,6 +64,69 @@ describe('cafeStatusReducer', () => {
       loading: false,
       loadError: '取得できませんでした。',
     });
+  });
+
+  it('更新成功時にAPI応答値で該当する一覧データだけを置換する', () => {
+    const currentTable: CafeTable = {
+      tableNumber: 'T01',
+      classification: 'テーブル',
+      status: '提供済',
+      guestIds: ['G01'],
+      予約: [],
+      stateElapsedSeconds: 125,
+      statusDurationsSeconds: {
+        空き: 0,
+        未オーダー: 0,
+        調理中: 0,
+        提供済: 125,
+        片付け中: 0,
+      },
+      people: 2,
+      billingAmount: 1_360,
+      dailyUsageRate: 24,
+    };
+    const otherTable: CafeTable = { ...currentTable, tableNumber: 'T02' };
+    const updatedTable: CafeTable = {
+      ...currentTable,
+      status: '片付け中',
+      people: 3,
+      billingAmount: 980,
+    };
+    const state = {
+      ...initialCafeStatusState,
+      dashboard: { ...dashboard, tables: [currentTable, otherTable] },
+    };
+
+    const result = cafeStatusReducer(state, updateTableSuccess({ table: updatedTable }));
+
+    expect(result.dashboard?.tables).toEqual([updatedTable, otherTable]);
+    expect(result.dashboard?.tables[0]).toBe(updatedTable);
+    expect(result.dashboard?.tables[1]).toBe(otherTable);
+  });
+
+  it('dashboard取得前の更新成功では一覧を生成しない', () => {
+    const table = {
+      tableNumber: 'T01',
+      classification: 'テーブル',
+      status: '提供済',
+      guestIds: [],
+      予約: [],
+      stateElapsedSeconds: 0,
+      statusDurationsSeconds: {
+        空き: 0,
+        未オーダー: 0,
+        調理中: 0,
+        提供済: 0,
+        片付け中: 0,
+      },
+      people: 0,
+      billingAmount: 0,
+      dailyUsageRate: 0,
+    } satisfies CafeTable;
+
+    const result = cafeStatusReducer(initialCafeStatusState, updateTableSuccess({ table }));
+
+    expect(result.dashboard).toBeNull();
   });
 
   it('分割比率の変更を保持する', () => {
