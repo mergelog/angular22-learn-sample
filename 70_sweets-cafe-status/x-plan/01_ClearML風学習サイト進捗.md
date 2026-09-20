@@ -105,7 +105,7 @@
 - [x] `cafe-status.actions.ts` を追加
 - [x] `cafe-status.reducer.ts` を追加
 - [x] `cafe-status.selectors.ts` を追加
-- [ ] `cafe-status.effects.ts` を追加
+- [x] `cafe-status.effects.ts` を追加
 - [ ] `provideStore()` をアプリへ登録
 - [ ] `/cafe-status` の親routeへ `provideState()` を登録
 - [ ] `/cafe-status` の親routeへ `provideEffects()` を登録
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3のStateにactions、reducer、selectorsを追加済み。
-次は `cafe-status.effects.ts` を追加する。
+Phase 3のStateにactions、reducer、selectors、effectsの各ファイルを追加済み。
+次は `provideStore()` をアプリへ登録する。
