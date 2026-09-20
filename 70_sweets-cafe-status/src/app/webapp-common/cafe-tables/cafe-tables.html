@@ -108,7 +108,7 @@
             <app-cafe-tables-grid
               [tables]="data.tables"
               [selectedTableNumber]="selectedTableNumber()"
-              (tableSelected)="selectTable($event)"
+              (tableSelected)="openTable($event)"
             />
           } @else {
             <div class="state-message">

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 
@@ -54,6 +54,7 @@ describe('CafeTables', () => {
     });
 
     const dispatch = vi.spyOn(TestBed.inject(Store), 'dispatch');
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     const fixture = TestBed.createComponent(CafeTables);
     fixture.detectChanges();
 
@@ -62,6 +63,12 @@ describe('CafeTables', () => {
     expect(row.textContent).toContain('T01');
     expect(row.textContent).toContain('提供済');
     expect(row.textContent).toContain('¥1,360');
+
+    row.click();
+
+    expect(navigate).toHaveBeenCalledWith(['T01', 'overview'], {
+      relativeTo: expect.any(ActivatedRoute),
+    });
 
     const refreshButton: HTMLButtonElement = fixture.nativeElement.querySelector('.refresh-button');
     refreshButton.click();

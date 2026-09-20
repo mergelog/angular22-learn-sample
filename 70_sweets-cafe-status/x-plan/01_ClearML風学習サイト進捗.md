@@ -134,7 +134,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 ### 基底class
 
 - [x] `BaseCafeEntityPage` を追加
-- [ ] `CafeTables` を `BaseCafeEntityPage` の継承へ変更
+- [x] `CafeTables` を `BaseCafeEntityPage` の継承へ変更
 - [ ] `BaseCafeTableOutput` を追加
 - [ ] `CafeTableOutput` を `BaseCafeTableOutput` の継承で作成
 
@@ -226,6 +226,5 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4の基底classに `BaseCafeEntityPage` を追加し、子routeの `tableNumber`を
-Signalへ同期する処理とoverviewを開く共通遷移を用意した。次は `CafeTables` を
-`BaseCafeEntityPage` の継承へ変更する。
+`CafeTables` を `BaseCafeEntityPage` の継承へ変更し、行選択をローカルSignalの更新ではなく
+overviewへのURL遷移に変換した。次は `BaseCafeTableOutput` を追加する。
