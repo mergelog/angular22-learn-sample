@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { provideStore } from '@ngrx/store';
 import { SplitAreaComponent } from 'angular-split';
@@ -66,17 +66,50 @@ function detailPaneArea(harness: RouterTestingHarness): SplitAreaComponent {
     .componentInstance as SplitAreaComponent;
 }
 
+function detailPane(harness: RouterTestingHarness): HTMLElement {
+  return harness.fixture.nativeElement.querySelector('app-cafe-table-output');
+}
+
+function tableRow(harness: RouterTestingHarness, tableNumber: string): HTMLTableRowElement {
+  const rows: HTMLTableRowElement[] = Array.from(
+    harness.fixture.nativeElement.querySelectorAll('tbody tr'),
+  );
+
+  return rows.find((row) => row.textContent?.includes(tableNumber))!;
+}
+
+async function clickTableRow(harness: RouterTestingHarness, tableNumber: string): Promise<void> {
+  tableRow(harness, tableNumber).click();
+  await harness.fixture.whenStable();
+  harness.detectChanges();
+}
+
 describe('cafe-statusのURL連動', () => {
   it('URLを直接指定すると対象テーブルの右ペインが開く', async () => {
     configureCafeStatusTestBed();
 
     const harness = await openCafeStatus('/cafe-status/T01/overview');
-    const detailPane: HTMLElement =
-      harness.fixture.nativeElement.querySelector('app-cafe-table-output');
+    const pane = detailPane(harness);
 
     expect(detailPaneArea(harness).visible()).toBe(true);
-    expect(detailPane.querySelector('.info-header h2')?.textContent).toBe('T01');
-    expect(detailPane.querySelector('app-cafe-table-overview')?.textContent).toContain('Overview');
-    expect(detailPane.textContent).not.toContain('テーブルが見つかりません');
+    expect(pane.querySelector('.info-header h2')?.textContent).toBe('T01');
+    expect(pane.querySelector('app-cafe-table-overview')?.textContent).toContain('Overview');
+    expect(pane.textContent).not.toContain('テーブルが見つかりません');
+  });
+
+  it('一覧の行クリックで対象テーブルの右ペインが開く', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status');
+
+    expect(detailPaneArea(harness).visible()).toBe(false);
+
+    await clickTableRow(harness, 'T02');
+
+    expect(TestBed.inject(Router).url).toBe('/cafe-status/T02/overview');
+    expect(detailPaneArea(harness).visible()).toBe(true);
+    expect(detailPane(harness).querySelector('.info-header h2')?.textContent).toBe('T02');
+    expect(tableRow(harness, 'T02').getAttribute('aria-selected')).toBe('true');
+    expect(tableRow(harness, 'T01').getAttribute('aria-selected')).toBe('false');
   });
 });
