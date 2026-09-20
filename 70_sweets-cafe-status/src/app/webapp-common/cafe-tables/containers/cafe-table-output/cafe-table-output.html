@@ -1,5 +1,6 @@
 <section class="cafe-table-output" aria-label="テーブル詳細">
   @if (selectedTable(); as table) {
     <app-cafe-info-header [table]="table" (closeRequested)="closePanel()" />
+    <router-outlet />
   }
 </section>

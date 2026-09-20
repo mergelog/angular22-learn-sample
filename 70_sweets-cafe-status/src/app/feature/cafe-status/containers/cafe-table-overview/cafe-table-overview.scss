@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+.overview {
+  padding: 20px;
+}
+
+h3,
+h4,
+dl,
+dd {
+  margin: 0;
+}
+
+h3 {
+  color: #202634;
+  font-size: 1rem;
+}
+
+h4 {
+  margin-top: 24px;
+  color: #596170;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.metrics div,
+.durations div {
+  padding: 12px;
+  border: 1px solid #e2e5ea;
+  border-radius: 6px;
+}
+
+dt {
+  color: #8b91a0;
+  font-size: 0.68rem;
+}
+
+dd {
+  margin-top: 5px;
+  color: #202634;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.durations {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.durations div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.durations dd {
+  margin-top: 0;
+}
+
+@media (max-width: 800px) {
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+}

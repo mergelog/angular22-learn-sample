@@ -1,0 +1,30 @@
+@if (table(); as table) {
+  <section class="overview" aria-labelledby="overview-title">
+    <h3 id="overview-title">Overview</h3>
+
+    <dl class="metrics">
+      <div>
+        <dt>分類</dt>
+        <dd>{{ table.classification }}</dd>
+      </div>
+      <div>
+        <dt>現状態の経過時間</dt>
+        <dd>{{ formatDuration(table.stateElapsedSeconds) }}</dd>
+      </div>
+      <div>
+        <dt>当日利用率</dt>
+        <dd>{{ table.dailyUsageRate }}%</dd>
+      </div>
+    </dl>
+
+    <h4>ステータス別の累計時間</h4>
+    <dl class="durations">
+      @for (status of statuses; track status) {
+        <div>
+          <dt>{{ status }}</dt>
+          <dd>{{ formatDuration(table.statusDurationsSeconds[status]) }}</dd>
+        </div>
+      }
+    </dl>
+  </section>
+}

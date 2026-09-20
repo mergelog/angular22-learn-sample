@@ -45,7 +45,7 @@ Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomp
 `/cafe-status/:tableNumber` をoverviewへ正規化する子routeと、overviewから
 詳細ペインを遅延ロードするrouteを追加し、親画面の子outletへ
 `CafeTableOutput` を描画し、`CafeInfoHeader` で選択テーブルの要約とclose操作を
-扱える段階である。
+扱える。子routeの `CafeTableOverview` で利用率とステータス別時間も表示できる段階である。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
 行選択はoverviewのURL遷移に変換できるが、対応するrouteと右ペインの表示、編集処理は
@@ -149,7 +149,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] `/cafe-status/:tableNumber/overview` を追加
 - [x] `CafeTableOutput` を追加
 - [x] `CafeInfoHeader` を追加
-- [ ] `CafeTableOverview` を追加
+- [x] `CafeTableOverview` を追加
 - [ ] `angular-split` で左右の分割レイアウトを作成
 - [ ] URLから選択中のテーブル番号を取得
 - [ ] 選択中の行を強調表示
@@ -231,5 +231,5 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-Phase 4のroute定義、`CafeTableOutput` の組み込み、`CafeInfoHeader` の追加は完了。
-次は利用率とステータス別時間を表示する `CafeTableOverview` を追加する。
+Phase 4のroute定義と詳細ペインの3component追加は完了。
+次は `angular-split` で一覧と詳細の左右分割レイアウトを作成する。

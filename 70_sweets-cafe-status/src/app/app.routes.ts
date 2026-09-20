@@ -30,11 +30,20 @@ export const routes: Routes = [
         redirectTo: ':tableNumber/overview',
       },
       {
-        path: ':tableNumber/overview',
+        path: ':tableNumber',
         loadComponent: () =>
           import('./webapp-common/cafe-tables/containers/cafe-table-output/cafe-table-output').then(
             (m) => m.CafeTableOutput,
           ),
+        children: [
+          {
+            path: 'overview',
+            loadComponent: () =>
+              import('./feature/cafe-status/containers/cafe-table-overview/cafe-table-overview').then(
+                (m) => m.CafeTableOverview,
+              ),
+          },
+        ],
       },
     ],
     providers: [
