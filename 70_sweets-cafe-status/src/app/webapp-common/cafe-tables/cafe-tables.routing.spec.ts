@@ -7,7 +7,7 @@ import { By } from '@angular/platform-browser';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { provideStore } from '@ngrx/store';
-import { SplitAreaComponent } from 'angular-split';
+import { SplitAreaComponent, SplitComponent } from 'angular-split';
 
 import { routes } from '../../app.routes';
 import { CafeDashboard, CafeTable } from '../../core/model/cafe-status.model';
@@ -74,6 +74,23 @@ async function openCafeStatus(url: string): Promise<RouterTestingHarness> {
 function detailPaneArea(harness: RouterTestingHarness): SplitAreaComponent {
   return harness.fixture.debugElement.queryAll(By.directive(SplitAreaComponent))[1]
     .componentInstance as SplitAreaComponent;
+}
+
+function splitSizes(harness: RouterTestingHarness): unknown[] {
+  return harness.fixture.debugElement
+    .queryAll(By.directive(SplitAreaComponent))
+    .map((area) => (area.componentInstance as SplitAreaComponent).size());
+}
+
+async function dragGutterTo(harness: RouterTestingHarness, listPercent: number): Promise<void> {
+  const split = harness.fixture.debugElement.query(By.directive(SplitComponent));
+
+  (split.componentInstance as SplitComponent).dragEnd.emit({
+    gutterNum: 1,
+    sizes: [listPercent, 100 - listPercent],
+  });
+  await harness.fixture.whenStable();
+  harness.detectChanges();
 }
 
 function detailPane(harness: RouterTestingHarness): HTMLElement {
@@ -240,6 +257,27 @@ describe('cafe-statusのURL連動', () => {
     expect(detailPane(harness).querySelector('app-cafe-table-overview')?.textContent).toContain(
       '57%',
     );
+  });
+
+  it('ドラッグで変えた分割比率が遷移や開閉のあとも維持される', async () => {
+    configureCafeStatusTestBed();
+
+    const harness = await openCafeStatus('/cafe-status/T01/overview');
+
+    expect(splitSizes(harness)).toEqual([65, 35]);
+
+    await dragGutterTo(harness, 30);
+
+    expect(splitSizes(harness)).toEqual([30, 70]);
+
+    await clickTableRow(harness, 'T02');
+
+    expect(splitSizes(harness)).toEqual([30, 70]);
+
+    await closeDetailPane(harness);
+    await clickTableRow(harness, 'T01');
+
+    expect(splitSizes(harness)).toEqual([30, 70]);
   });
 
   for (const unknownTableNumber of ['T99', 't01']) {
