@@ -15,3 +15,8 @@ export const loadDashboardFailure = createAction(
   `[${CAFE_STATUS_ACTION_SOURCE}] Load Dashboard Failure`,
   props<{ readonly errorMessage: string }>(),
 );
+
+export const changeSplitPercent = createAction(
+  `[${CAFE_STATUS_ACTION_SOURCE}] Change Split Percent`,
+  props<{ readonly splitPercent: number }>(),
+);
