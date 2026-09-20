@@ -87,7 +87,10 @@
         [gutterSize]="8"
         (dragEnd)="changeSplitPercent($event)"
       >
-        <as-split-area [size]="splitPercent()" [minSize]="35">
+        <as-split-area
+          [size]="selectedTableNumber() === null ? 100 : splitPercent()"
+          [minSize]="35"
+        >
           <section class="table-panel">
             <div class="table-toolbar">
               <div>

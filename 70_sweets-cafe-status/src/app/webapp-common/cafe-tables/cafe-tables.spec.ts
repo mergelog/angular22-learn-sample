@@ -88,7 +88,7 @@ describe('CafeTables', () => {
     expect(dispatch).toHaveBeenLastCalledWith(loadDashboard());
   });
 
-  it('Storeの分割比率で左右の幅を決め、ドラッグ終了で変更をdispatchする', () => {
+  it('詳細を閉じている間は一覧を100%にし、ドラッグ終了で変更をdispatchする', () => {
     TestBed.configureTestingModule({
       imports: [CafeTables],
       providers: [
@@ -109,7 +109,7 @@ describe('CafeTables', () => {
     fixture.detectChanges();
 
     const splitAreas = fixture.debugElement.queryAll(By.directive(SplitAreaComponent));
-    expect(splitAreas[0].componentInstance.size()).toBe(40);
+    expect(splitAreas[0].componentInstance.size()).toBe(100);
     expect(splitAreas[1].componentInstance.size()).toBe(60);
 
     const split = fixture.debugElement.query(By.directive(SplitComponent));

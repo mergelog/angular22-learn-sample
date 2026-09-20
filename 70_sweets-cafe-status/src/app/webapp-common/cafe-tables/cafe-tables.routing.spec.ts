@@ -487,6 +487,9 @@ describe('cafe-statusのURL連動', () => {
     expect(splitSizes(harness)).toEqual([30, 70]);
 
     await closeDetailPane(harness);
+
+    expect(splitSizes(harness)).toEqual([100, 70]);
+
     await clickTableRow(harness, 'T01');
 
     expect(splitSizes(harness)).toEqual([30, 70]);
