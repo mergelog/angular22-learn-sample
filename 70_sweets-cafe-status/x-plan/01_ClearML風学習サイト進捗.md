@@ -41,10 +41,11 @@
 - [ ] 初期完成版の受け入れ条件をすべて達成
 
 現在は、既存APIから取得したテーブル状況をNgRx Store経由でSignalとして表示でき、
-Phase 3の一覧取得、effect test、reducer testまで完了した段階である。
+Phase 4のURL連動に用いる2つの基底classと具象の詳細ペインcomponentを用意した段階である。
 APIの直接参照は `ViewJson` とeffectだけに限定している。
 画面にはトップバー、サイドバー、集計欄、6列の一覧表を用意している。
-行選択は親子間で受け渡せるが、右ペインと編集処理は追加していない。
+行選択はoverviewのURL遷移に変換できるが、対応するrouteと右ペインの表示、編集処理は
+まだ追加していない。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -136,7 +137,7 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 - [x] `BaseCafeEntityPage` を追加
 - [x] `CafeTables` を `BaseCafeEntityPage` の継承へ変更
 - [x] `BaseCafeTableOutput` を追加
-- [ ] `CafeTableOutput` を `BaseCafeTableOutput` の継承で作成
+- [x] `CafeTableOutput` を `BaseCafeTableOutput` の継承で作成
 
 ### ルートと画面
 
@@ -226,6 +227,6 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 
 ## 9. 次に着手する項目
 
-`BaseCafeTableOutput` を追加し、routeの `tableNumber` とStoreのdashboardから選択中の
-テーブルを導出し、一覧へ閉じる共通遷移を用意した。次は `CafeTableOutput` を
-`BaseCafeTableOutput` の継承で作成する。
+Phase 4の基底classは完了。`CafeTables` はURL連動用の `BaseCafeEntityPage`、
+`CafeTableOutput` は選択テーブル導出用の `BaseCafeTableOutput` を継承している。
+次はルートと画面の最初の項目として、`/cafe-status/:tableNumber` を追加する。
