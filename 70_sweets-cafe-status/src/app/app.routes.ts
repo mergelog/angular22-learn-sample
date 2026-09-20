@@ -1,4 +1,10 @@
 import { Routes } from '@angular/router';
+import { provideState } from '@ngrx/store';
+
+import {
+  CAFE_STATUS_FEATURE_KEY,
+  cafeStatusReducer,
+} from './feature/cafe-status/state/cafe-status.reducer';
 
 export const routes: Routes = [
   {
@@ -15,6 +21,7 @@ export const routes: Routes = [
     path: 'cafe-status',
     loadComponent: () =>
       import('./webapp-common/cafe-tables/cafe-tables').then((m) => m.CafeTables),
+    providers: [provideState(CAFE_STATUS_FEATURE_KEY, cafeStatusReducer)],
     title: 'Cafe Tables',
   },
   {

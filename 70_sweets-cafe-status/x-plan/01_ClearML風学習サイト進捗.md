@@ -107,7 +107,7 @@
 - [x] `cafe-status.selectors.ts` を追加
 - [x] `cafe-status.effects.ts` を追加
 - [x] `provideStore()` をアプリへ登録
-- [ ] `/cafe-status` の親routeへ `provideState()` を登録
+- [x] `/cafe-status` の親routeへ `provideState()` を登録
 - [ ] `/cafe-status` の親routeへ `provideEffects()` を登録
 
 ### 一覧取得
@@ -226,5 +226,5 @@
 
 ## 9. 次に着手する項目
 
-Phase 3のStateファイルを追加し、`provideStore()` をアプリへ登録済み。
-次は `/cafe-status` の親routeへ `provideState()` を登録する。
+Phase 3のStateファイルとルートStoreを用意し、`/cafe-status` の親
+routeへ `provideState()` を登録済み。次は同じrouteへ `provideEffects()` を登録する。
