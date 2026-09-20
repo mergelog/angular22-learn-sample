@@ -6,6 +6,8 @@ import {
   loadDashboard,
   loadDashboardFailure,
   loadDashboardSuccess,
+  updateTable,
+  updateTableFailure,
   updateTableSuccess,
 } from './cafe-status.actions';
 
@@ -46,6 +48,11 @@ export const cafeStatusReducer = createReducer(
     loading: false,
     loadError: errorMessage,
   })),
+  on(updateTable, (state, { request }) => ({
+    ...state,
+    updatingTableNumber: request.tableNumber,
+    updateError: null,
+  })),
   on(updateTableSuccess, (state, { table }) => ({
     ...state,
     dashboard: state.dashboard
@@ -56,6 +63,14 @@ export const cafeStatusReducer = createReducer(
           ),
         }
       : null,
+    updatingTableNumber:
+      state.updatingTableNumber === table.tableNumber ? null : state.updatingTableNumber,
+  })),
+  on(updateTableFailure, (state, { tableNumber, message }) => ({
+    ...state,
+    updatingTableNumber:
+      state.updatingTableNumber === tableNumber ? null : state.updatingTableNumber,
+    updateError: { tableNumber, message },
   })),
   on(changeSplitPercent, (state, { splitPercent }) => ({
     ...state,

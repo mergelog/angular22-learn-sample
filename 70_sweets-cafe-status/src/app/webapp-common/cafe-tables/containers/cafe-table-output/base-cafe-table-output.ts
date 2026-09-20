@@ -9,6 +9,7 @@ import { updateTable } from '../../../../feature/cafe-status/state/cafe-status.a
 import {
   selectDashboard,
   selectLoading,
+  selectUpdatingTableNumber,
 } from '../../../../feature/cafe-status/state/cafe-status.selectors';
 
 @Directive()
@@ -20,6 +21,7 @@ export abstract class BaseCafeTableOutput {
 
   protected readonly dashboard = this.store.selectSignal(selectDashboard);
   protected readonly loading = this.store.selectSignal(selectLoading);
+  protected readonly updatingTableNumber = this.store.selectSignal(selectUpdatingTableNumber);
   protected readonly generatedAt = computed(() => this.dashboard()?.generatedAt ?? null);
   protected readonly tableNumber = signal<string | null>(null);
   protected readonly selectedTable = computed(() => {

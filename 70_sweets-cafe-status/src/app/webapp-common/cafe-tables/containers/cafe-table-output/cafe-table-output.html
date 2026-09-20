@@ -3,6 +3,7 @@
     <app-cafe-info-header
       [table]="table"
       [generatedAt]="generatedAt()"
+      [saving]="updatingTableNumber() === table.tableNumber"
       (closeRequested)="closePanel()"
       (saveRequested)="saveTable($event)"
     />

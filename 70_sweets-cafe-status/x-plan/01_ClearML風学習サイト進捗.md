@@ -77,6 +77,9 @@ APIの直接参照は `ViewJson` とeffectだけに限定している。
 `updateTableFailure` actionも定義済み。更新effectは `concatMap` で更新要求を受信順に
 APIへ送り、成功・失敗actionへ変換する。更新成功時はAPI応答の `CafeTable` で
 dashboard内の該当行だけを置換する。
+更新開始時は対象番号をStoreへ保存して詳細フォームを送信中にし、失敗時はdashboardを
+変更せず送信中状態だけを終了する。同じテーブルのAPI応答ではフォームを初期化しないため、
+失敗後も編集欄と入力値を維持する。
 
 ## 3. Phase 1: Signalで一覧を描画
 
@@ -225,7 +228,7 @@ dashboard内の該当行だけを置換する。
 - [x] `updateTableFailure` actionを追加
 - [x] 更新effectを `concatMap` で実装
 - [x] 更新成功時に該当する一覧データを置換
-- [ ] 更新失敗時に入力内容を維持
+- [x] 更新失敗時に入力内容を維持
 - [ ] 更新対象と一致するエラーだけを詳細ペインへ表示
 - [ ] 400と404を区別できるエラーメッセージを追加
 - [ ] 複数更新時に先の応答で後の送信中状態を解除しない
@@ -267,4 +270,5 @@ invalidと送信中の保存ボタン無効化までをcomponent testで確認�
 `updateTableSuccess` actionと、対象番号・メッセージをpayloadに持つ
 `updateTableFailure` actionも追加した。更新effectは `concatMap` で実装し、複数要求を
 受信順に直列実行することをeffect testで確認済み。更新成功時はAPI応答値で該当する
-一覧データだけを置換する。次は更新失敗時に入力内容を維持する。
+一覧データだけを置換する。更新失敗時は一覧を変更せず、編集欄と入力内容を維持する。
+次は更新対象と一致するエラーだけを詳細ペインへ表示する。

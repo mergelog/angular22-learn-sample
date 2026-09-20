@@ -153,6 +153,37 @@ describe('CafeTableOutput', () => {
     expect(dispatch).toHaveBeenCalledWith(updateTable({ request }));
   });
 
+  it('表示中テーブルの更新中状態を編集フォームへ渡す', () => {
+    TestBed.configureTestingModule({
+      imports: [CafeTableOutput],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ tableNumber: 'T01' })) },
+        },
+        { provide: Router, useValue: { navigate: vi.fn().mockResolvedValue(true) } },
+        provideMockStore({
+          initialState: {
+            [CAFE_STATUS_FEATURE_KEY]: {
+              ...initialCafeStatusState,
+              dashboard,
+              updatingTableNumber: 'T01',
+            },
+          },
+        }),
+      ],
+    });
+    const fixture = TestBed.createComponent(CafeTableOutput);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('.edit-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const saveButton = fixture.nativeElement.querySelector('.save-button') as HTMLButtonElement;
+    expect(saveButton.disabled).toBe(true);
+    expect(saveButton.textContent).toContain('保存中');
+  });
+
   for (const unknownTableNumber of ['T99', 't01']) {
     it(`存在しないテーブル番号 ${unknownTableNumber} をnot-found表示する`, () => {
       TestBed.configureTestingModule({

@@ -309,4 +309,22 @@ describe('CafeInfoHeader', () => {
       billingAmount: 980,
     });
   });
+
+  it('更新失敗後も編集欄と入力内容を維持する', () => {
+    click('.edit-button');
+    componentRef.instance.form.patchValue({ status: '片付け中', people: 3, billingAmount: 980 });
+
+    componentRef.setInput('saving', true);
+    TestBed.tick();
+    componentRef.setInput('saving', false);
+    componentRef.setInput('table', { ...table });
+    TestBed.tick();
+
+    expect(query('.edit-form')).not.toBeNull();
+    expect(componentRef.instance.form.getRawValue()).toEqual({
+      status: '片付け中',
+      people: 3,
+      billingAmount: 980,
+    });
+  });
 });

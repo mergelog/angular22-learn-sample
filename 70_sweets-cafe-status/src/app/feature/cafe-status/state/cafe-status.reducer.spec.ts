@@ -4,6 +4,8 @@ import {
   loadDashboard,
   loadDashboardFailure,
   loadDashboardSuccess,
+  updateTable,
+  updateTableFailure,
   updateTableSuccess,
 } from './cafe-status.actions';
 import { cafeStatusReducer, initialCafeStatusState } from './cafe-status.reducer';
@@ -127,6 +129,39 @@ describe('cafeStatusReducer', () => {
     const result = cafeStatusReducer(initialCafeStatusState, updateTableSuccess({ table }));
 
     expect(result.dashboard).toBeNull();
+  });
+
+  it('更新開始時に対象番号を保存して以前の更新エラーを消す', () => {
+    const state = {
+      ...initialCafeStatusState,
+      updateError: { tableNumber: 'T01', message: '以前のエラー' },
+    };
+
+    const result = cafeStatusReducer(
+      state,
+      updateTable({
+        request: { tableNumber: 'T01', status: '片付け中', people: 3, billingAmount: 980 },
+      }),
+    );
+
+    expect(result.updatingTableNumber).toBe('T01');
+    expect(result.updateError).toBeNull();
+  });
+
+  it('更新失敗時に一覧を変更せず送信中状態を終了する', () => {
+    const state = {
+      ...initialCafeStatusState,
+      dashboard,
+      updatingTableNumber: 'T01',
+    };
+
+    const result = cafeStatusReducer(
+      state,
+      updateTableFailure({ tableNumber: 'T01', message: '更新できませんでした。' }),
+    );
+
+    expect(result.dashboard).toBe(dashboard);
+    expect(result.updatingTableNumber).toBeNull();
   });
 
   it('分割比率の変更を保持する', () => {
