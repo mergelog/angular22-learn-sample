@@ -1,0 +1,16 @@
+<main>
+  <h1>new Subscription()</h1>
+
+  <p>複数の購読を1つにまとめ、停止ボタンで一括解除します。</p>
+
+  <p>500ms ごとの通知回数: {{ fastCount() }}</p>
+  <p>1秒ごとの通知回数: {{ slowCount() }}</p>
+
+  <button type="button" (click)="stop()" [disabled]="stopped()">すべての購読を停止</button>
+
+  @if (stopped()) {
+    <p>購読を停止しました。</p>
+  }
+
+  <app-p04-store-navi />
+</main>

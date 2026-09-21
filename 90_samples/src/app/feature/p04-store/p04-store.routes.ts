@@ -36,6 +36,13 @@ export const P04_STORE_ROUTES: Routes = [
       ),
   },
   {
+    path: 'learn-05-new-subscription',
+    loadComponent: () =>
+      import('./learn-05-new-subscription/learn-05-new-subscription').then(
+        (m) => m.Learn05NewSubscription,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'learn-01-cva',
