@@ -1,0 +1,37 @@
+{
+  "name": "80-tarminal",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "yarn@1.22.19",
+  "scripts": {
+    "start": "tsx watch --clear-screen=false src/terminal/main.ts",
+    "demo": "tsx src/terminal/main.ts --once",
+    "serve": "ng serve --port 3200",
+    "build": "ng build",
+    "typecheck": "tsc --noEmit -p tsconfig.terminal.json && ng build --configuration development"
+  },
+  "dependencies": {
+    "@angular/cdk": "^22.1.6",
+    "@angular/common": "^22.1.0",
+    "@angular/compiler": "^22.1.0",
+    "@angular/core": "^22.1.0",
+    "@angular/forms": "^22.1.0",
+    "@angular/material": "^22.1.6",
+    "@angular/platform-browser": "^22.1.0",
+    "@angular/router": "^22.1.0",
+    "@ngrx/component": "^22.0.1",
+    "@ngrx/effects": "^22.0.1",
+    "@ngrx/signals": "^22.0.0",
+    "@ngrx/store": "^22.0.1",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.1.6",
+    "@angular/cli": "^22.1.6",
+    "@angular/compiler-cli": "^22.1.0",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "~6.0.2"
+  }
+}
