@@ -84,6 +84,10 @@ export class Foo implements OnInit {     // ...解説
 
 ## cps {関数名など} と指定された場合
 
+> 但し、
+> `cps 80_ {関数名など}`　のように 80_ の指定がある場合は
+> 80_tarminal/src/terminal/t04_store に「console.log」で観点における挙動を確認できる tsファイル と x_{}.concept.md を作成する
+
 ./90_samples/src/app/feature/p04-store
 にコンポーネント作成してサンプルコード作成し、dashboardからリンクしてください。
 

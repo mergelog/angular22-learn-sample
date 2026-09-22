@@ -17,7 +17,7 @@
 - hoは handoffで引き継ぎファイルを作成すること x-handoff.md
 - _old はどの階層においても指示がない限り観覧不要
 
-- AGENTS.local.md も確認すること  
+- AGENTS.local.md も確認すること
 
 ## 規約
 - sampleで画面を追加した場合、その画面へのリンクを追加する
@@ -83,6 +83,10 @@ export class Foo implements OnInit {     // ...解説
 - lv3: 具体的に何をしているかまでコメント。知りたいのはなんのために何をするか。一辺倒にダラダラ書かない。短い要約目指す
 
 ## cps {関数名など} と指定された場合
+
+> 但し、
+> `cps 80_ {関数名など}`　のように 80_ の指定がある場合は
+> 80_tarminal/src/terminal/t04_store に「console.log」で観点における挙動を確認できる tsファイル と x_{}.concept.md を作成する
 
 ./90_samples/src/app/feature/p04-store
 にコンポーネント作成してサンプルコード作成し、dashboardからリンクしてください。

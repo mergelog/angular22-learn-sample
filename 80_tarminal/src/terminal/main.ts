@@ -5,14 +5,16 @@ import { runNgRxExample } from './examples/ngrx';
 import { runSignalExample } from './examples/signal';
 import { runSignalStoreExample } from './examples/signal-store';
 import { runTypeScriptExample } from './examples/typescript';
-import { t01 } from './free-canvas/t01_canvas';
+import { learn01Test } from './t04_store/learn-01-test/learn-01-test';
+import { runDistinctUntilKeyChangedExample } from './t04_store/learn-02-distinct-until-key-changed/learn-02-distinct-until-key-changed';
 
 const once = process.argv.includes('--once');
 const port = 3200;
 
 function runExamples(): void {
 
-  t01()
+  learn01Test()
+  runDistinctUntilKeyChangedExample();
   
   // 初期サンプル
   // runTypeScriptExample();
