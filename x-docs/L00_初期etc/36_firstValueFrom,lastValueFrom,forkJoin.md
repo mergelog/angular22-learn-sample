@@ -4,13 +4,19 @@
 ---
 ---
 
+一言でまとめると、
+
+> **単発処理なら `await lastValueFrom()` は読みやすい。ストリーム処理ならRxJSのまま。**
+
+---
 
 `lastValueFrom()` には重要な弱点があります。
 一番大きいのは、**Observableの世界からPromiseの世界に出てしまう**ことです。
 
 見た目だけなら `await lastValueFrom(...)` の方がかなり読みやすいです。実際、**用途によってはこっちを使った方がいい**です。
-
 ただし、Angular/RxJSでは「短いから常にこちら」が正解ではありません。
+
+---
 
 ```ts
 const result = await lastValueFrom(
