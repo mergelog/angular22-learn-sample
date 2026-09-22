@@ -71,6 +71,11 @@ export const P04_STORE_ROUTES: Routes = [
       ),
   },
   {
+    path: 'learn-10-computed',
+    loadComponent: () =>
+      import('./learn-10-computed/learn-10-computed').then((m) => m.Learn10Computed),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'learn-01-cva',
