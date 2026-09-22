@@ -1,0 +1,22 @@
+<main>
+  <h1>debounceTime / debounce</h1>
+
+  <p>文字を続けて入力し、値が確定するまでの待ち時間を比較します。</p>
+
+  <label>
+    検索語
+    <input type="search" (input)="input($event)" placeholder="4文字以上も入力してください" />
+  </label>
+
+  <dl>
+    <dt>debounceTime（常に500ms）</dt>
+    <dd>{{ debounceTimeResult() }}</dd>
+
+    <dt>debounce（現在は{{ debounceWait() }}ms）</dt>
+    <dd>{{ debounceResult() }}</dd>
+  </dl>
+
+  <p>debounce は3文字以下なら1000ms、4文字以上なら300ms待ちます。</p>
+
+  <app-p04-store-navi />
+</main>

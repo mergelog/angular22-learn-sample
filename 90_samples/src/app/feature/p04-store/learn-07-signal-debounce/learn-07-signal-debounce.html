@@ -1,0 +1,22 @@
+<main>
+  <h1>Signalだけでdebounce</h1>
+
+  <p>effect のクリーンアップで前のタイマーを破棄し、最後の入力だけを確定します。</p>
+
+  <label>
+    検索語
+    <input type="search" (input)="input($event)" placeholder="4文字以上も入力してください" />
+  </label>
+
+  <dl>
+    <dt>固定（常に500ms）</dt>
+    <dd>{{ fixedResult() }}</dd>
+
+    <dt>可変（現在は{{ variableWait() }}ms）</dt>
+    <dd>{{ variableResult() }}</dd>
+  </dl>
+
+  <p>可変側は3文字以下なら1000ms、4文字以上なら300ms待ちます。</p>
+
+  <app-p04-store-navi />
+</main>

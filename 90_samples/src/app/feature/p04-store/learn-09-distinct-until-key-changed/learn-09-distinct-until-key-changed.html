@@ -1,0 +1,13 @@
+<main>
+  <h1>distinctUntilKeyChanged</h1>
+
+  <p>A → A → B → A の順に押すと、id が変わっても連続した2つ目の A は除かれます。</p>
+
+  <button type="button" (click)="send('A')">A を送信</button>
+  <button type="button" (click)="send('B')">B を送信</button>
+
+  <p>送信した値: {{ sentItems().join(' → ') || 'なし' }}</p>
+  <p>受け取った値: {{ receivedItems().join(' → ') || 'なし' }}</p>
+
+  <app-p04-store-navi />
+</main>

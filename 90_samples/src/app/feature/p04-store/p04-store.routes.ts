@@ -43,6 +43,34 @@ export const P04_STORE_ROUTES: Routes = [
       ),
   },
   {
+    path: 'learn-06-debounce-time-debounce',
+    loadComponent: () =>
+      import('./learn-06-debounce-time-debounce/learn-06-debounce-time-debounce').then(
+        (m) => m.Learn06DebounceTimeDebounce,
+      ),
+  },
+  {
+    path: 'learn-07-signal-debounce',
+    loadComponent: () =>
+      import('./learn-07-signal-debounce/learn-07-signal-debounce').then(
+        (m) => m.Learn07SignalDebounce,
+      ),
+  },
+  {
+    path: 'learn-08-distinct-until-changed',
+    loadComponent: () =>
+      import('./learn-08-distinct-until-changed/learn-08-distinct-until-changed').then(
+        (m) => m.Learn08DistinctUntilChanged,
+      ),
+  },
+  {
+    path: 'learn-09-distinct-until-key-changed',
+    loadComponent: () =>
+      import('./learn-09-distinct-until-key-changed/learn-09-distinct-until-key-changed').then(
+        (m) => m.Learn09DistinctUntilKeyChanged,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'learn-01-cva',

@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+main {
+  max-width: 640px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+}
+
+input {
+  padding: 8px;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 24px;
+}
+
+dd {
+  margin: 0;
+  font-weight: 700;
+}
