@@ -12,6 +12,7 @@ import { runDistinctUntilKeyChangedExample } from './t04_store/learn-02-distinct
 import { runThrottleTimeExample } from './t04_store/learn-03-throttle-time/learn-03-throttle-time';
 import { runFinalizeExample } from './t04_store/learn-04-finalize/learn-04-finalize';
 import { runExpandReduceExample } from './t04_store/learn-05-expand-reduce/learn-05-expand-reduce';
+import { runTimerTakeWhileTakeUntilExample } from './t04_store/learn-06-timer-take-while-take-until/learn-06-timer-take-while-take-until';
 import { free } from './free/free';
 
 const once = process.argv.includes('--once');
@@ -30,7 +31,8 @@ function runExamples(): void {
   // run(runDistinctUntilKeyChangedExample);
   // run(runThrottleTimeExample);
   // run(runFinalizeExample);
-  run(runExpandReduceExample);
+  // run(runExpandReduceExample);
+  run(runTimerTakeWhileTakeUntilExample);
 
   // 初期サンプル
   // run(runTypeScriptExample);
