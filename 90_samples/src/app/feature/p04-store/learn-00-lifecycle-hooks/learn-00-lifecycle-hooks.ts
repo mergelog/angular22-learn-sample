@@ -3,9 +3,9 @@ import { P04StoreNavi } from '../layout/p04-store-navi/p04-store-navi';
 import { ProfileCardComponent } from './profile-card';
 
 @Component({
-  selector: 'app-learn-11-lifecycle-hooks',
+  selector: 'app-learn-00-lifecycle-hooks',
   imports: [P04StoreNavi, ProfileCardComponent],
-  templateUrl: './learn-11-lifecycle-hooks.html',
+  templateUrl: './learn-00-lifecycle-hooks.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Learn11LifecycleHooks {}
+export class Learn00LifecycleHooks {}

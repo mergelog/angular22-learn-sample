@@ -16,6 +16,8 @@ import { runTimerTakeWhileTakeUntilExample } from './t04_store/learn-06-timer-ta
 import { runComputedExample } from './t04_store/learn-07-computed/learn-07-computed';
 import { runLinkedSignalSourceComputationExample } from './t04_store/learn-08-linked-signal-source-computation/learn-08-linked-signal-source-computation';
 import { runRxResourceParamsExample } from './t04_store/learn-09-rx-resource-params/learn-09-rx-resource-params';
+import { runSignalStoreEventsExample } from './t04_store/learn-10-signal-store-events/learn-10-signal-store-events';
+import { runSignalStoreFeatureEventsExample } from './t04_store/learn-11-signal-store-feature-events/learn-11-signal-store-feature-events';
 import { free } from './free/free';
 
 const once = process.argv.includes('--once');
@@ -38,14 +40,15 @@ function runExamples(): void {
   // run(runTimerTakeWhileTakeUntilExample);
   // run(runComputedExample);
   // run(runLinkedSignalSourceComputationExample);
-  run(runRxResourceParamsExample);
+  // run(runRxResourceParamsExample);
+  // run(runSignalStoreEventsExample);
+  run(runSignalStoreFeatureEventsExample);
 
   // 初期サンプル
   // run(runTypeScriptExample);
   // run(runSignalExample);
   // run(runNgRxExample);
   // run(runSignalStoreExample);
-
   // run(free);
 }
 

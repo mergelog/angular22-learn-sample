@@ -1,0 +1,18 @@
+<main>
+  <h1>SignalStore のイベント</h1>
+  <p>初期値: 0。順に押すと、受信ログには更新後の合計が表示されます。</p>
+
+  <button type="button" (click)="addWithDispatcher()">Dispatcher で +2</button>
+  <button type="button" (click)="dispatch.add(3)">injectDispatch で +3</button>
+
+  <p>現在の値: {{ store.count() }}</p>
+  <ul>
+    @for (message of log.messages(); track $index) {
+      <li>{{ message }}</li>
+    } @empty {
+      <li>受信したイベントはありません</li>
+    }
+  </ul>
+
+  <app-p04-store-navi />
+</main>

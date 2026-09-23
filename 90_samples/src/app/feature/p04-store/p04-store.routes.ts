@@ -9,6 +9,13 @@ import { signalComparisonFeature } from './learn-03-store-select-signal-to-signa
 
 export const P04_STORE_ROUTES: Routes = [
   {
+    path: 'learn-00-lifecycle-hooks',
+    loadComponent: () =>
+      import('./learn-00-lifecycle-hooks/learn-00-lifecycle-hooks').then(
+        (m) => m.Learn00LifecycleHooks,
+      ),
+  },
+  {
     path: 'learn-01-cva',
     loadComponent: () => import('./learn-01-cva/learn-01-cva').then((m) => m.Learn01Cva),
   },
@@ -71,15 +78,17 @@ export const P04_STORE_ROUTES: Routes = [
       ),
   },
   {
-    path: 'learn-10-computed',
+    path: 'learn-10-signal-store-events',
     loadComponent: () =>
-      import('./learn-10-computed/learn-10-computed').then((m) => m.Learn10Computed),
+      import('./learn-10-signal-store-events/learn-10-signal-store-events').then(
+        (m) => m.Learn10SignalStoreEvents,
+      ),
   },
   {
-    path: 'learn-11-lifecycle-hooks',
+    path: 'learn-11-signal-store-feature-events',
     loadComponent: () =>
-      import('./learn-11-lifecycle-hooks/learn-11-lifecycle-hooks').then(
-        (m) => m.Learn11LifecycleHooks,
+      import('./learn-11-signal-store-feature-events/learn-11-signal-store-feature-events').then(
+        (m) => m.Learn11SignalStoreFeatureEvents,
       ),
   },
   {
