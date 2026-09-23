@@ -2,7 +2,7 @@
 
 ## 関数詳細
 
-`eventGroup()` と `type<number>()` で `add` イベントを定義する。`Dispatcher.dispatch()` と `injectDispatch()` のどちらでも発火できる。`withReducer()` が `count` を更新し、`withEventHandlers()` が更新後の値を受信ログに追加する。
+`eventGroup()` と `type<number>()` で `add` イベントを定義する。`Dispatcher.dispatch()` と `injectDispatch()` のどちらでも発火できる。`withTrackedReducer()` が `count` を更新し、`withEventHandlers()` が更新後の値を受信ログに追加する。
 
 ## どういうケースで使用するか
 
@@ -10,4 +10,4 @@
 
 ## 注意点
 
-`injectDispatch()` はコンポーネントの injection context で作る。`provideDispatcher()` はこの画面のイベントを画面内に閉じる。受信ログ用の `CounterEventLog` は表示のための補助クラス。
+`injectDispatch()` はコンポーネントの injection context で作る。`provideDispatcher()` はこの画面のイベントを画面内に閉じる。Redux DevTools の「NgRx SignalStore」を選ぶと、`[Counter] add` と `count` の変化を確認できる。受信ログ用の `CounterEventLog` は表示のための補助クラス。

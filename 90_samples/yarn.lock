@@ -986,6 +986,13 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.3"
 
+"@ngrx-toolkit/core@22.0.1":
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/@ngrx-toolkit/core/-/core-22.0.1.tgz#9c967acfc4faad86bdbebdf539204c73d5ba0531"
+  integrity sha512-57DKzE4xIAA2Td2ZfLleCGuju7BjeK/mB1GvXX39oXNzxQ1xMlZoMfY9nUzobsPrOeJe/oLES3wkJyhrGmrsaQ==
+  dependencies:
+    tslib "^2.3.0"
+
 "@ngrx/component@^22.0.1":
   version "22.0.1"
   resolved "https://registry.yarnpkg.com/@ngrx/component/-/component-22.0.1.tgz#e46f67c73d01e33c8078ac452e6cca088cd01c3f"

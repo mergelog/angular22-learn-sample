@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { withDevtools, withGlitchTracking, withTrackedReducer } from '@ngrx-toolkit/core';
 import { signalStore, signalStoreFeature, type, withState } from '@ngrx/signals';
 import {
   Dispatcher,
@@ -8,7 +9,6 @@ import {
   on,
   provideDispatcher,
   withEventHandlers,
-  withReducer,
 } from '@ngrx/signals/events';
 import { tap } from 'rxjs';
 import { CounterEventLog } from '../counter-event-log';
@@ -22,7 +22,7 @@ const counterEvents = eventGroup({
 function withCounterEvents() {
   return signalStoreFeature(
     withState({ count: 0 }),
-    withReducer(on(counterEvents.add, ({ payload }, state) => ({ count: state.count + payload }))),
+    withTrackedReducer(on(counterEvents.add, ({ payload }, state) => ({ count: state.count + payload }))),
     withEventHandlers((store, events = inject(Events), log = inject(CounterEventLog)) => ({
       log$: events
         .on(counterEvents.add)
@@ -31,7 +31,10 @@ function withCounterEvents() {
   );
 }
 
-const CounterStore = signalStore(withCounterEvents());
+const CounterStore = signalStore(
+  withDevtools('learn-11-counter', withGlitchTracking()),
+  withCounterEvents(),
+);
 
 @Component({
   selector: 'app-learn-11-signal-store-feature-events',

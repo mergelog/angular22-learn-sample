@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { withDevtools, withGlitchTracking, withTrackedReducer } from '@ngrx-toolkit/core';
 import { signalStore, type, withState } from '@ngrx/signals';
 import {
   Dispatcher,
@@ -8,7 +9,6 @@ import {
   on,
   provideDispatcher,
   withEventHandlers,
-  withReducer,
 } from '@ngrx/signals/events';
 import { tap } from 'rxjs';
 import { CounterEventLog } from '../counter-event-log';
@@ -16,12 +16,15 @@ import { P04StoreNavi } from '../layout/p04-store-navi/p04-store-navi';
 
 const counterEvents = eventGroup({
   source: 'Counter',
-  events: { add: type<number>() },
+  events: {
+    add: type<number>() // add
+  },
 });
 
 const CounterStore = signalStore(
+  withDevtools('learn-10-counter', withGlitchTracking()),
   withState({ count: 0 }),
-  withReducer(on(counterEvents.add, ({ payload }, state) => ({ count: state.count + payload }))),
+  withTrackedReducer(on(counterEvents.add, ({ payload }, state) => ({ count: state.count + payload }))),
   withEventHandlers((store, events = inject(Events), log = inject(CounterEventLog)) => ({
     log$: events
       .on(counterEvents.add)
