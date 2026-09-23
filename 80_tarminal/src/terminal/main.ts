@@ -15,6 +15,7 @@ import { runExpandReduceExample } from './t04_store/learn-05-expand-reduce/learn
 import { runTimerTakeWhileTakeUntilExample } from './t04_store/learn-06-timer-take-while-take-until/learn-06-timer-take-while-take-until';
 import { runComputedExample } from './t04_store/learn-07-computed/learn-07-computed';
 import { runLinkedSignalSourceComputationExample } from './t04_store/learn-08-linked-signal-source-computation/learn-08-linked-signal-source-computation';
+import { runRxResourceParamsExample } from './t04_store/learn-09-rx-resource-params/learn-09-rx-resource-params';
 import { free } from './free/free';
 
 const once = process.argv.includes('--once');
@@ -36,7 +37,8 @@ function runExamples(): void {
   // run(runExpandReduceExample);
   // run(runTimerTakeWhileTakeUntilExample);
   // run(runComputedExample);
-  run(runLinkedSignalSourceComputationExample);
+  // run(runLinkedSignalSourceComputationExample);
+  run(runRxResourceParamsExample);
 
   // 初期サンプル
   // run(runTypeScriptExample);
