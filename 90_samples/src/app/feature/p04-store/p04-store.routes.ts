@@ -76,6 +76,13 @@ export const P04_STORE_ROUTES: Routes = [
       import('./learn-10-computed/learn-10-computed').then((m) => m.Learn10Computed),
   },
   {
+    path: 'learn-11-lifecycle-hooks',
+    loadComponent: () =>
+      import('./learn-11-lifecycle-hooks/learn-11-lifecycle-hooks').then(
+        (m) => m.Learn11LifecycleHooks,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'learn-01-cva',

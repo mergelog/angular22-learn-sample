@@ -1,0 +1,11 @@
+<main>
+  <h1>ライフサイクルごとの参照可能時点</h1>
+
+  <p>開発者ツールのコンソールで、1〜4のログと参照できる値を確認します。</p>
+
+  <app-profile-card [userId]="100">
+    <p #message>親コンポーネントから渡したメッセージ</p>
+  </app-profile-card>
+
+  <app-p04-store-navi />
+</main>
