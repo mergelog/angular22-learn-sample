@@ -13,7 +13,10 @@
 ## 汎用
 - [Angular コーディングスタイルガイド](https://angular.jp/style-guide)
 - [Google TypeScript スタイルガイド](https://google.github.io/styleguide/tsguide.html)
+
+## ライフサイクル
 - [Angular公式: コンポーネントライフサイクル](https://angular.jp/guide/components/lifecycle) ※feat: update origin to 4d985a179e (Angular v22.1.1) (#1197)
+- [x-docs/L00_初期Angular/00_ライフサイクル追記.md](x-docs/L00_初期Angular/00_ライフサイクル追記.md)
 
 ## 記憶カード
 - [x-docs/00_02.記憶カード.md](x-docs/00_02.記憶カード.md)
