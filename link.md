@@ -2,7 +2,8 @@
 - [70_sweets-cafe-status](70_sweets-cafe-status/src/app/feature)
 
 ## サンプル ターミナル表現
-- [80_tarminal/src/terminal/t04_store](80_tarminal/src/terminal/t04_store) <!-- 80_ -->
+<!-- 80_ -->
+- [80_tarminal/src/terminal/t04_store](80_tarminal/src/terminal/t04_store)
 
 ## サンプル 通常
 - [90_samples/../p04-store](90_samples/src/app/feature/p04-store)
