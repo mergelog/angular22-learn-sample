@@ -1,0 +1,14 @@
+<main>
+  <h1>createFeatureSelector と createSelector</h1>
+
+  <p>名前: {{ name() }}</p>
+  <p>数値: {{ num() }}</p>
+  <p>状態: {{ status() }}</p>
+
+  <label for="canvas-name">名前</label>
+  <input id="canvas-name" #nameInput [value]="name()" />
+  <button type="button" (click)="changeName(nameInput.value)">名前を更新</button>
+  <button type="button" (click)="incrementNum()">数値を +1</button>
+
+  <app-p04-store-navi />
+</main>

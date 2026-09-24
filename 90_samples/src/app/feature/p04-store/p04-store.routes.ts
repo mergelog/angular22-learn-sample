@@ -6,6 +6,11 @@ import {
   trackDispatchFalseRun,
 } from './learn-04-dispatch-false/dispatch-false.effect';
 import { signalComparisonFeature } from './learn-03-store-select-signal-to-signal/comparison.store';
+import {
+  changeManualNameStatus,
+  P00_CANVAS_MANUAL_FEATURE_KEY,
+  p00CanvasManualReducer,
+} from '../p00-ngrx/store/p00.canvas.store.createFeatureStore';
 
 export const P04_STORE_ROUTES: Routes = [
   {
@@ -89,6 +94,17 @@ export const P04_STORE_ROUTES: Routes = [
     loadComponent: () =>
       import('./learn-11-signal-store-feature-events/learn-11-signal-store-feature-events').then(
         (m) => m.Learn11SignalStoreFeatureEvents,
+      ),
+  },
+  {
+    path: 'learn-12-create-feature-selector',
+    providers: [
+      provideState(P00_CANVAS_MANUAL_FEATURE_KEY, p00CanvasManualReducer),
+      provideEffects({ changeManualNameStatus }),
+    ],
+    loadComponent: () =>
+      import('./learn-12-create-feature-selector/learn-12-create-feature-selector').then(
+        (m) => m.Learn12CreateFeatureSelector,
       ),
   },
   {

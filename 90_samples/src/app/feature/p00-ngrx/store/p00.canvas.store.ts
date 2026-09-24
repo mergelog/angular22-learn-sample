@@ -1,9 +1,11 @@
 // 20260912
 
-// for Effect
+// angular
 import { inject } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+
+// rxjs
 import { map, switchMap, timer } from 'rxjs';
+
 // base
 import {
   createActionGroup,
@@ -13,6 +15,11 @@ import {
   on,
   props
 } from "@ngrx/store"
+import {
+  Actions,
+  createEffect,
+  ofType
+} from '@ngrx/effects';
 
 // model
 export interface P00CanvasStete {
@@ -85,6 +92,10 @@ export const changeNameStatus = createEffect(
     ),
   { functional: true },
 );
+
+// ---
+// --- 以下メモ
+// ---
 
 /* ---
     ファイル分ける場合、

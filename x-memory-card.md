@@ -346,6 +346,71 @@ NgRx Storeなどのグローバルな状態管理に載せず、共通の親コ�
 
 ## ▼　▶️ Store; NgRX/RxJS
 
+  - 基本サンプル  
+    [p00.canvas.store.ts](./90_samples/src/app/feature/p00-ngrx/store/p00.canvas.store.ts)
+
+### createSelector
+
+  `createSelector`という名前が紛らわしい  
+  selectっていうから this.store.select みたいに「購読取得する」と最初は混同しやすい
+
+  - reactのuseMemoに似ている（目的が少し違う）
+  - Angular の computed() にかなり近い
+
+  たとえば NgRx なら
+  ```ts
+  const selectCompletedCount = createSelector(
+    selectExperiments,
+    experiments =>
+      experiments.filter(x => x.status === 'completed').length
+  );
+  ```
+
+  Signal なら
+  ```ts
+  readonly completedCount = computed(() =>
+    this.experiments()
+      .filter(x => x.status === 'completed')
+      .length
+  );
+  ```
+
+### createFeatureSelector
+
+  - createFeatureSelector は何のために使う？  
+    コールバック直書きの方が読みやすいのでは？  
+    [L00_初期etc/45_createFeatureSelector.md](x-docs/L00_初期etc/45_createFeatureSelector.md) 
+
+  - createFetureSelectorあり
+  ```ts
+  const selectExperimentsState =
+    createFeatureSelector<ExperimentsState>('experiments');
+  
+  const selectExperiments = createSelector(
+    selectExperimentsState,
+    state => state.items
+  );
+  ```
+
+  - createFeatureSelectorなし
+  ```ts
+  const selectExperimentsState =
+    (state: AppState) => state.experiments;
+
+  const selectExperiments = createSelector(
+    selectExperimentsState,
+    state => state.items
+  );
+  ```
+
+  - コールバック直書き
+  ```ts
+  const selectExperiments = createSelector(
+    (state: AppState) => state.experiments,
+    state => state.items
+  );
+  ```
+
 ### take()、first() の違い
 
 first() がエラーになる条件: 値が1件も来ないまま、first() から見て Observable が complete した
