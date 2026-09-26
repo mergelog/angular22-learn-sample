@@ -1186,3 +1186,19 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
 - 変更時の影響範囲を狭める
 - 業務ルールはコンポーネントの外へ出す
   - Angular、React、CLIでも、バックエンドでも意味がある → Component外
+
+## ▼ 一行目メモ
+
+```txt
+50文字で言うと
+```
+
+- ___上に書いていく___
+
+- @defer : 条件がtrueになった時点でブロック内を遅延読み込み・描画するAngularの制御構文。
+  - 以下とセット  
+  @placeholder  
+  @loading  
+  @error  
+
+
