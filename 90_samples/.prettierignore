@@ -1,0 +1,15 @@
+# ビルド成果物・キャッシュ
+/dist
+/out-tsc
+/coverage
+/.angular
+/node_modules
+
+# ロックファイル
+yarn.lock
+
+# ドキュメント: 手書きの表組み・コード例を Prettier が組み替えてしまうため対象外
+*.md
+
+# 拡張子から parser を推論できないため（明示指定するとエラーになる）
+*.concept

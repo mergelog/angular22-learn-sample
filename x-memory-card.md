@@ -11,6 +11,9 @@
 - [コードリーディング・テクニック全網羅](x-outside/x-コードリーディング・テクニック全網羅/00_総目次と読む順序.md)  
   → [こっちの方がいい: 00_05.コードリーディング基礎.md](./x-docs/00_05.コードリーディング基礎.md)
 
+- [00_親子関係の実現技術_全面調査.md](x-docs/L00_初期Angular/00_親子関係の実現技術_全面調査.md)
+  - [10_al-drawerコンポーネントの役割と使い方.md](x-docs/L00_初期Angular/10_al-drawerコンポーネントの役割と使い方.md)
+
 ## プロンプトヒント
 
 - [定型プロンプト集](x-docs/00_00.便利.md#prompt-template)
@@ -56,6 +59,8 @@
 | `effect()`       | `signalChangeToSideEffect()`   |
 
 ## ▼ 基本的なコードリーディング方法・手順 ----------------------------
+
+コードリーディングする上で、要件を明確に理解し、仕様を把握する
 
 ### 正統技
 - 何を解析したいか目標を明確に言語化する
@@ -137,12 +142,12 @@ this.newc().changeA() // 子を操作
   @Component({
     selector: 'app-sample-22-ng-frame',
     template: `
-      <ng-content /> // Sample22NgPanel　はここにはない。（親が持っている<app-sample-22-ng-frame><app-sample-22-ng-panel /></  app-sample-22-ng-frame>）
+      <ng-content /> // Sample22NgPanel　は👈ここにはない。（親が持っている<app-sample-22-ng-frame><app-sample-22-ng-panel /></  app-sample-22-ng-frame>）
       <p>viewChild: {{ viewPanel() ? '取れた' : '取れない' }}</p>
       <p>contentChild: {{ contentPanel() ? '取れた' : '取れない' }}</p>
     `,
     readonly viewPanel = viewChild(Sample22NgPanel); // 取れない!!
-    readonly contentPanel = contentChild(Sample22NgPanel); 取れる（OK）
+    readonly contentPanel = contentChild(Sample22NgPanel); 👈contentChildで取れる（OK）
   ```
 
 ## ▼ ng-content
@@ -173,7 +178,7 @@ ng-contentは、selectで指定して取れるやつ一部とか、全部とか�
 子が拾う
 <ng-content select="[header]" />
 
-残りを拾う
+(さらに子が)残りを拾う
 <ng-content />
 ```
 
@@ -277,6 +282,8 @@ Angularにおけるcontext: { $implicit: data }は、テンプレート内のロ
 
 - 「何回使うか」ではなく「独立した責務か」
 - 一度しか使わないComponentでも意味がありますし、3箇所に似たHTMLがあるだけで無理に共通Component化する必要もありません。
+
+<!-- now 復習中 -->
 
 ### 基礎
 
@@ -1187,23 +1194,7 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
 - 業務ルールはコンポーネントの外へ出す
   - Angular、React、CLIでも、バックエンドでも意味がある → Component外
 
-## ▼ 一行目メモ
-
-```txt
-50文字で言うと
-```
-
-- ___上に書いていく___
-
-- @defer : 条件がtrueになった時点でブロック内を遅延読み込み・描画するAngularの制御構文。
-  - 以下とセット  
-  @placeholder  
-  @loading  
-  @error  
-
-- BFF（Backend for Frontend）- Angular と本来のバックエンドAPIの間に置いて、Angular側が使いやすい形にデータを整形・集約する層です。
-
-- AWSとAzure対応票
+## ▼ AWSとAzure対応票
 
 | AWS                 | Azure                                         | ざっくり何をするものか                 |
 | ------------------- | --------------------------------------------- | --------------------------- |
@@ -1227,3 +1218,20 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
 | **SQS**             | **Azure Service Bus Queue / Storage Queue**   | メッセージキュー                    |
 | **SNS**             | **Azure Service Bus Topics / Event Grid**     | Pub/Sub、イベント通知              |
 | **API Gateway**     | **Azure API Management**                      | API公開・認証・制御                 |
+
+
+## ▼ 一行目メモ
+
+```txt
+50文字で言うと
+```
+
+- ___上に書いていく___
+
+- @defer : 条件がtrueになった時点でブロック内を遅延読み込み・描画するAngularの制御構文。
+  - 以下とセット  
+  @placeholder  
+  @loading  
+  @error  
+
+- BFF（Backend for Frontend）- Angular と本来のバックエンドAPIの間に置いて、Angular側が使いやすい形にデータを整形・集約する層です。

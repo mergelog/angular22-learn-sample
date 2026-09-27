@@ -162,6 +162,13 @@ export const P00_NGRX_ROUTES: Routes = [
       import('./sample-16-frame-events/sample-16-frame-events').then((m) => m.Sample16FrameEvents),
   },
   {
+    path: 'sample-17-clearml-drawer',
+    loadComponent: () =>
+      import('./sample-17-clearml-drawer/sample-17-clearml-drawer').then(
+        (m) => m.Sample17ClearmlDrawer,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'novice',

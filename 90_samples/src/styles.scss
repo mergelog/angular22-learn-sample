@@ -1,2 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+// ClearML 独自のアイコンフォントがないため、コピーした Drawer の矢印だけ表示する。
+.sample-17-clearml-drawer mat-icon.al-ico-previous::before {
+  content: '‹';
+  font-family: Arial, sans-serif;
+}

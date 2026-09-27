@@ -1,0 +1,19 @@
+.sample-17-clearml-drawer {
+  padding: 24px;
+  --color-surface-container-high: #e2e8f0;
+  --color-surface-container-highest: #cbd5e1;
+  --color-outline-variant: #94a3b8;
+  --color-outline: #334155;
+  --color-primary: #1e293b;
+}
+
+al-drawer {
+  width: 320px;
+  min-height: 160px;
+  border: 1px solid #d0d5dd;
+  background: #f8fafc;
+}
+
+.drawer-content {
+  padding: 16px;
+}
