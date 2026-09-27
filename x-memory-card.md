@@ -1201,10 +1201,9 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
   @loading  
   @error  
 
+- BFF（Backend for Frontend）- Angular と本来のバックエンドAPIの間に置いて、Angular側が使いやすい形にデータを整形・集約する層です。
 
-- Service
-
-「AWSのこのサービスは、Azureだとだいたい何に当たるか」という対応だけ押さえるなら、これで十分です。
+- AWSとAzure対応票
 
 | AWS                 | Azure                                         | ざっくり何をするものか                 |
 | ------------------- | --------------------------------------------- | --------------------------- |
