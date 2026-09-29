@@ -287,7 +287,7 @@ Angularにおけるcontext: { $implicit: data }は、テンプレート内のロ
 
 ### 基礎
 
-  [30_ClearML実験管理画面のコンポーネント分割調査.md](x-docs/L00_初期etc/30_ClearML実験管理画面のコンポーネント分割調査.md)  
+  [30_ClearML実験管理画面のコンポーネント分割調査.md](x-docs/L01_運用解析etc/30_ClearML実験管理画面のコンポーネント分割調査.md)  
 
 ### ClearML真似していい悪いを記載した資料
 
@@ -1194,31 +1194,37 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
 - 業務ルールはコンポーネントの外へ出す
   - Angular、React、CLIでも、バックエンドでも意味がある → Component外
 
-## ▼ AWSとAzure対応票
+## ▼ Javascript
 
-| AWS                 | Azure                                         | ざっくり何をするものか                 |
-| ------------------- | --------------------------------------------- | --------------------------- |
-| **S3**              | **Azure Blob Storage**                        | ファイル・画像・ログ・学習データなどのオブジェクト保存 |
-| **EC2**             | **Azure Virtual Machines**                    | 仮想サーバー                      |
-| **EBS**             | **Azure Managed Disks**                       | VMに付ける仮想ディスク                |
-| **RDS**             | **Azure SQL Database / Azure Database系**      | マネージドDB                     |
-| **DynamoDB**        | **Azure Cosmos DB**                           | NoSQLデータベース                 |
-| **VPC**             | **Azure Virtual Network（VNet）**               | クラウド内の仮想ネットワーク              |
-| **IAM**             | **Microsoft Entra ID + Azure RBAC**           | ユーザー認証・権限制御                 |
-| **ELB**             | **Azure Load Balancer / Application Gateway** | 負荷分散                        |
-| **Route 53**        | **Azure DNS**                                 | DNS管理                       |
-| **CloudWatch**      | **Azure Monitor**                             | 監視・メトリクス・ログ                 |
-| **CloudTrail**      | **Azure Activity Log**                        | 「誰が何を操作したか」の監査ログ            |
-| **Lambda**          | **Azure Functions**                           | サーバーレス関数                    |
-| **ECS**             | **Azure Container Apps / AKS**                | コンテナ実行                      |
-| **EKS**             | **AKS（Azure Kubernetes Service）**             | Kubernetes                  |
-| **ECR**             | **Azure Container Registry（ACR）**             | Dockerイメージ保管                |
-| **Secrets Manager** | **Azure Key Vault**                           | パスワード・APIキー・証明書管理           |
-| **CloudFront**      | **Azure Front Door / Azure CDN**              | CDN、Web配信高速化                |
-| **SQS**             | **Azure Service Bus Queue / Storage Queue**   | メッセージキュー                    |
-| **SNS**             | **Azure Service Bus Topics / Event Grid**     | Pub/Sub、イベント通知              |
-| **API Gateway**     | **Azure API Management**                      | API公開・認証・制御                 |
+### 演算子
 
+| 構文 | 意味 | 一言で覚える |
+|---|---|---|
+| `a ?? b` | nullish合体 | `null/undefined` なら `b` |
+| `a \|\| b` | OR | falsyなら `b` |
+| `a && b` | AND | truthyなら `b` |
+| `a?.b` | Optional Chaining | `a` がなければそこで終了 |
+| `a?.()` | Optional Call | 関数があれば呼ぶ。実行時関数ではない場合エラー<br>TypeError: callback is not a function |
+| `a ??= b` | nullish代入 | 未設定なら `b` を代入 |
+| `a \|\|= b` | OR代入 | falsyなら `b` を代入 |
+| `a &&= b` | AND代入 | truthyなら `b` を代入 |
+| `a ? b : c` | 三項演算子 | trueならb、falseならc |
+| `...a` | Spread | 中身を展開 |
+| `...args` | Rest | 残りをまとめる |
+| `{ a, b } = obj` | 分割代入 | オブジェクトから取り出す |
+| `[a, b] = arr` | 分割代入 | 配列から取り出す |
+| `x => x.id` | Arrow Function | 関数の短縮形 |
+| `!!a` | Boolean化 | 強制的にtrue/falseへ |
+| `===` / `!==` | 厳密比較 | 型も含めて比較 |
+| `in` | プロパティ確認 | キーを持っているか |
+| `instanceof` | インスタンス判定 | 何から作られたか |
+
+関数だったら実行は以下
+```ts
+if (typeof callback === 'function') {
+  callback();
+}
+```
 
 ## ▼ 一行目メモ
 
