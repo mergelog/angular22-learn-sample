@@ -674,11 +674,24 @@ this.value$.pipe(
   // ['A', 'B', 'C']としてまとめて一回流す
   ```
 
+### 使うときにNgRXからSignalに落とし込む落とし込まない
+
+直接 Observable のまま使うのが向いているのは、特に RxJS の処理を続けたい場合です。
+[12_NgRXのObservableをSignalに落とし込む.md](x-docs/L00_初期Angular/12_NgRXのObservableをSignalに落とし込む.md)
+
+| ケース | そのまま使う形 |
+|---|---|
+| Template表示だけ | `store.select()` + `async` |
+| RxJS加工を続ける | `select().pipe(...)` |
+| 複数Observableを合成 | `combineLatest` など |
+| NgRx Effects | Observableのまま |
+| イベント発火 | `store.dispatch()` |
+| Signal中心のComponent | `selectSignal()` |
+
 ### link:  
 
 - NgRxの教科書:  
   https://zenn.dev/zzzzzzz/books/ngrx-textbook/viewer/09-selector-and-memoization
-
 
 ## ▼ ▶️ Observable の源流と合流
 
@@ -1235,16 +1248,18 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
 
 ### 演算子
 
+JavaScript の ?? と || は似ていますが、「何を未設定とみなすか」が違
+
 | 構文 | 意味 | 一言で覚える |
 |---|---|---|
 | `a ?? b` | nullish合体 | `null/undefined` なら `b` |
-| `a \|\| b` | OR | falsyなら `b` |
-| `a && b` | AND | truthyなら `b` |
+| `a \|\| b` | OR | falsyなら `b`。（false, 0, "", Nan なども`b`になる |
+| `a && b` | AND | truthyなら `b`。 ややこしい。`false && "OK"`ならfalse、`0 && "OK"`なら0、`"" && "OK"`なら""。「||」とたいで覚える |
+| `a ??= b` | nullish代入 | 未設定なら `b` を代入。`a ?? b`と振る舞いは同じ |
+| `a \|\|= b` | OR代入 | falsyなら `b` を代入。`a \|\| b`と振る舞いは同じ |
+| `a &&= b` | AND代入 | truthyなら `b` を代入。`a && b`と振る舞いは同じ |
 | `a?.b` | Optional Chaining | `a` がなければそこで終了 |
 | `a?.()` | Optional Call | 関数があれば呼ぶ。実行時関数ではない場合エラー<br>TypeError: callback is not a function |
-| `a ??= b` | nullish代入 | 未設定なら `b` を代入 |
-| `a \|\|= b` | OR代入 | falsyなら `b` を代入 |
-| `a &&= b` | AND代入 | truthyなら `b` を代入 |
 | `a ? b : c` | 三項演算子 | trueならb、falseならc |
 | `...a` | Spread | 中身を展開 |
 | `...args` | Rest | 残りをまとめる |
@@ -1256,11 +1271,45 @@ this.tags = uniq(experiments?.map(exp => exp.tags).flat());
 | `in` | プロパティ確認 | キーを持っているか |
 | `instanceof` | インスタンス判定 | 何から作られたか |
 
-関数だったら実行は以下
+### 関数だったら実行は以下
 ```ts
 if (typeof callback === 'function') {
   callback();
 }
+```
+
+### inとincludes
+
+| 書き方 | 何を調べる？ | 例 |
+|---|---|---|
+| `x in obj` | **キー・プロパティが存在するか** | `'name' in user` |
+| `array.includes(x)` | **値が含まれているか** | `[1, 2, 3].includes(2)` |
+| `string.includes(x)` | **文字列が含まれているか** | `'hello'.includes('ell')` |
+
+```ts
+const arr = ['A', 'B', 'C'];
+
+1 in arr
+// true
+// 「添字 1 が存在するか？」→ 存在する
+
+'B' in arr
+// false
+// 「'B' というプロパティ名が存在するか？」→ 存在しない
+
+arr.includes('B')
+// true
+// 「値として 'B' が含まれているか？」
+
+--- オブジェクトなら in です。
+
+const user = {
+  name: 'Taro',
+  age: 30
+};
+
+'name' in user
+// true
 ```
 
 ## ▼ 一行目メモ
