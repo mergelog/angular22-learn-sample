@@ -875,6 +875,11 @@ this.value$.pipe(
 
   - NgRx Effect で画面表示中にジョブの状態を定期取得し、完了または画面離脱でポーリングを終える場合。
   - [ややこしいサンプル: learn-06-timer-take-while-take-until.ts](80_tarminal/src/terminal/t04_store/learn-06-timer-take-while-take-until/learn-06-timer-take-while-take-until.ts)
+    - `takeUntil(actions$.pipe(ofType(pageLeft))), // [!] Page Left が来たら強制終了`  
+      takeUntilは、引数に「値」ではなく、キャンセル通知用の Observable を渡す  
+       takeUntil(actions$.pipe(ofType(tasksActions.cancelLoad)))  
+       でキャンセルボタン待ち受けのような場合にも有用
+
   - ちなみに timer(0, 100) のように使うが、戻り値は `Observable<index: number>`
 
 ### retryWhen()

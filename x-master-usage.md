@@ -242,7 +242,7 @@ Tarend
 
 - worktree
 
-[/L00_初期etc/31_worktree使用方法.md](./L00_初期etc/31_worktree使用方法.md)
+[x-docs/L00_初期etc/31_worktree使用方法.md](x-docs/L00_初期etc/31_worktree使用方法.md)
 
 - .gitignore に記載せず ignoreする
   + 方法1: プロジェクト内の`.git/info/exclude`に記載（.gitignoreと同じように記載）
@@ -307,7 +307,7 @@ git push --force-with-lease
 
 ### コミットメッセージ/commit message
 
-[L00_初期etc/30_コミットメッセージ.md](./L00_初期etc/30_コミットメッセージ.md)
+[L00_初期etc/30_コミットメッセージ.md](x-docs/L00_初期etc/30_コミットメッセージ.md)
 
 | type        | 意味            | 例                           |
 | ----------- | ------------- | --------------------------- |

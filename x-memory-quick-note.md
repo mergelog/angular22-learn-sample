@@ -24,3 +24,5 @@ QuickNote（一言メモ）は、物の仕様ではなく、作法について�
     TaskDetailActions.loadTasks
   ),
   ```
+
+
