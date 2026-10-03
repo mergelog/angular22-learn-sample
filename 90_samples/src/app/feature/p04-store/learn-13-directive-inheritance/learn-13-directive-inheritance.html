@@ -1,0 +1,14 @@
+<main>
+  <h1>Directive 基底クラスの input 継承</h1>
+
+  <p>基底クラスの name を、継承先で定義し直さずに使います。</p>
+
+  <label>
+    名前
+    <input #nameInput [value]="name()" (input)="name.set(nameInput.value)" />
+  </label>
+
+  <app-inherited-greeting [name]="name()" />
+
+  <app-p04-store-navi />
+</main>

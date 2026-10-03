@@ -108,6 +108,13 @@ export const P04_STORE_ROUTES: Routes = [
       ),
   },
   {
+    path: 'learn-13-directive-inheritance',
+    loadComponent: () =>
+      import('./learn-13-directive-inheritance/learn-13-directive-inheritance').then(
+        (m) => m.Learn13DirectiveInheritance,
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'learn-01-cva',
